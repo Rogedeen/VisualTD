@@ -3,6 +3,8 @@ import mediapipe as mp
 import time
 import socket
 import json
+import os
+import urllib.request
 
 class UDPSender:
     def __init__(self, ip="127.0.0.1", port=5052):
@@ -17,98 +19,115 @@ class UDPSender:
 
 class GestureTracker:
     def __init__(self):
-        self.mp_hands = mp.solutions.hands
-        self.hands = self.mp_hands.Hands(
-            static_image_mode=False,
-            max_num_hands=2,
-            min_detection_confidence=0.7,
-            min_tracking_confidence=0.5
-        )
-        self.mp_draw = mp.solutions.drawing_utils
+        self.download_model()
+        
+        BaseOptions = mp.tasks.BaseOptions
+        HandLandmarker = mp.tasks.vision.HandLandmarker
+        HandLandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
+        VisionRunningMode = mp.tasks.vision.RunningMode
+
+        options = HandLandmarkerOptions(
+            base_options=BaseOptions(model_asset_path='hand_landmarker.task'),
+            running_mode=VisionRunningMode.VIDEO,
+            num_hands=2)
+
+        self.landmarker = HandLandmarker.create_from_options(options)
         self.pTime = 0
+        self.start_time_ms = int(time.time() * 1000)
         
         # State variables for dynamic gestures
         self.prev_arrow_state = 0
         self.prev_lightning_state = 0
         self.lightning_y_start = 0
+        self.results = None
 
-    def fingers_up(self, hand_landmarks):
+    def download_model(self):
+        model_path = "hand_landmarker.task"
+        if not os.path.exists(model_path):
+            print("Downloading MediaPipe hand landmarker model...")
+            urllib.request.urlretrieve(
+                "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
+                model_path)
+            print("Download complete.")
+
+    def fingers_up(self, landmarks):
         fingers = []
-        # Thumb (Simple check: is tip further from center than IP joint)
-        if hand_landmarks.landmark[self.mp_hands.HandLandmark.THUMB_TIP].x < hand_landmarks.landmark[self.mp_hands.HandLandmark.THUMB_IP].x:
+        
+        # Thumb
+        if landmarks[4].x < landmarks[3].x:
             fingers.append(1)
         else:
             fingers.append(0)
             
         # 4 Fingers
-        tip_ids = [self.mp_hands.HandLandmark.INDEX_FINGER_TIP, 
-                   self.mp_hands.HandLandmark.MIDDLE_FINGER_TIP, 
-                   self.mp_hands.HandLandmark.RING_FINGER_TIP, 
-                   self.mp_hands.HandLandmark.PINKY_TIP]
-        pip_ids = [self.mp_hands.HandLandmark.INDEX_FINGER_PIP, 
-                   self.mp_hands.HandLandmark.MIDDLE_FINGER_PIP, 
-                   self.mp_hands.HandLandmark.RING_FINGER_PIP, 
-                   self.mp_hands.HandLandmark.PINKY_PIP]
+        tip_ids = [8, 12, 16, 20]
+        pip_ids = [6, 10, 14, 18]
                    
         for i in range(4):
-            if hand_landmarks.landmark[tip_ids[i]].y < hand_landmarks.landmark[pip_ids[i]].y:
+            if landmarks[tip_ids[i]].y < landmarks[pip_ids[i]].y:
                 fingers.append(1)
             else:
                 fingers.append(0)
         return fingers
 
-    def process_frame(self, img):
-        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        self.results = self.hands.process(img_rgb)
+    def process_frame(self, img, timestamp_ms):
+        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        # Ensure timestamp is strictly increasing and relative to start
+        relative_timestamp = timestamp_ms - self.start_time_ms
+        if relative_timestamp <= 0:
+            relative_timestamp = 1
         
-        if self.results.multi_hand_landmarks:
-            for hand_landmarks in self.results.multi_hand_landmarks:
-                self.mp_draw.draw_landmarks(
-                    img, hand_landmarks, self.mp_hands.HAND_CONNECTIONS)
+        self.results = self.landmarker.detect_for_video(mp_image, relative_timestamp)
+        
+        # Draw landmarks using OpenCV
+        if self.results.hand_landmarks:
+            for hand_landmarks in self.results.hand_landmarks:
+                for landmark in hand_landmarks:
+                    x = int(landmark.x * img.shape[1])
+                    y = int(landmark.y * img.shape[0])
+                    cv2.circle(img, (x, y), 5, (255, 0, 255), cv2.FILLED)
                 
         return img
 
     def detect_gestures(self):
-        if not self.results.multi_hand_landmarks:
+        if not self.results or not self.results.hand_landmarks:
             return None
             
         gesture_detected = None
         
-        for idx, hand_landmarks in enumerate(self.results.multi_hand_landmarks):
-            fingers = self.fingers_up(hand_landmarks)
-            
-            # 3. Fortify/Heal Wall - Both hands open (Stop gesture)
-            if len(self.results.multi_hand_landmarks) == 2:
-                hand2_landmarks = self.results.multi_hand_landmarks[1]
-                fingers2 = self.fingers_up(hand2_landmarks)
-                if sum(fingers) >= 4 and sum(fingers2) >= 4:
-                    gesture_detected = "Fortify_Wall"
-                    print("Gesture Detected: Fortify/Heal Wall")
-                    # Reset states to avoid false positives
-                    self.prev_arrow_state = 0
-                    return gesture_detected
+        # Multiple hands check for Fortify
+        if len(self.results.hand_landmarks) == 2:
+            fingers1 = self.fingers_up(self.results.hand_landmarks[0])
+            fingers2 = self.fingers_up(self.results.hand_landmarks[1])
+            if sum(fingers1) >= 4 and sum(fingers2) >= 4:
+                gesture_detected = "Fortify_Wall"
+                print("Gesture Detected: Fortify/Heal Wall")
+                self.prev_arrow_state = 0
+                return gesture_detected
 
-            if len(self.results.multi_hand_landmarks) == 1:
-                # 1. Arrow Volley: Fist closed -> Hand opened
-                if sum(fingers) == 0:
-                    self.prev_arrow_state = 1
-                elif sum(fingers) >= 4 and self.prev_arrow_state == 1:
-                    gesture_detected = "Arrow_Volley"
-                    print("Gesture Detected: Arrow Volley")
-                    self.prev_arrow_state = 0
-                    
-                # 2. Lightning Strike: Index finger pointing up -> Swift downward motion
-                index_up_only = (fingers[1] == 1 and sum(fingers[2:]) == 0)
-                if index_up_only:
-                    self.prev_lightning_state = 1
-                    self.lightning_y_start = hand_landmarks.landmark[self.mp_hands.HandLandmark.INDEX_FINGER_TIP].y
-                elif self.prev_lightning_state == 1:
-                    current_y = hand_landmarks.landmark[self.mp_hands.HandLandmark.INDEX_FINGER_TIP].y
-                    # Y goes down as value increases (from 0 top to 1 bottom)
-                    if current_y - self.lightning_y_start > 0.2: 
-                        gesture_detected = "Lightning_Strike"
-                        print("Gesture Detected: Lightning Strike")
-                        self.prev_lightning_state = 0
+        if len(self.results.hand_landmarks) == 1:
+            landmarks = self.results.hand_landmarks[0]
+            fingers = self.fingers_up(landmarks)
+            
+            # 1. Arrow Volley: Fist closed -> Hand opened
+            if sum(fingers) == 0:
+                self.prev_arrow_state = 1
+            elif sum(fingers) >= 4 and self.prev_arrow_state == 1:
+                gesture_detected = "Arrow_Volley"
+                print("Gesture Detected: Arrow Volley")
+                self.prev_arrow_state = 0
+                
+            # 2. Lightning Strike: Index finger pointing up -> Swift downward motion
+            index_up_only = (fingers[1] == 1 and sum(fingers[2:]) == 0)
+            if index_up_only:
+                self.prev_lightning_state = 1
+                self.lightning_y_start = landmarks[8].y # index finger tip
+            elif self.prev_lightning_state == 1:
+                current_y = landmarks[8].y
+                if current_y - self.lightning_y_start > 0.2: 
+                    gesture_detected = "Lightning_Strike"
+                    print("Gesture Detected: Lightning Strike")
+                    self.prev_lightning_state = 0
                 
         return gesture_detected
 
@@ -123,7 +142,8 @@ def main():
         if not success:
             break
             
-        img = tracker.process_frame(img)
+        timestamp_ms = int(time.time() * 1000)
+        img = tracker.process_frame(img, timestamp_ms)
         gesture = tracker.detect_gestures()
         
         current_time = time.time()
