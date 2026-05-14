@@ -1,6 +1,19 @@
 import cv2
 import mediapipe as mp
 import time
+import socket
+import json
+
+class UDPSender:
+    def __init__(self, ip="127.0.0.1", port=5052):
+        self.ip = ip
+        self.port = port
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        
+    def send_gesture(self, gesture_name):
+        data = {"gesture": gesture_name}
+        json_data = json.dumps(data)
+        self.sock.sendto(json_data.encode("utf-8"), (self.ip, self.port))
 
 class GestureTracker:
     def __init__(self):
@@ -102,6 +115,8 @@ class GestureTracker:
 def main():
     cap = cv2.VideoCapture(0)
     tracker = GestureTracker()
+    udp_sender = UDPSender()
+    last_sent_time = 0
     
     while True:
         success, img = cap.read()
@@ -111,8 +126,14 @@ def main():
         img = tracker.process_frame(img)
         gesture = tracker.detect_gestures()
         
+        current_time = time.time()
         if gesture:
             cv2.putText(img, gesture, (10, 120), cv2.FONT_HERSHEY_PLAIN, 3, (0, 255, 0), 3)
+            # 1 second cooldown to prevent spamming UDP
+            if current_time - last_sent_time > 1.0:
+                udp_sender.send_gesture(gesture)
+                print(f"Sent UDP packet: {gesture}")
+                last_sent_time = current_time
         
         # Calculate FPS
         cTime = time.time()

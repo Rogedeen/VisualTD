@@ -9,10 +9,10 @@
 - [ ] Algılanan hareketleri konsola yazdır.
 
 ## Faz 2 - Köprü (The Bridge)
-- [ ] JSON verilerini serileştirip göndermek için Python'da UDP Sender oluştur.
-- [ ] Unity C#'ta asenkron UDP Receiver (`UDPReceiver.cs`) oluştur.
-- [ ] Unity tarafında ana iş parçacığını dondurmadan JSON verisi ayrıştırma (parsing) işlemini gerçekleştir.
-- [ ] Python ve Unity arasındaki uçtan uca iletişimi test et.
+- [x] JSON verilerini serileştirip göndermek için Python'da UDP Sender oluştur.
+- [x] Unity C#'ta asenkron UDP Receiver (`UDPReceiver.cs`) oluştur.
+- [x] Unity tarafında ana iş parçacığını dondurmadan JSON verisi ayrıştırma (parsing) işlemini gerçekleştir.
+- [x] Python ve Unity arasındaki uçtan uca iletişimi test et.
 
 ## Faz 3 - Temel Oyun Sistemleri
 - [ ] Objelerin verimli yönetimi için `ObjectPooler.cs` oluştur.
