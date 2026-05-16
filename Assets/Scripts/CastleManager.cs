@@ -13,12 +13,22 @@ public class CastleManager : MonoBehaviour
     [Tooltip("How fast the wall shrinks into the ground")]
     [SerializeField] private float collapseDuration = 0.5f;
 
+    [Header("UI & Feedback")]
+    [SerializeField] private HealthBar healthBar;
+    [SerializeField] private DamageFlash damageFlash;
+
     public UnityEvent OnCastleDestroyed;
     private bool isDestroyed = false;
+    
+    public bool IsDestroyed => isDestroyed;
 
     private void Start()
     {
         currentHealth = maxHealth;
+        if (healthBar == null) healthBar = GetComponentInChildren<HealthBar>();
+        if (damageFlash == null) damageFlash = GetComponent<DamageFlash>();
+        
+        if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
     }
 
     public void TakeDamage(float amount)
@@ -26,6 +36,10 @@ public class CastleManager : MonoBehaviour
         if (isDestroyed) return;
 
         currentHealth -= amount;
+        
+        if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
+        if (damageFlash != null) damageFlash.Flash();
+
         if (currentHealth <= 0)
         {
             currentHealth = 0;
@@ -47,6 +61,9 @@ public class CastleManager : MonoBehaviour
         {
             currentHealth = maxHealth;
         }
+        
+        if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
+        
         Debug.Log($"Wall Healed: {currentHealth}/{maxHealth}");
     }
 

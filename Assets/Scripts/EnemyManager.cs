@@ -1,18 +1,35 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemyManager : MonoBehaviour
 {
     [SerializeField] private Transform[] spawnPoints;
-    [SerializeField] private float spawnInterval = 3f;
+    [SerializeField] private int enemiesPerWave = 3;
+    [SerializeField] private float waveInterval = 5f;
+    [SerializeField] private float enemySpawnDelay = 0.5f;
     
-    private float nextSpawnTime;
+    private float nextWaveTime;
+    private int spawnPointIndex = 0;
 
     private void Update()
     {
-        if (Time.time >= nextSpawnTime)
+        if (Time.time >= nextWaveTime)
+        {
+            StartCoroutine(SpawnWave());
+            nextWaveTime = Time.time + waveInterval;
+        }
+    }
+
+    private IEnumerator SpawnWave()
+    {
+        for (int i = 0; i < enemiesPerWave; i++)
         {
             SpawnEnemy();
-            nextSpawnTime = Time.time + spawnInterval;
+            
+            if (i < enemiesPerWave - 1)
+            {
+                yield return new WaitForSeconds(enemySpawnDelay);
+            }
         }
     }
 
@@ -20,10 +37,10 @@ public class EnemyManager : MonoBehaviour
     {
         if (spawnPoints.Length == 0) return;
 
-        int randomIndex = Random.Range(0, spawnPoints.Length);
-        Transform spawnPoint = spawnPoints[randomIndex];
+        // Cycle through spawn points instead of random
+        Transform spawnPoint = spawnPoints[spawnPointIndex];
+        spawnPointIndex = (spawnPointIndex + 1) % spawnPoints.Length;
 
-        // Enemy prefab must be registered in ObjectPooler with tag "Enemy"
         ObjectPooler.Instance.SpawnFromPool("Enemy", spawnPoint.position, spawnPoint.rotation);
     }
 }
