@@ -14,3 +14,6 @@ Applying SOLID principles ensures a scalable and maintainable codebase:
 
 ## Object Pooling for Performance
 In Unity, repeatedly instantiating and destroying GameObjects (like arrows or enemies) triggers garbage collection and memory allocation, leading to frame rate drops (stutters). Object Pooling solves this by pre-instantiating a set number of objects and disabling them. When an object is needed, it is enabled and repositioned. When it is "destroyed", it is simply disabled and returned to the pool, drastically reducing CPU overhead.
+
+## Pooled Spawn Order Matters
+When a pooled object has `OnEnable` logic, its position and rotation should be assigned before calling `SetActive(true)`. Otherwise, the object can briefly initialize with stale transform data from its previous use, which can create incorrect facing, animation, or agent state on the first frame.

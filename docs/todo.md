@@ -25,4 +25,5 @@
 - [ ] Connect `GestureParser.cs` to `SkillManager.cs` to trigger actual skills from UDP data.
 - [ ] Hook up KayKit animations (Idle, Walk, Attack, Die).
 - [ ] Add visual and particle effects for skills (arrows falling, lightning strike, healing aura).
+- [ ] Play-mode verify tower and enemy orientation after the spawn rotation fix.
 - [ ] Balance test and polish gameplay mechanics.
