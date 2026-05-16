@@ -3756,7 +3756,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.33311862, y: 0.012670904, z: -0.0044770497, w: 0.9427892}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.4897199, y: 4.51, z: -6.80619}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -13218,51 +13218,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8b9e92eac85154a4cbf536163e3588cb, type: 3}
   m_PrefabInstance: {fileID: 972764210}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &977348165 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5355089339792264935, guid: d07c0466761bf214da0d2006514706b6, type: 3}
-  m_PrefabInstance: {fileID: 2226981757023233058}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &977348166 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7938680839563534842, guid: d07c0466761bf214da0d2006514706b6, type: 3}
   m_PrefabInstance: {fileID: 2226981757023233058}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &977348167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 977348165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7065dc9622088947b540c0a34032c9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DamageFlash
-  flashColor: {r: 1, g: 0, b: 0, a: 1}
-  flashDuration: 0.1
-  renderers: []
---- !u!114 &977348168
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 977348165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 898beaf6a18556f4ab0dcaaf9c07224b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CastleManager
-  maxHealth: 1000
-  dustParticlePrefab: {fileID: 0}
-  collapseDuration: 0.5
-  healthBar: {fileID: 0}
-  damageFlash: {fileID: 0}
-  OnCastleDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1001 &988786272
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28857,14 +28817,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tower
       objectReference: {fileID: 0}
-    - target: {fileID: 5355089339792264935, guid: d07c0466761bf214da0d2006514706b6, type: 3}
-      propertyPath: m_TagString
-      value: Castle
-      objectReference: {fileID: 0}
-    - target: {fileID: 6573106206151720142, guid: d07c0466761bf214da0d2006514706b6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.399
-      objectReference: {fileID: 0}
     - target: {fileID: 7938680839563534842, guid: d07c0466761bf214da0d2006514706b6, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.016092777
@@ -28908,13 +28860,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5355089339792264935, guid: d07c0466761bf214da0d2006514706b6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 977348168}
-    - targetCorrespondingSourceObject: {fileID: 5355089339792264935, guid: d07c0466761bf214da0d2006514706b6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 977348167}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d07c0466761bf214da0d2006514706b6, type: 3}
 --- !u!1001 &2625749719933973408
 PrefabInstance:
