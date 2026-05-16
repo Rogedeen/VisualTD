@@ -21,7 +21,6 @@ public class EnemyAI : MonoBehaviour
     private Transform castleTarget;
     private CastleManager castleManager;
     private float lastAttackTime;
-    private Quaternion initialLocalRotation;
     
     private bool isDead = false;
     public bool IsDead => isDead; // Okçular ölüleri hedef almasın diye public yaptık
@@ -37,7 +36,6 @@ public class EnemyAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        initialLocalRotation = transform.localRotation;
         
         if (healthBar == null) healthBar = GetComponentInChildren<HealthBar>();
         if (damageFlash == null) damageFlash = GetComponent<DamageFlash>();
@@ -48,7 +46,6 @@ public class EnemyAI : MonoBehaviour
         IsSpawning = true; // Uyanma modunda
         currentHealth = maxHealth;
         isDead = false;
-        transform.localRotation = initialLocalRotation;
         GetComponent<Collider>().enabled = true;
 
         // Havuzdan çıktığında NavMesh hatalarını önlemek için bulunduğu yere zorla oturt
