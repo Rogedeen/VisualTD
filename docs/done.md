@@ -14,3 +14,4 @@
 - [x] Fixed attack spam by preventing state re-triggering (TransitionToAttack checks current state).
 - [x] Added missing pathPending and hasPath checks for robust NavMesh pathfinding.
 - [x] Improved spawn point cycling (round-robin instead of random) to spread enemies across spawn points.
+- [x] Projected enemy castle targets onto NavMesh before SetDestination so below-ground castle roots do not break pathfinding.
