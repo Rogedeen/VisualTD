@@ -15,11 +15,12 @@
 - [ ] Test end-to-end communication between Python and Unity.
 
 ## Phase 3 - Core Game Systems
-- [ ] Implement `ObjectPooler.cs` for efficient object management.
-- [ ] Implement `EnemyManager.cs` and `EnemyAI.cs` with NavMesh integration.
-- [ ] Implement `SkillManager.cs` and define skill structures.
-- [ ] Implement `CastleManager.cs` for gate/wall health management.
-- [ ] Set up Unity Inspector variables and prepare NavMesh instructions for the user.
+- [x] Implement `ObjectPooler.cs` for efficient object management.
+- [x] Implement `EnemyManager.cs` and `EnemyAI.cs` with NavMesh integration.
+- [x] Implement `SkillManager.cs` and define skill structures.
+- [x] Implement `CastleManager.cs` for gate/wall health management.
+- [x] Set up Unity Inspector variables and prepare NavMesh instructions for the user.
+- [x] Complete enemy wave system with state machine and proper NavMesh lifecycle.
 
 ## Phase 4 - Integration & Polish
 - [ ] Connect `GestureParser.cs` to `SkillManager.cs` to trigger actual skills from UDP data.
