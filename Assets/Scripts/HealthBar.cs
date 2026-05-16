@@ -19,14 +19,14 @@ public class HealthBar : MonoBehaviour
 
     private void LateUpdate()
     {
-        // Billboard effect: Make the health bar always face the camera (canvas style)
-        if (mainCamera != null)
+        // Billboard effect: Only rotate the UI image to face camera, NOT the parent transform
+        if (mainCamera != null && fillImage != null)
         {
-            // Only rotate to face camera, but maintain local Z orientation
-            Vector3 dirToCamera = mainCamera.position - transform.position;
+            // Only the fill image rotates; the parent (enemy) rotation stays unchanged
+            Vector3 dirToCamera = mainCamera.position - fillImage.transform.position;
             if (dirToCamera != Vector3.zero)
             {
-                transform.rotation = Quaternion.LookRotation(-dirToCamera, Vector3.up);
+                fillImage.transform.rotation = Quaternion.LookRotation(-dirToCamera, Vector3.up);
             }
         }
     }
