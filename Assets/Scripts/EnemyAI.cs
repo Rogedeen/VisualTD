@@ -6,10 +6,14 @@ using System.Collections;
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float maxHealth = 500f; // Can arttırıldı (Önceden 100'dü)
     [SerializeField] private float attackDamage = 10f;
     [SerializeField] private float attackRange = 3f;
     [SerializeField] private float attackCooldown = 2f;
+    
+    [Header("UI & Feedback")]
+    [SerializeField] private HealthBar healthBar;
+    [SerializeField] private DamageFlash damageFlash;
     
     private float currentHealth;
     private NavMeshAgent agent;
@@ -17,7 +21,12 @@ public class EnemyAI : MonoBehaviour
     private Transform castleTarget;
     private CastleManager castleManager;
     private float lastAttackTime;
+    private Quaternion initialLocalRotation;
+    
     private bool isDead = false;
+    public bool IsDead => isDead; // Okçular ölüleri hedef almasın diye public yaptık
+    
+    public bool IsSpawning { get; private set; } = true; // Spawn olurken okçular saldırmasın diye
 
     // Animator Hashes
     private readonly int speedHash = Animator.StringToHash("Speed");
@@ -28,27 +37,66 @@ public class EnemyAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        initialLocalRotation = transform.localRotation;
+        
+        if (healthBar == null) healthBar = GetComponentInChildren<HealthBar>();
+        if (damageFlash == null) damageFlash = GetComponent<DamageFlash>();
     }
 
     private void OnEnable()
     {
+        IsSpawning = true; // Uyanma modunda
         currentHealth = maxHealth;
         isDead = false;
+        transform.localRotation = initialLocalRotation;
         GetComponent<Collider>().enabled = true;
-        
-        // Find Castle if not assigned (Usually better to pass this via EnemyManager)
-        if (castleTarget == null)
+
+        // Havuzdan çıktığında NavMesh hatalarını önlemek için bulunduğu yere zorla oturt
+        if (agent != null && agent.isActiveAndEnabled)
         {
-            GameObject castle = GameObject.FindGameObjectWithTag("Castle");
-            if (castle != null)
+            agent.Warp(transform.position);
+        }
+        
+        if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
+
+        // Find the closest Castle/Wall/Tower piece
+        GameObject[] castles = GameObject.FindGameObjectsWithTag("Castle");
+        float closestDistance = Mathf.Infinity;
+        GameObject closestCastle = null;
+
+        foreach (GameObject castle in castles)
+        {
+            float distance = Vector3.Distance(transform.position, castle.transform.position);
+            if (distance < closestDistance)
             {
-                castleTarget = castle.transform;
-                castleManager = castle.GetComponent<CastleManager>();
+                closestDistance = distance;
+                closestCastle = castle;
             }
         }
 
-        if (castleTarget != null)
+        if (closestCastle != null)
         {
+            castleTarget = closestCastle.transform;
+            castleManager = closestCastle.GetComponent<CastleManager>();
+            // SetDestination'ı buradan kaldırdık, WaitAndMove içine aldık
+            agent.isStopped = true; // Spawn animasyonu bitene kadar dur
+            StartCoroutine(WaitAndMove());
+        }
+        else
+        {
+            // Stop agent if no target is found
+            agent.isStopped = true;
+        }
+    }
+
+    private IEnumerator WaitAndMove()
+    {
+        yield return new WaitForSeconds(2f); // Spawn animasyonu süresi (yaklaşık)
+        IsSpawning = false; // Artık uyanma bitti, okçular saldırabilir
+
+        if (!isDead && castleTarget != null)
+        {
+            // Rotayı uyanma bittikten sonra belirliyoruz ki NavMesh sorunsuz hesaplasın
             agent.SetDestination(castleTarget.position);
             agent.isStopped = false;
         }
@@ -56,10 +104,15 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
-        if (isDead || castleTarget == null) return;
+        // Spawning (uyanma) aşamasındayken Update döngüsü çalışmasın.
+        // Aksi halde aşağıdaki isStopped = false komutu uyanma süresini hemen iptal eder.
+        if (IsSpawning || isDead || castleTarget == null) return;
 
         // Update Animator Speed
-        animator.SetFloat(speedHash, agent.velocity.magnitude);
+        if (agent.isActiveAndEnabled && agent.isOnNavMesh)
+        {
+            animator.SetFloat(speedHash, agent.velocity.magnitude);
+        }
 
         // Check Attack Range
         float distanceToCastle = Vector3.Distance(transform.position, castleTarget.position);
@@ -93,6 +146,10 @@ public class EnemyAI : MonoBehaviour
         if (isDead) return;
 
         currentHealth -= amount;
+        
+        if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
+        if (damageFlash != null) damageFlash.Flash();
+
         if (currentHealth <= 0)
         {
             Die();

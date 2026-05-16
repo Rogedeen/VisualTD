@@ -17,3 +17,6 @@ In Unity, repeatedly instantiating and destroying GameObjects (like arrows or en
 
 ## Pooled Spawn Order Matters
 When a pooled object has `OnEnable` logic, its position and rotation should be assigned before calling `SetActive(true)`. Otherwise, the object can briefly initialize with stale transform data from its previous use, which can create incorrect facing, animation, or agent state on the first frame.
+
+## Baseline Rotation Cache
+If an animated humanoid character keeps an unexpected tilt after spawn, caching the prefab's initial local rotation in `Awake` and restoring it in `OnEnable` is a robust way to separate authored orientation from transient animation pose or pooled reuse state.

@@ -15,17 +15,23 @@ public class ArcherAI : MonoBehaviour
     private float nextFireTime;
     private readonly int attackHash = Animator.StringToHash("Attack");
     private EnemyAI currentTarget; // Atış sırasında hedefi hafızada tutmak için
+    private Quaternion initialLocalRotation;
 
-    // Gesture control variables
-    public static bool isHoldingFire = false;
-
-    private void Start()
+    private void Awake()
     {
-        transform.rotation = Quaternion.identity;
+        initialLocalRotation = transform.localRotation;
+    }
+
+    private void OnEnable()
+    {
+        transform.localRotation = initialLocalRotation;
 
         // Okçuların aynı anda senkronize ok atmasını önlemek için rastgele bir başlangıç süresi
         nextFireTime = Time.time + Random.Range(1f, fireRate + 2f);
     }
+
+    // Gesture control variables
+    public static bool isHoldingFire = false;
 
     private void Update()
     {
