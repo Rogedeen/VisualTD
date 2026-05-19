@@ -15,3 +15,11 @@
 - [x] Added missing pathPending and hasPath checks for robust NavMesh pathfinding.
 - [x] Improved spawn point cycling (round-robin instead of random) to spread enemies across spawn points.
 - [x] Projected enemy castle targets onto NavMesh before SetDestination so below-ground castle roots do not break pathfinding.
+- [x] Standardized all KayKit characters to use a shared `UniversalSkeletonAvatar` and Humanoid Rig.
+- [x] Rig Debugging & Stabilization: Fixed "gliding/frozen" motion by force-enabling Loop Time and Humanoid conversion via code for all FBX assets.
+- [x] Implemented Y-axis locking in `EnemyAI` to eliminate floating/clipping (forced transform position sync with `agent.nextPosition`).
+- [x] Refactored `SkillManager` into a central gesture API (Fireball, Lightning, Fortify, Archer Hold).
+- [x] Integrated `GestureParser` with `SkillManager` for webcam-controlled feedback.
+- [x] Implemented `MageAI` defender logic (Auto-repair structures, cast fireballs at enemies).
+- [x] Synchronized Commander and Mage Animator Controllers with gesture-based parameters (`isHolding`, `isFortifying`, `fireball`).
+- [x] Fixed code-base compilation errors (CS7036, CS1061) regarding method signature mismatches.
