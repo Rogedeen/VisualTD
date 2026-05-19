@@ -60,6 +60,9 @@ Yetenekler, okçuların yetersiz kaldığı anlarda (duvarda yığılma olduğun
 | **Arrow Volley** (El Açma) | Alan Hasarı (AoE) | 10 Ok x 20 Hasar = Toplam 200 Hasar (Alana Dağıtılır) | 15 Saniye | Kalabalık "Zayıf" düşman yığınlarını temizlemek. |
 | **Lightning Strike** (Aşağı Çekme)| Yüksek Tekli Hasar | Küçük Alanda 150 Hasar (Çarpılma Etkisi) | 30 Saniye | Canı yüksek olan (Örn: Boss veya Zırhlı) düşmanları tek seferde eritmek. |
 | **Fortify / Heal** (Dur İşareti) | Bina Canı Yenileme | Hedef Binaya +150 HP | 20 Saniye | Yıkılmak üzere olan kapıyı/duvarı kritik anda kurtarmak. |
+| **Fireball** (Adukhet) | Yoğun Alan Hasarı (AoE) | En kalabalık gruba 150 Splash Hasarı | 25 Saniye | Yığılmış olan düşman gruplarını tamamen temizlemek. İki elin bileklerinin yakın olması ile tetiklenir. |
+| **Time Out** (T-Şekli) | Oyunu Durdurma | Time.timeScale = 0 | - | Yükseltme (Upgrade) yapmak veya molaya çıkmak için oyunu durdurur. |
+| **Upgrade 1-4** (1,2,3,4 Parmak) | Ekonomi / Yükseltme | Altın harcanarak kalıcı güçlendirmeler alınır. | - | Parmaklar 3 saniye havada tutulduğunda (oyun akarken veya dururken) tetiklenir. |
 
 ---
 **ALTIN KURAL:** Yeni ajan, `EnemyAI.cs`, `ArcherAI.cs` ve oluşturulacak yeni Bina scriptlerinde (Örn: `StructureManager.cs`) yukarıdaki değerleri `[SerializeField]` olarak Unity Inspector'a açmalı ve bu varsayılan (default) değerleri atamalıdır. Herhangi bir magic number (sabit sayı) kullanmak yasaktır!
