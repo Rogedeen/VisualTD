@@ -13,6 +13,7 @@ public class ArcherAI : MonoBehaviour
     private float nextFireTime;
     private readonly int attackHash = Animator.StringToHash("Attack");
     private readonly int dieHash = Animator.StringToHash("Die");
+    private readonly int holdHash = Animator.StringToHash("isHolding");
     private EnemyAI currentTarget; // Atış sırasında hedefi hafızada tutmak için
     private bool isDead = false;
 
@@ -31,6 +32,11 @@ public class ArcherAI : MonoBehaviour
 
     private void Update()
     {
+        if (animator != null)
+        {
+            animator.SetBool(holdHash, isHoldingFire);
+        }
+
         if (isDead || isHoldingFire) return; // Yumruk yapıldıysa veya ölüyse ok atma
 
         if (Time.time >= nextFireTime)

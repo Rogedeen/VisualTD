@@ -40,24 +40,30 @@ public class SkillManager : MonoBehaviour
 
         if (commanderAnimator != null) commanderAnimator.SetTrigger(castArrowHash);
 
-        // Sahnedeki tüm okçuları bul ve aynı anda ateş ettir (Volley efekti)
-        ArcherAI[] archers = FindObjectsOfType<ArcherAI>();
-        foreach (var archer in archers)
+        // Sahnedeki düşmanlara gökyüzünden ok yağdırma efekti
+        EnemyAI[] enemies = FindObjectsOfType<EnemyAI>();
+        if (enemies.Length > 0)
         {
-            EnemyAI target = archer.FindNearestEnemy();
-            if (target != null)
+            for (int i = 0; i < 20; i++)
             {
-                archer.Shoot(target);
+                // Rastgele bir düşman seç
+                EnemyAI randomEnemy = enemies[Random.Range(0, enemies.Length)];
+                if (randomEnemy != null && !randomEnemy.IsDead)
+                {
+                    // Düşmanın biraz tepesinden spawn et (Gökyüzünden yağıyor hissi için)
+                    Vector3 spawnPos = randomEnemy.transform.position + new Vector3(Random.Range(-3f, 3f), Random.Range(10f, 15f), Random.Range(-3f, 3f));
+                    GameObject arrowObj = ObjectPooler.Instance.SpawnFromPool("Arrow", spawnPos, Quaternion.Euler(90, 0, 0));
+                    
+                    if (arrowObj != null)
+                    {
+                        Arrow arrowScript = arrowObj.GetComponent<Arrow>();
+                        if (arrowScript != null)
+                        {
+                            arrowScript.Initialize(randomEnemy.transform);
+                        }
+                    }
+                }
             }
-        }
-
-        // Gökyüzünden ekstra ok yağdırma efekti (Opsiyonel)
-        Vector3 targetPosition = Vector3.zero; // Or center of the map
-        for (int i = 0; i < 10; i++)
-        {
-            Vector3 randomOffset = new Vector3(Random.Range(-5f, 5f), 15f, Random.Range(-5f, 5f));
-            Vector3 spawnPos = targetPosition + randomOffset;
-            ObjectPooler.Instance.SpawnFromPool("Arrow", spawnPos, Quaternion.Euler(90, 0, 0));
         }
     }
 
