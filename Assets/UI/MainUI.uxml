@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:Style src="project://database/Assets/UI/MainUI.uss" />
-    <ui:VisualElement name="TopContainer" style="flex-direction: row; justify-content: space-between; width: 100%;">
+    <ui:Style src="MainUI.uss" />
+    <ui:VisualElement name="TopContainer" style="position: absolute; top: 10px; left: 10px; right: 10px; flex-direction: row; justify-content: space-between;">
         <ui:VisualElement name="EconomyPanel" class="glass-panel">
             <ui:Label text="GOLD" style="font-size: 12px; color: rgb(200, 200, 200);" />
             <ui:Label name="GoldText" text="0" class="resource-text" />

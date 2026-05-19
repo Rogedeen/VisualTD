@@ -6,21 +6,18 @@
     padding: 12px 24px;
     margin: 16px;
     min-width: 150px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 .resource-text {
     font-size: 36px;
     -unity-font-style: bold;
     color: rgb(255, 215, 0); /* Gold color */
-    text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .health-text {
     font-size: 36px;
     -unity-font-style: bold;
     color: rgb(255, 60, 60); /* Red color */
-    text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .gesture-panel {
@@ -47,5 +44,4 @@
     font-size: 42px;
     -unity-font-style: bold;
     color: white;
-    text-shadow: 0 0 10px rgba(46, 163, 255, 0.5);
 }
