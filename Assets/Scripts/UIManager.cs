@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     private UIDocument uiDocument;
     private Label goldText;
     private Label healthText;
+    private Label playerHealthText;
     private Label gestureText;
     private VisualElement gesturePanel;
 
@@ -29,6 +30,7 @@ public class UIManager : MonoBehaviour
         var root = uiDocument.rootVisualElement;
         goldText = root.Q<Label>("GoldText");
         healthText = root.Q<Label>("HealthText");
+        playerHealthText = root.Q<Label>("PlayerHealthText");
         gestureText = root.Q<Label>("GestureText");
         gesturePanel = root.Q<VisualElement>("GesturePanel");
 
@@ -43,7 +45,8 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance != null)
         {
             if (goldText != null) goldText.text = GameManager.Instance.Gold.ToString();
-            if (healthText != null) healthText.text = GameManager.Instance.BaseHealth.ToString();
+            if (healthText != null) healthText.text = GameManager.Instance.GateHealth.ToString();
+            if (playerHealthText != null) playerHealthText.text = GameManager.Instance.PlayerHealth.ToString();
         }
 
         // Gesture panelinin yavaşça kaybolması (Fade out)

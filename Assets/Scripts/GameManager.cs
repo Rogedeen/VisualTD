@@ -6,12 +6,29 @@ public class GameManager : MonoBehaviour
     
     private bool isPaused = false;
     public int Gold { get; private set; } = 100; // Başlangıç parası
-    public int BaseHealth { get; private set; } = 1000; // Kule Canı
+    public int GateHealth { get; private set; } = 1000; // Kapı Canı
+    public int PlayerHealth { get; private set; } = 20; // Oyuncu Canı
 
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+    }
+
+    public void TakePlayerDamage(int amount)
+    {
+        PlayerHealth -= amount;
+        if (PlayerHealth <= 0)
+        {
+            PlayerHealth = 0;
+            Debug.Log(">>> GAME OVER! KALEN DÜŞTÜ! <<<");
+            Time.timeScale = 0f; // Oyunu durdur
+        }
+    }
+
+    public void UpdateGateHealth(int currentHealth)
+    {
+        GateHealth = currentHealth;
     }
 
     public void TogglePause()
