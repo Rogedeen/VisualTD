@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     
     private bool isPaused = false;
     public int Gold { get; private set; } = 100; // Başlangıç parası
+    public int BaseHealth { get; private set; } = 1000; // Kule Canı
 
     private void Awake()
     {

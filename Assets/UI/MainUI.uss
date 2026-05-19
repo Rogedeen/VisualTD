@@ -1,0 +1,51 @@
+.glass-panel {
+    background-color: rgba(15, 20, 30, 0.85);
+    border-radius: 12px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.1);
+    padding: 12px 24px;
+    margin: 16px;
+    min-width: 150px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.resource-text {
+    font-size: 36px;
+    -unity-font-style: bold;
+    color: rgb(255, 215, 0); /* Gold color */
+    text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.health-text {
+    font-size: 36px;
+    -unity-font-style: bold;
+    color: rgb(255, 60, 60); /* Red color */
+    text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.gesture-panel {
+    position: absolute;
+    bottom: 40px;
+    align-self: center;
+    align-items: center;
+    background-color: rgba(10, 15, 25, 0.95);
+    border-radius: 20px;
+    padding: 16px 32px;
+    border-top-width: 3px;
+    border-top-color: rgb(46, 163, 255);
+}
+
+.gesture-label {
+    font-size: 14px;
+    color: rgb(160, 196, 255);
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+}
+
+.gesture-value {
+    font-size: 42px;
+    -unity-font-style: bold;
+    color: white;
+    text-shadow: 0 0 10px rgba(46, 163, 255, 0.5);
+}

@@ -28,6 +28,11 @@ public class GestureParser : MonoBehaviour
     {
         Debug.Log($"[GestureParser] Executing action for: {gestureName}");
         
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateGestureText(gestureName);
+        }
+
         switch (gestureName)
         {
             case "Hold_Fire":
