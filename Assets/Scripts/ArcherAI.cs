@@ -19,6 +19,11 @@ public class ArcherAI : MonoBehaviour
 
     private void Awake()
     {
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
+            if (animator == null) animator = GetComponentInChildren<Animator>();
+        }
     }
 
     private void OnEnable()
