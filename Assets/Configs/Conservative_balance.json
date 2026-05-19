@@ -1,0 +1,21 @@
+{
+  "name": "Conservative",
+  "WaveCount": 20,
+  "BaseEnemiesPerWave": 8,
+  "EnemyGrowthRate": 1.12,
+  "SpawnInterval": 1.2,
+  "Enemies": {
+    "Skeleton_Minion": { "HP": 30, "Damage": 5, "AttackRate": 1.2, "MoveSpeed": 2.2, "RewardGold": 2 },
+    "Ranger": { "HP": 60, "Damage": 8, "AttackRate": 1.0, "MoveSpeed": 2.0, "RewardGold": 4 },
+    "Barbarian": { "HP": 90, "Damage": 12, "AttackRate": 0.9, "MoveSpeed": 2.6, "RewardGold": 5 },
+    "Knight": { "HP": 200, "Damage": 20, "AttackRate": 1.5, "MoveSpeed": 1.6, "RewardGold": 10 },
+    "Brute": { "HP": 300, "Damage": 25, "AttackRate": 1.2, "MoveSpeed": 1.4, "RewardGold": 14 },
+    "Skirmisher": { "HP": 120, "Damage": 10, "AttackRate": 0.8, "MoveSpeed": 3.0, "RewardGold": 6 }
+  },
+  "ArcherTower": { "Damage": 25, "FireRate": 0.8, "Range": 8.0, "Cost": 60 },
+  "Gate": { "MaxHP": 2000 },
+  "Wall": { "HPperSegment": 300 },
+  "PlayerInteriorDamage": 5,
+  "StartingPlayerHP": 100,
+  "GoldPerKillScaling": 1.02
+}

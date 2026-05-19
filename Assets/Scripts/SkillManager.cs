@@ -10,7 +10,14 @@ public class SkillManager : MonoBehaviour
     [SerializeField] private float lightningRadius = 5f;
 
     [Header("References")]
-    [SerializeField] private CastleManager castleManager;
+    [SerializeField] private StructureManager mainGate; // The main gate
+    [Tooltip("The Commander character standing on the tower")]
+    [SerializeField] private Animator commanderAnimator;
+
+    // Animator Hashes for Commander
+    private readonly int castArrowHash = Animator.StringToHash("CastArrow");
+    private readonly int castLightningHash = Animator.StringToHash("CastLightning");
+    private readonly int castHealHash = Animator.StringToHash("CastHeal");
 
     private void Awake()
     {
@@ -20,13 +27,35 @@ public class SkillManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void TriggerArrowVolley(Vector3 targetPosition)
+    public void HoldArchers()
     {
-        Debug.Log("Skill Triggered: Arrow Volley at " + targetPosition);
-        // Spawn 10 arrows in a radius around the target position
+        Debug.Log("Skill Triggered: Hold Archers");
+        ArcherAI.isHoldingFire = true;
+    }
+
+    public void TriggerArrowVolley()
+    {
+        Debug.Log("Skill Triggered: Arrow Volley!");
+        ArcherAI.isHoldingFire = false; // Ateş serbest!
+
+        if (commanderAnimator != null) commanderAnimator.SetTrigger(castArrowHash);
+
+        // Sahnedeki tüm okçuları bul ve aynı anda ateş ettir (Volley efekti)
+        ArcherAI[] archers = FindObjectsOfType<ArcherAI>();
+        foreach (var archer in archers)
+        {
+            EnemyAI target = archer.FindNearestEnemy();
+            if (target != null)
+            {
+                archer.Shoot(target);
+            }
+        }
+
+        // Gökyüzünden ekstra ok yağdırma efekti (Opsiyonel)
+        Vector3 targetPosition = Vector3.zero; // Or center of the map
         for (int i = 0; i < 10; i++)
         {
-            Vector3 randomOffset = new Vector3(Random.Range(-2f, 2f), 10f, Random.Range(-2f, 2f));
+            Vector3 randomOffset = new Vector3(Random.Range(-5f, 5f), 15f, Random.Range(-5f, 5f));
             Vector3 spawnPos = targetPosition + randomOffset;
             ObjectPooler.Instance.SpawnFromPool("Arrow", spawnPos, Quaternion.Euler(90, 0, 0));
         }
@@ -35,6 +64,8 @@ public class SkillManager : MonoBehaviour
     public void TriggerLightningStrike(Vector3 targetPosition)
     {
         Debug.Log("Skill Triggered: Lightning Strike at " + targetPosition);
+        
+        if (commanderAnimator != null) commanderAnimator.SetTrigger(castLightningHash);
         
         // Spawn Visual Effect
         ObjectPooler.Instance.SpawnFromPool("Lightning", targetPosition, Quaternion.identity);
@@ -54,11 +85,61 @@ public class SkillManager : MonoBehaviour
     public void TriggerFortifyWall()
     {
         Debug.Log("Skill Triggered: Fortify Wall");
-        if (castleManager != null)
+
+        if (commanderAnimator != null) commanderAnimator.SetTrigger(castHealHash);
+
+        if (mainGate != null)
         {
-            castleManager.HealWall(healAmount);
+            mainGate.HealWall(healAmount);
             // Optional: Spawn Heal particle effect at castle position
-            // ObjectPooler.Instance.SpawnFromPool("HealEffect", castleManager.transform.position, Quaternion.identity);
+            // ObjectPooler.Instance.SpawnFromPool("HealEffect", mainGate.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            // Eğer ana kapı atanmadıysa, sahnede hayatta olan tüm duvarları/kapıları bulup can ver
+            StructureManager[] structures = FindObjectsOfType<StructureManager>();
+            foreach (var structure in structures)
+            {
+                structure.HealWall(healAmount);
+            }
         }
     }
+
+    public void TriggerMageCast()
+    {
+        Debug.Log("Skill Triggered: Spiderman Web (Yavaşlatma vb. eklenebilir)");
+        // Şimdilik sadece log atıyor, Spiderman için ilerde yavaşlatma eklenebilir.
+    }
+
+    public void TriggerFireball()
+    {
+        Debug.Log("Skill Triggered: Fireball (Adukhet)!");
+        
+        EnemyAI[] enemies = FindObjectsOfType<EnemyAI>();
+        if (enemies.Length > 0)
+        {
+            // En kalabalık düşman grubunu bulmak için basitçe ilk düşmanı seçip etrafındakileri buluyoruz.
+            // İlerde daha gelişmiş bir merkez bulma algoritması yazılabilir.
+            EnemyAI target = enemies[Random.Range(0, enemies.Length)];
+            if (target != null && !target.IsDead)
+            {
+                ObjectPooler.Instance.SpawnFromPool("Fireball", target.transform.position, Quaternion.identity);
+                
+                // Alan hasarı
+                float splashRadius = 5f;
+                float splashDamage = 150f;
+                
+                Collider[] colliders = Physics.OverlapSphere(target.transform.position, splashRadius);
+                foreach (var col in colliders)
+                {
+                    EnemyAI enemy = col.GetComponent<EnemyAI>();
+                    if (enemy != null && !enemy.IsDead)
+                    {
+                        enemy.TakeDamage(splashDamage);
+                    }
+                }
+            }
+        }
+    }
+
 }

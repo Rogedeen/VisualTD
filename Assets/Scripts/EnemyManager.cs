@@ -1,36 +1,63 @@
 using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
+public struct Wave
+{
+    [Tooltip("Bu dalgada çıkacak toplam düşman sayısı")]
+    public int enemyCount;
+    [Tooltip("Düşmanların ne kadar sıklıkla çıkacağı")]
+    public float spawnRate;
+}
+
 public class EnemyManager : MonoBehaviour
 {
     [SerializeField] private Transform[] spawnPoints;
-    [SerializeField] private int enemiesPerWave = 3;
-    [SerializeField] private float waveInterval = 5f;
-    [SerializeField] private float enemySpawnDelay = 0.5f;
     
-    private float nextWaveTime;
+    [Header("Wave Settings")]
+    [SerializeField] private Wave[] waves;
+    [SerializeField] private float timeBetweenWaves = 10f;
+    
+    private int currentWaveIndex = 0;
     private int spawnPointIndex = 0;
 
-    private void Update()
+    private void Start()
     {
-        if (Time.time >= nextWaveTime)
+        if (waves.Length > 0)
         {
-            StartCoroutine(SpawnWave());
-            nextWaveTime = Time.time + waveInterval;
+            StartCoroutine(SpawnWavesRoutine());
+        }
+        else
+        {
+            Debug.LogWarning("Hiç Wave ayarlanmamış! EnemyManager'dan wave ekleyin.");
         }
     }
 
-    private IEnumerator SpawnWave()
+    private IEnumerator SpawnWavesRoutine()
     {
-        for (int i = 0; i < enemiesPerWave; i++)
+        yield return new WaitForSeconds(3f); // Initial delay
+
+        while (currentWaveIndex < waves.Length)
         {
-            SpawnEnemy();
-            
-            if (i < enemiesPerWave - 1)
+            Debug.Log($"Wave {currentWaveIndex + 1} Başladı!");
+            Wave currentWave = waves[currentWaveIndex];
+
+            for (int i = 0; i < currentWave.enemyCount; i++)
             {
-                yield return new WaitForSeconds(enemySpawnDelay);
+                SpawnEnemy();
+                yield return new WaitForSeconds(currentWave.spawnRate);
+            }
+
+            currentWaveIndex++;
+            
+            if (currentWaveIndex < waves.Length)
+            {
+                Debug.Log($"Sonraki dalga için bekleniyor... ({timeBetweenWaves} saniye)");
+                yield return new WaitForSeconds(timeBetweenWaves);
             }
         }
+        
+        Debug.Log("Tüm dalgalar tamamlandı! (Oyuncu Kazandı)");
     }
 
     private void SpawnEnemy()

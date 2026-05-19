@@ -648,7 +648,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArcherAI
   fireRate: 4
-  range: 15
+  range: 8
   firePoint: {fileID: 5321067494575011293}
   animator: {fileID: 1581120615696862004}
 --- !u!1 &2278703167539361645

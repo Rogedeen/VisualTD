@@ -1,0 +1,16 @@
+{
+  "servers": {
+    "unityMCP": {
+      "command": "C:\\Users\\iyunu\\.local\\bin\\uvx.exe",
+      "args": [
+        "--offline",
+        "--from",
+        "mcpforunityserver==9.6.8",
+        "mcp-for-unity",
+        "--transport",
+        "stdio"
+      ],
+      "type": "stdio"
+    }
+  }
+}

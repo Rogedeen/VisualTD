@@ -6,10 +6,10 @@ using System.Collections;
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] private float maxHealth = 500f;
-    [SerializeField] private float attackDamage = 10f;
+    [SerializeField] private float maxHealth = 50f;
+    [SerializeField] private float attackDamage = 5f;
     [SerializeField] private float attackRange = 3f;
-    [SerializeField] private float attackCooldown = 2f;
+    [SerializeField] private float attackCooldown = 1.5f;
     [SerializeField] private float targetValidationInterval = 1f;
 
     [Header("UI & Feedback")]
@@ -23,9 +23,11 @@ public class EnemyAI : MonoBehaviour
     private float currentHealth;
     private NavMeshAgent agent;
     private Animator animator;
-    private Transform castleTarget;
-    private CastleManager castleManager;
-    private Vector3 castleNavMeshDestination;
+    
+    private Transform currentTarget;
+    private StructureManager targetStructure;
+    private Vector3 navMeshDestination;
+    
     private float lastAttackTime = -Mathf.Infinity;
     private float lastTargetValidationTime;
     private bool isDead = false;
@@ -40,8 +42,6 @@ public class EnemyAI : MonoBehaviour
     private Coroutine spawnCoroutine;
     private const float SPAWN_ANIMATION_DURATION = 2f;
 
-    // NavMesh arama yarıçapı — spawn noktaların navmesh'ten ne kadar uzakta
-    // olabileceğine göre bunu artır (5 → 10 gibi)
     private const float NAVMESH_SAMPLE_RADIUS = 5f;
     private const float TARGET_SAMPLE_RADIUS = 8f;
 
@@ -52,11 +52,12 @@ public class EnemyAI : MonoBehaviour
 
         if (healthBar == null) healthBar = GetComponentInChildren<HealthBar>();
         if (damageFlash == null) damageFlash = GetComponent<DamageFlash>();
+        
+        // NOTE: Do not override NavMeshAgent.speed here so prefab/inspector values are respected.
     }
 
     private void OnEnable()
     {
-        // State sıfırla
         currentState = EnemyState.Spawning;
         currentHealth = maxHealth;
         isDead = false;
@@ -65,7 +66,6 @@ public class EnemyAI : MonoBehaviour
 
         GetComponent<Collider>().enabled = true;
 
-        // Animator sıfırla — önceki triggerlar birikmiş olabilir
         if (animator != null)
         {
             animator.ResetTrigger(attackHash);
@@ -73,7 +73,6 @@ public class EnemyAI : MonoBehaviour
             animator.SetFloat(speedHash, 0f);
         }
 
-        // Agent'ı NavMesh'e oturt
         if (agent != null && agent.isActiveAndEnabled)
         {
             agent.isStopped = true;
@@ -87,9 +86,7 @@ public class EnemyAI : MonoBehaviour
             }
             else
             {
-                // NavMesh bulunamadı — bu objeyi kullanma, geri havuza gönder
-                Debug.LogWarning($"[EnemyAI] Spawn noktası NavMesh'ten çok uzak: {transform.position}. " +
-                                 $"NAVMESH_SAMPLE_RADIUS={NAVMESH_SAMPLE_RADIUS} artırılabilir ya da spawn noktası taşınmalı.");
+                Debug.LogWarning($"[EnemyAI] Spawn noktası NavMesh'ten çok uzak: {transform.position}.");
                 StartCoroutine(ReturnToPoolNextFrame());
                 return;
             }
@@ -97,9 +94,9 @@ public class EnemyAI : MonoBehaviour
 
         if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
 
-        if (!FindClosestCastle())
+        if (!FindTarget())
         {
-            Debug.LogWarning("[EnemyAI] Kale bulunamadı!");
+            Debug.LogWarning("[EnemyAI] Hedef bulunamadı!");
             StartCoroutine(ReturnToPoolNextFrame());
             return;
         }
@@ -124,74 +121,99 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    // Aynı frame'de SetActive(false) çağırmaktan kaçın
     private IEnumerator ReturnToPoolNextFrame()
     {
         yield return null;
         ObjectPooler.Instance.ReturnToPool("Enemy", gameObject);
     }
 
-    private bool FindClosestCastle()
+    private bool FindTarget()
     {
-        GameObject[] castles = GameObject.FindGameObjectsWithTag("Castle");
-        if (castles.Length == 0) return false;
-
-        float closestDistance = Mathf.Infinity;
-        GameObject closestCastle = null;
-
-        foreach (GameObject castle in castles)
+        StructureManager[] structures = FindObjectsOfType<StructureManager>();
+        StructureManager gate = null;
+        
+        // Önce Kapıyı (Gate) bul
+        foreach (var s in structures)
         {
-            if (castle == null || !castle.activeInHierarchy) continue;
-
-            float distance = Vector3.Distance(transform.position, castle.transform.position);
-            if (distance < closestDistance)
+            if (s.type == StructureType.Gate && !s.IsDestroyed && s.gameObject.activeInHierarchy)
             {
-                closestDistance = distance;
-                closestCastle = castle;
+                gate = s;
+                break;
             }
         }
 
-        if (closestCastle == null) return false;
-
-        castleTarget = closestCastle.transform;
-        castleManager = closestCastle.GetComponent<CastleManager>();
-
-        if (!TryUpdateCastleDestination())
+        if (gate != null)
         {
-            castleTarget = null;
-            castleManager = null;
-            return false;
+            currentTarget = gate.transform;
+            targetStructure = gate;
+            
+            // Kapıya yol var mı bak?
+            TryUpdateDestination();
+            NavMeshPath path = new NavMeshPath();
+            if (agent.CalculatePath(navMeshDestination, path) && path.status == NavMeshPathStatus.PathComplete)
+            {
+                // Mevcut yol tam, kapıya git
+                return true;
+            }
+            
+            // Kapıya yol yoksa (duvarlar kapalıysa), en yakın Duvara (Wall) yönel
+            StructureManager closestWall = null;
+            float minDist = Mathf.Infinity;
+            foreach (var s in structures)
+            {
+                if (s.type == StructureType.Wall && !s.IsDestroyed && s.gameObject.activeInHierarchy)
+                {
+                    float d = Vector3.Distance(transform.position, s.transform.position);
+                    if (d < minDist)
+                    {
+                        minDist = d;
+                        closestWall = s;
+                    }
+                }
+            }
+
+            if (closestWall != null)
+            {
+                currentTarget = closestWall.transform;
+                targetStructure = closestWall;
+                TryUpdateDestination();
+                return true;
+            }
         }
-
-        return true;
-    }
-
-    private bool TryUpdateCastleDestination()
-    {
-        if (castleTarget == null || agent == null)
+        
+        // Kapı yoksa veya yıkıldıysa (veya kapıya giden yol/duvar kalmadıysa) İçeriye (Core) git
+        if (CoreManager.Instance != null)
         {
-            return false;
-        }
-
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(castleTarget.position, out hit, TARGET_SAMPLE_RADIUS, NavMesh.AllAreas))
-        {
-            castleNavMeshDestination = hit.position;
+            currentTarget = CoreManager.Instance.transform;
+            targetStructure = null;
+            TryUpdateDestination();
             return true;
         }
 
-        castleNavMeshDestination = castleTarget.position;
+        return false;
+    }
+
+    private bool TryUpdateDestination()
+    {
+        if (currentTarget == null || agent == null) return false;
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(currentTarget.position, out hit, TARGET_SAMPLE_RADIUS, NavMesh.AllAreas))
+        {
+            navMeshDestination = hit.position;
+            return true;
+        }
+
+        navMeshDestination = currentTarget.position;
         return false;
     }
 
     private IEnumerator SpawnSequence()
     {
-        // Spawn animasyonu süresince bekle
         yield return new WaitForSeconds(SPAWN_ANIMATION_DURATION);
 
-        if (isDead || castleTarget == null) yield break;
+        if (isDead || currentTarget == null) yield break;
 
-        // Agent navmesh'te değilse kısa süre bekleyip tekrar dene
         if (!agent.isOnNavMesh)
         {
             float elapsed = 0f;
@@ -207,7 +229,7 @@ public class EnemyAI : MonoBehaviour
 
             if (!agent.isOnNavMesh)
             {
-                Debug.LogWarning($"[EnemyAI] NavMesh'e oturulamadı, geri gönderiliyor: {transform.position}");
+                Debug.LogWarning($"[EnemyAI] NavMesh'e oturulamadı: {transform.position}");
                 ObjectPooler.Instance.ReturnToPool("Enemy", gameObject);
                 yield break;
             }
@@ -215,9 +237,9 @@ public class EnemyAI : MonoBehaviour
 
         currentState = EnemyState.Moving;
 
-        TryUpdateCastleDestination();
+        TryUpdateDestination();
 
-        bool success = agent.SetDestination(castleNavMeshDestination);
+        bool success = agent.SetDestination(navMeshDestination);
         if (success)
         {
             agent.isStopped = false;
@@ -233,14 +255,12 @@ public class EnemyAI : MonoBehaviour
     {
         if (isDead) return;
 
-        // Hedef doğrulama
         if (Time.time >= lastTargetValidationTime + targetValidationInterval)
         {
             ValidateTarget();
             lastTargetValidationTime = Time.time;
         }
 
-        // Spawning sırasında animator'ı yine de güncelle (idle/spawn anim oynasın)
         if (currentState == EnemyState.Spawning)
         {
             if (animator != null) animator.SetFloat(speedHash, 0f);
@@ -249,15 +269,14 @@ public class EnemyAI : MonoBehaviour
 
         if (agent == null || !agent.isActiveAndEnabled || !agent.isOnNavMesh) return;
 
-        // Hız animasyonu
         if (animator != null)
             animator.SetFloat(speedHash, agent.velocity.magnitude);
 
         if (!agent.pathPending && agent.isOnNavMesh)
         {
-            float distanceToCastle = Vector3.Distance(transform.position, castleNavMeshDestination);
+            float distanceToTarget = Vector3.Distance(transform.position, navMeshDestination);
 
-            if (distanceToCastle <= attackRange)
+            if (distanceToTarget <= attackRange)
                 TransitionToAttack();
             else
                 TransitionToMoving();
@@ -266,19 +285,47 @@ public class EnemyAI : MonoBehaviour
 
     private void ValidateTarget()
     {
-        if (castleTarget == null || !castleTarget.gameObject.activeInHierarchy)
+        if (currentTarget == null || !currentTarget.gameObject.activeInHierarchy || (targetStructure != null && targetStructure.IsDestroyed))
         {
-            if (!FindClosestCastle())
+            if (!FindTarget())
             {
-                Debug.Log("[EnemyAI] Geçerli kale kalmadı, enemy duruyor.");
                 if (agent.isOnNavMesh) agent.isStopped = true;
-                currentState = EnemyState.Spawning;
+                currentState = EnemyState.Spawning; // Durum korumak için geçici
             }
             else if (currentState == EnemyState.Moving && agent.isOnNavMesh)
             {
-                // Yeni kale bulundu, hedefe güncelle
-                TryUpdateCastleDestination();
-                agent.SetDestination(castleNavMeshDestination);
+                TryUpdateDestination();
+                agent.SetDestination(navMeshDestination);
+            }
+        }
+        else if (agent.isOnNavMesh)
+        {
+            // Eğer hedefe giden yol tıkalıysa (duvar varsa) en yakın duvara saldır
+            if (agent.pathStatus == NavMeshPathStatus.PathPartial)
+            {
+                StructureManager[] structures = FindObjectsOfType<StructureManager>();
+                StructureManager closestWall = null;
+                float minDist = Mathf.Infinity;
+                foreach (var s in structures)
+                {
+                    if (s.type == StructureType.Wall && !s.IsDestroyed && s.gameObject.activeInHierarchy)
+                    {
+                        float d = Vector3.Distance(transform.position, s.transform.position);
+                        if (d < minDist)
+                        {
+                            minDist = d;
+                            closestWall = s;
+                        }
+                    }
+                }
+
+                if (closestWall != null)
+                {
+                    currentTarget = closestWall.transform;
+                    targetStructure = closestWall;
+                    TryUpdateDestination();
+                    agent.SetDestination(navMeshDestination);
+                }
             }
         }
     }
@@ -291,7 +338,7 @@ public class EnemyAI : MonoBehaviour
         agent.isStopped = true;
 
         if (Time.time >= lastAttackTime + attackCooldown)
-            AttackCastle();
+            AttackTarget();
     }
 
     private void TransitionToMoving()
@@ -303,18 +350,26 @@ public class EnemyAI : MonoBehaviour
 
         if (!agent.hasPath || agent.remainingDistance < 0.1f)
         {
-            TryUpdateCastleDestination();
-            agent.SetDestination(castleNavMeshDestination);
+            TryUpdateDestination();
+            agent.SetDestination(navMeshDestination);
         }
     }
 
-    private void AttackCastle()
+    private void AttackTarget()
     {
         lastAttackTime = Time.time;
         if (animator != null) animator.SetTrigger(attackHash);
 
-        if (castleManager != null && !castleManager.IsDestroyed)
-            castleManager.TakeDamage(attackDamage);
+        // Hedef bir binaysa ona hasar ver
+        if (targetStructure != null && !targetStructure.IsDestroyed)
+        {
+            targetStructure.TakeDamage(attackDamage);
+        }
+        else if (currentTarget == CoreManager.Instance?.transform)
+        {
+            // Eğer hedefe (Core) ulaştıysak aslında trigger içine girmesi beklenir, ama range'den vuruyorsa diye
+            // Collider'ın OnTriggerEnter kısmı halledecek.
+        }
     }
 
     public void TakeDamage(float amount)

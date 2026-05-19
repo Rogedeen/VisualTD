@@ -1,0 +1,21 @@
+{
+  "name": "Aggressive",
+  "WaveCount": 20,
+  "BaseEnemiesPerWave": 12,
+  "EnemyGrowthRate": 1.15,
+  "SpawnInterval": 0.9,
+  "Enemies": {
+    "Skeleton_Minion": { "HP": 45, "Damage": 8, "AttackRate": 1.0, "MoveSpeed": 2.4, "RewardGold": 3 },
+    "Ranger": { "HP": 90, "Damage": 12, "AttackRate": 0.9, "MoveSpeed": 2.2, "RewardGold": 6 },
+    "Barbarian": { "HP": 140, "Damage": 18, "AttackRate": 0.8, "MoveSpeed": 3.0, "RewardGold": 8 },
+    "Knight": { "HP": 350, "Damage": 30, "AttackRate": 1.3, "MoveSpeed": 1.5, "RewardGold": 18 },
+    "Brute": { "HP": 500, "Damage": 40, "AttackRate": 1.1, "MoveSpeed": 1.3, "RewardGold": 28 },
+    "Skirmisher": { "HP": 180, "Damage": 14, "AttackRate": 0.7, "MoveSpeed": 3.6, "RewardGold": 10 }
+  },
+  "ArcherTower": { "Damage": 30, "FireRate": 0.75, "Range": 8.0, "Cost": 65 },
+  "Gate": { "MaxHP": 1500 },
+  "Wall": { "HPperSegment": 220 },
+  "PlayerInteriorDamage": 8,
+  "StartingPlayerHP": 80,
+  "GoldPerKillScaling": 1.05
+}

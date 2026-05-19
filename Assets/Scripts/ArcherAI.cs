@@ -3,18 +3,18 @@ using UnityEngine;
 public class ArcherAI : MonoBehaviour
 {
     [Header("Combat Settings")]
-    [SerializeField] private float fireRate = 6f; // Çok daha yavaş (Ok yağmuru anlamlı olsun diye)
+    [SerializeField] private float fireRate = 1.5f; // Dengeleme raporuna göre 1.5 yapıldı
     [SerializeField] private float range = 15f;
     [SerializeField] private Transform firePoint;
-    // [SerializeField] private float arrowSpawnDelay = 1.2f; // Kaldırıldı -> Artık Animation Event kullanılıyor
-
     
     [Header("References")]
     [SerializeField] private Animator animator;
 
     private float nextFireTime;
     private readonly int attackHash = Animator.StringToHash("Attack");
+    private readonly int dieHash = Animator.StringToHash("Die");
     private EnemyAI currentTarget; // Atış sırasında hedefi hafızada tutmak için
+    private bool isDead = false;
 
     private void Awake()
     {
@@ -22,9 +22,8 @@ public class ArcherAI : MonoBehaviour
 
     private void OnEnable()
     {
-
         // Okçuların aynı anda senkronize ok atmasını önlemek için rastgele bir başlangıç süresi
-        nextFireTime = Time.time + Random.Range(1f, fireRate + 2f);
+        nextFireTime = Time.time + Random.Range(0.5f, fireRate);
     }
 
     // Gesture control variables
@@ -32,7 +31,7 @@ public class ArcherAI : MonoBehaviour
 
     private void Update()
     {
-        if (isHoldingFire) return; // Yumruk yapıldıysa ok atma, bekle
+        if (isDead || isHoldingFire) return; // Yumruk yapıldıysa veya ölüyse ok atma
 
         if (Time.time >= nextFireTime)
         {
@@ -69,10 +68,10 @@ public class ArcherAI : MonoBehaviour
 
     public void Shoot(EnemyAI target)
     {
-        if (target == null) return;
+        if (target == null || isDead) return;
 
-        // Bir sonraki atışa rastgelelik ekle ki robot gibi olmasın (Volley atışı sonrası da dahil)
-        nextFireTime = Time.time + fireRate + Random.Range(-1.5f, 1.5f);
+        // Bir sonraki atışa rastgelelik ekle
+        nextFireTime = Time.time + fireRate + Random.Range(-0.2f, 0.2f);
 
         // 1. Face the target
         Vector3 lookPosition = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
@@ -86,15 +85,12 @@ public class ArcherAI : MonoBehaviour
 
         // 3. Hedefi hafızaya al
         currentTarget = target;
-        
-        // 4. Oku fırlatmak artık sabit saniye ile (Coroutine) değil, 
-        // doğrudan Animation Event ile tetiklenecek! (Bkz: ReleaseArrow metodu)
     }
 
-    // Bu metodu Unity Editör'de 'Attack' animasyonunun tam ok çıkış karesine 
-    // "Animation Event" olarak eklemelisin.
     public void ReleaseArrow()
     {
+        if (isDead) return;
+
         if (currentTarget != null && !currentTarget.IsDead && firePoint != null)
         {
             Vector3 direction = (currentTarget.transform.position - firePoint.position).normalized;
@@ -110,6 +106,38 @@ public class ArcherAI : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void FallAndDie()
+    {
+        if (isDead) return;
+        isDead = true;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            rb = gameObject.AddComponent<Rigidbody>();
+        }
+        
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        
+        // Rastgele bir fırlama efekti (sağa/sola/öne/arkaya biraz ivme)
+        Vector3 randomTorque = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), Random.Range(-5f, 5f));
+        rb.AddTorque(randomTorque, ForceMode.Impulse);
+        
+        // Hafifçe dışarı doğru ittir
+        Vector3 randomDir = new Vector3(Random.Range(-1f, 1f), 1f, Random.Range(-1f, 1f)).normalized;
+        rb.AddForce(randomDir * 5f, ForceMode.Impulse);
+
+        if (animator != null)
+        {
+            animator.SetTrigger(dieHash);
+        }
+        
+        // Saniye bekle ve sonra kendini kapat (poola dönmesi vs eklenebilir, şimdilik destroy da olabilir)
+        // Tower gidince okçu da ölecek.
+        Destroy(gameObject, 3f);
     }
     
     private void OnDrawGizmosSelected()

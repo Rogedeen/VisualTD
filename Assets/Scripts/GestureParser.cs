@@ -30,17 +30,39 @@ public class GestureParser : MonoBehaviour
         
         switch (gestureName)
         {
+            case "Hold_Fire":
+                if (SkillManager.Instance != null) SkillManager.Instance.HoldArchers();
+                break;
             case "Arrow_Volley":
-                // TODO: Link to SkillManager.Instance.CastArrowVolley()
-                Debug.Log(">>> ACTION: Arrow Volley Casted!");
+                if (SkillManager.Instance != null) SkillManager.Instance.TriggerArrowVolley();
                 break;
             case "Lightning_Strike":
-                // TODO: Link to SkillManager.Instance.CastLightningStrike()
-                Debug.Log(">>> ACTION: Lightning Strike Casted!");
+                // Assuming target position is center for now, can be updated later
+                if (SkillManager.Instance != null) SkillManager.Instance.TriggerLightningStrike(Vector3.zero);
                 break;
             case "Fortify_Wall":
-                // TODO: Link to SkillManager.Instance.CastFortifyWall()
-                Debug.Log(">>> ACTION: Wall Fortified!");
+                if (SkillManager.Instance != null) SkillManager.Instance.TriggerFortifyWall();
+                break;
+            case "Spiderman_Cast":
+                if (SkillManager.Instance != null) SkillManager.Instance.TriggerMageCast();
+                break;
+            case "Fireball_Cast":
+                if (SkillManager.Instance != null) SkillManager.Instance.TriggerFireball();
+                break;
+            case "Time_Out":
+                if (GameManager.Instance != null) GameManager.Instance.TogglePause();
+                break;
+            case "Upgrade_1":
+                if (GameManager.Instance != null) GameManager.Instance.PurchaseUpgrade(1);
+                break;
+            case "Upgrade_2":
+                if (GameManager.Instance != null) GameManager.Instance.PurchaseUpgrade(2);
+                break;
+            case "Upgrade_3":
+                if (GameManager.Instance != null) GameManager.Instance.PurchaseUpgrade(3);
+                break;
+            case "Upgrade_4":
+                if (GameManager.Instance != null) GameManager.Instance.PurchaseUpgrade(4);
                 break;
             default:
                 Debug.LogWarning($"[GestureParser] Unknown gesture received: {gestureName}");
