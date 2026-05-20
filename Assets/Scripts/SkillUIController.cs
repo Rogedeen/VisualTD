@@ -6,6 +6,7 @@ public class SkillUIController : MonoBehaviour
 {
     private VisualElement root;
     private SkillSlotUI arrowSlot, lightningSlot, fortifySlot, meteorSlot;
+    private UpgradeSlotUI wallUpgrade, towerUpgrade, mageUpgrade;
 
     private void OnEnable()
     {
@@ -19,6 +20,11 @@ public class SkillUIController : MonoBehaviour
         lightningSlot = new SkillSlotUI(root.Q("Skill_Lightning"));
         fortifySlot = new SkillSlotUI(root.Q("Skill_Fortify"));
         meteorSlot = new SkillSlotUI(root.Q("Skill_Meteor"));
+
+        // Upgrade slotlarını bağla
+        wallUpgrade = new UpgradeSlotUI(root.Q("Upgrade_Wall"));
+        towerUpgrade = new UpgradeSlotUI(root.Q("Upgrade_Tower"));
+        mageUpgrade = new UpgradeSlotUI(root.Q("Upgrade_Mage"));
     }
 
     private void Update()
@@ -29,6 +35,62 @@ public class SkillUIController : MonoBehaviour
         lightningSlot.UpdateProgress(SkillManager.Instance.GetLightningProgress(), this);
         fortifySlot.UpdateProgress(SkillManager.Instance.GetFortifyProgress(), this);
         meteorSlot.UpdateProgress(SkillManager.Instance.GetMeteorProgress(), this);
+
+        if (UpgradeManager.Instance != null && GameManager.Instance != null)
+        {
+            wallUpgrade.UpdateState(GameManager.Instance.GetGold(), UpgradeManager.Instance.wallUpgradeCost, this);
+            towerUpgrade.UpdateState(GameManager.Instance.GetGold(), UpgradeManager.Instance.towerUpgradeCost, this);
+            mageUpgrade.UpdateState(GameManager.Instance.GetGold(), UpgradeManager.Instance.mageUpgradeCost, this);
+        }
+    }
+
+    private class UpgradeSlotUI
+    {
+        private VisualElement icon;
+        private Label costLabel;
+        private bool canAfford = false;
+
+        public UpgradeSlotUI(VisualElement slot)
+        {
+            if (slot == null) return;
+            icon = slot.Q<VisualElement>(className: "upgrade-icon");
+            costLabel = slot.Q<Label>(className: "upgrade-cost");
+        }
+
+        public void UpdateState(int currentGold, int cost, MonoBehaviour owner)
+        {
+            if (icon == null || costLabel == null) return;
+
+            costLabel.text = cost + "G";
+
+            if (currentGold >= cost)
+            {
+                if (!canAfford)
+                {
+                    canAfford = true;
+                    owner.StartCoroutine(PlayReadyEffect());
+                }
+                icon.style.borderTopColor = Color.green;
+                icon.style.borderBottomColor = Color.green;
+                icon.style.borderLeftColor = Color.green;
+                icon.style.borderRightColor = Color.green;
+            }
+            else
+            {
+                canAfford = false;
+                icon.style.borderTopColor = Color.red;
+                icon.style.borderBottomColor = Color.red;
+                icon.style.borderLeftColor = Color.red;
+                icon.style.borderRightColor = Color.red;
+            }
+        }
+
+        private IEnumerator PlayReadyEffect()
+        {
+            icon.AddToClassList("ready-to-buy");
+            yield return new WaitForSeconds(0.5f);
+            icon.RemoveFromClassList("ready-to-buy");
+        }
     }
 
     private class SkillSlotUI
@@ -58,7 +120,10 @@ public class SkillUIController : MonoBehaviour
             else
                 targetColor = Color.Lerp(new Color(1f, 0.5f, 0f), Color.green, (progress - 0.5f) * 2f);
 
-            icon.style.borderColor = targetColor;
+            icon.style.borderTopColor = targetColor;
+            icon.style.borderBottomColor = targetColor;
+            icon.style.borderLeftColor = targetColor;
+            icon.style.borderRightColor = targetColor;
 
             // Hazır olma efekti (1 defalık parlayıp büyüme)
             if (progress >= 1f && !isReady)
