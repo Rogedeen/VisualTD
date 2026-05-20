@@ -29,8 +29,49 @@ public class ArcherAI : MonoBehaviour
 
     private void OnEnable()
     {
+        isDead = false;
         // Okçuların aynı anda senkronize ok atmasını önlemek için rastgele bir başlangıç süresi
         ApplyRandomOffset();
+        if (animator != null) animator.ResetTrigger(dieHash);
+    }
+
+    // Kule yıkıldığında çağrılacak metod
+    public void OnTowerDestroyed()
+    {
+        if (isDead) return;
+        
+        isDead = true;
+        
+        // Parent'tan ayrıl ki kuleyle beraber yok olmasın (ve havada kalmasın)
+        transform.SetParent(null);
+        
+        if (animator != null) animator.SetTrigger(dieHash);
+        
+        // Düşme fiziği: Rigidbody varsa Gravity halleder, yoksa manuel düşürelim
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+        }
+        else
+        {
+            StartCoroutine(ManualFallRoutine());
+        }
+    }
+
+    private System.Collections.IEnumerator ManualFallRoutine()
+    {
+        float vVelocity = 0;
+        while (transform.position.y > 0.1f)
+        {
+            vVelocity += -9.81f * Time.deltaTime;
+            transform.position += Vector3.up * vVelocity * Time.deltaTime;
+            yield return null;
+        }
+        transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+        yield return new WaitForSeconds(3f);
+        gameObject.SetActive(false);
     }
 
     private void ApplyRandomOffset()

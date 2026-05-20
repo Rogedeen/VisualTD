@@ -96,8 +96,17 @@ public class StructureManager : MonoBehaviour
             isDestroyed = true;
             OnStructureDestroyed?.Invoke();
             
-            if (dustParticlePrefab != null)
+            // --- KULE YIKILINCA OKÇUYU ÖLDÜR/DÜŞÜR ---
+            if (type == StructureType.Tower)
             {
+                ArcherAI archer = GetComponentInChildren<ArcherAI>();
+                if (archer != null)
+                {
+                    archer.OnTowerDestroyed();
+                }
+            }
+
+            if (dustParticlePrefab != null)
                 ParticleSystem dust = Instantiate(dustParticlePrefab, transform.position, Quaternion.identity);
                 dust.Play();
                 Destroy(dust.gameObject, 3f);

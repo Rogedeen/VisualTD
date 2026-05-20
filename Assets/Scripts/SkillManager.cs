@@ -119,12 +119,17 @@ public class SkillManager : MonoBehaviour
         EnemyAI[] enemies = Object.FindObjectsByType<EnemyAI>(FindObjectsInactive.Exclude);
         if (enemies.Length > 0)
         {
-            for (int i = 0; i < 20; i++)
+            // --- DÜZELTME: Okları farklı düşmanlara dağıtıyoruz ---
+            int arrowCount = 20;
+            for (int i = 0; i < arrowCount; i++)
             {
+                // Her ok için listeden rastgele bir düşman seçiyoruz
                 EnemyAI randomEnemy = enemies[Random.Range(0, enemies.Length)];
+                
                 if (randomEnemy != null && !randomEnemy.IsDead)
                 {
-                    Vector3 spawnPos = randomEnemy.transform.position + new Vector3(Random.Range(-3f, 3f), Random.Range(10f, 15f), Random.Range(-3f, 3f));
+                    // Her düşmanın tepesinde biraz daha geniş bir alandan oklar yağsın
+                    Vector3 spawnPos = randomEnemy.transform.position + new Vector3(Random.Range(-3f, 3f), Random.Range(15f, 20f), Random.Range(-3f, 3f));
                     GameObject arrowObj = ObjectPooler.Instance.SpawnFromPool("Arrow", spawnPos, Quaternion.Euler(90, 0, 0));
                     if (arrowObj != null)
                     {
@@ -136,7 +141,7 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    public void TriggerFireball(Vector3 ignored)
+    public void TriggerFireball(Vector3 targetPosFromPython)
     {
         if (Time.time < lastMeteorTime + meteorRainCD) 
         {
@@ -147,11 +152,12 @@ public class SkillManager : MonoBehaviour
 
         Debug.Log("Commander Command: METEOR RAIN!");
         
-        // Animasyonu başlat (isAttacking = true)
+        // Animasyonu başlat
         SyncMagesBool(isAttackingHash, true);
         if (commanderAnimator != null) commanderAnimator.SetBool(isAttackingHash, true);
 
-        Vector3 targetPos = FindCrowdedEnemyArea();
+        // --- DÜZELTME: Python'dan gelen veya kalabalık olan yeri hedef al ---
+        Vector3 targetPos = targetPosFromPython != Vector3.zero ? targetPosFromPython : FindCrowdedEnemyArea();
         
         // MeteorRain aseti/scripti olan bir objeyi çıkarıyoruz
         GameObject rainObj = ObjectPooler.Instance.SpawnFromPool("MeteorRain", targetPos, Quaternion.identity);
@@ -159,9 +165,7 @@ public class SkillManager : MonoBehaviour
         {
             MeteorRain rainScript = rainObj.GetComponent<MeteorRain>();
             if (rainScript != null) rainScript.Initialize(targetPos);
-            else Debug.LogError("MeteorRain Script missing on prefab!");
         }
-        else Debug.LogError("MeteorRain Prefab not found in Pool!");
     }
 
     private Vector3 FindCrowdedEnemyArea()
