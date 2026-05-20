@@ -98,6 +98,23 @@
     align-items: center;
     transition-property: scale, border-color, translate;
     transition-duration: 0.2s;
+    overflow: visible;
+}
+
+.upgrade-hotkey {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 28px;
+    height: 28px;
+    background-color: var(--color-gold);
+    border-radius: 14px;
+    color: var(--color-slate);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    font-size: 14px;
+    border-width: 2px;
+    border-color: white;
 }
 
 .upgrade-frame {

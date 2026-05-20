@@ -1,73 +1,68 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:Style src="MainUI.uss" />
+    <Style src="project://database/Assets/UI/MainUI.uss?fileID=7433441132597879392&amp;guid=9ff3846b73ce3ba47befab8e858dfc2c&amp;type=3#MainUI"/>
     <ui:VisualElement name="TopContainer" style="position: absolute; top: 20px; left: 20px; right: 20px; flex-direction: row; justify-content: space-between;">
         <ui:VisualElement name="EconomyPanel" class="fantasy-panel">
-            <ui:Label text="SAVINGS" class="panel-header" />
+            <ui:Label text="SAVINGS" class="panel-header"/>
             <ui:VisualElement style="flex-direction: row; align-items: center;">
-                <ui:Label name="GoldText" text="0" class="resource-gold" />
-                <ui:Label text="G" class="resource-gold-suffix" />
+                <ui:Label name="GoldText" text="0" class="resource-gold"/>
+                <ui:Label text="G" class="resource-gold-suffix" style="font-size: 30px;"/>
             </ui:VisualElement>
         </ui:VisualElement>
-        
         <ui:VisualElement style="flex-direction: row; gap: 20px;">
             <ui:VisualElement name="GateHealthPanel" class="fantasy-panel">
-                <ui:Label text="GATE DEFENSE" class="panel-header" />
-                <ui:Label name="HealthText" text="1000" class="resource-health" />
+                <ui:Label text="GATE HP" class="panel-header"/>
+                <ui:Label name="HealthText" text="1000" class="resource-health"/>
             </ui:VisualElement>
-            
             <ui:VisualElement name="PlayerHealthPanel" class="fantasy-panel panel-highlight-red">
-                <ui:Label text="COMMANDER HP" class="panel-header" />
-                <ui:Label name="PlayerHealthText" text="20" class="resource-health" style="color: rgb(0, 255, 100);" />
+                <ui:Label text="CASTLE HP" class="panel-header"/>
+                <ui:Label name="PlayerHealthText" text="20" class="resource-health" style="color: rgb(0, 255, 100);"/>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-
-    <ui:VisualElement name="GesturePanel" class="gesture-panel">
-        <ui:Label text="ACTIVE COMMAND" class="gesture-header" />
-        <ui:Label name="GestureText" text="WAITING" class="gesture-value" />
+    <ui:VisualElement name="GesturePanel" class="gesture-panel" style="height: 124px; bottom: 41px; width: 228px;">
+        <ui:Label text="ACTIVE COMMAND" class="gesture-header" style="font-size: 16px; width: 175px;"/>
+        <ui:Label name="GestureText" text="WAITING" class="gesture-value" style="font-size: 24px; align-items: auto; align-content: auto;"/>
     </ui:VisualElement>
-
     <ui:VisualElement name="UpgradeContainer" class="upgrade-bar">
-        <ui:VisualElement name="Upgrade_Wall" class="upgrade-card">
-            <ui:VisualElement name="Icon_Wall" class="upgrade-frame" />
-            <ui:Label text="WALL FORTIFY" class="card-label" />
-            <ui:Label name="Cost_Wall" text="50G" class="card-cost" />
+        <ui:VisualElement name="Upgrade_Wall" class="upgrade-card" style="height: 157px; width: 160px;">
+            <ui:Label text="1" class="upgrade-hotkey" />
+            <ui:VisualElement name="Icon_Wall" class="upgrade-frame"/>
+            <ui:Label text="WALL FORTIFY" class="card-label" style="font-size: 16px;"/>
+            <ui:Label name="Cost_Wall" text="50G" class="card-cost" style="font-size: 16px;"/>
         </ui:VisualElement>
-        <ui:VisualElement name="Upgrade_Tower" class="upgrade-card">
-            <ui:VisualElement name="Icon_Tower" class="upgrade-frame" />
-            <ui:Label text="BALLISTA DMG" class="card-label" />
-            <ui:Label name="Cost_Tower" text="100G" class="card-cost" />
+        <ui:VisualElement name="Upgrade_Tower" class="upgrade-card" style="width: 160px;">
+            <ui:Label text="2" class="upgrade-hotkey" />
+            <ui:VisualElement name="Icon_Tower" class="upgrade-frame"/>
+            <ui:Label text="BALLISTA DMG" class="card-label" style="font-size: 16px;"/>
+            <ui:Label name="Cost_Tower" text="100G" class="card-cost" style="font-size: 16px;"/>
         </ui:VisualElement>
-        <ui:VisualElement name="Upgrade_Mage" class="upgrade-card">
-            <ui:VisualElement name="Icon_Mage" class="upgrade-frame" />
-            <ui:Label text="ARCANE FOCUS" class="card-label" />
-            <ui:Label name="Cost_Mage" text="150G" class="card-cost" />
+        <ui:VisualElement name="Upgrade_Mage" class="upgrade-card" style="width: 160px;">
+            <ui:Label text="3" class="upgrade-hotkey" />
+            <ui:VisualElement name="Icon_Mage" class="upgrade-frame"/>
+            <ui:Label text="ARCANE FOCUS" class="card-label" style="font-size: 16px;"/>
+            <ui:Label name="Cost_Mage" text="150G" class="card-cost" style="font-size: 16px;"/>
         </ui:VisualElement>
     </ui:VisualElement>
-
     <ui:VisualElement name="SkillContainer" class="skill-dock">
         <ui:VisualElement name="Skill_Arrow" class="skill-orb">
-            <ui:VisualElement name="Icon_Arrow" class="orb-inner" />
-            <ui:VisualElement name="CooldownBar_Arrow" class="orb-wipe" />
-            <ui:Label text="ARROWS" class="orb-label" />
+            <ui:VisualElement name="Icon_Arrow" class="orb-inner"/>
+            <ui:VisualElement name="CooldownBar_Arrow" class="orb-wipe"/>
+            <ui:Label text="ARROWS" class="orb-label"/>
         </ui:VisualElement>
-
         <ui:VisualElement name="Skill_Lightning" class="skill-orb">
-            <ui:VisualElement name="Icon_Lightning" class="orb-inner" />
-            <ui:VisualElement name="CooldownBar_Lightning" class="orb-wipe" />
-            <ui:Label text="THUNDER" class="orb-label" />
+            <ui:VisualElement name="Icon_Lightning" class="orb-inner"/>
+            <ui:VisualElement name="CooldownBar_Lightning" class="orb-wipe"/>
+            <ui:Label text="THUNDER" class="orb-label"/>
         </ui:VisualElement>
-
         <ui:VisualElement name="Skill_Fortify" class="skill-orb">
-            <ui:VisualElement name="Icon_Fortify" class="orb-inner" />
-            <ui:VisualElement name="CooldownBar_Fortify" class="orb-wipe" />
-            <ui:Label text="REPAIR" class="orb-label" />
+            <ui:VisualElement name="Icon_Fortify" class="orb-inner"/>
+            <ui:VisualElement name="CooldownBar_Fortify" class="orb-wipe"/>
+            <ui:Label text="REPAIR" class="orb-label"/>
         </ui:VisualElement>
-
         <ui:VisualElement name="Skill_Meteor" class="skill-orb">
-            <ui:VisualElement name="Icon_Meteor" class="orb-inner" />
-            <ui:VisualElement name="CooldownBar_Meteor" class="orb-wipe" />
-            <ui:Label text="METEOR" class="orb-label" />
+            <ui:VisualElement name="Icon_Meteor" class="orb-inner"/>
+            <ui:VisualElement name="CooldownBar_Meteor" class="orb-wipe"/>
+            <ui:Label text="METEOR" class="orb-label"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
