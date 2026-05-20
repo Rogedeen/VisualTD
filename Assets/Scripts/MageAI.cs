@@ -25,27 +25,7 @@ public class MageAI : MonoBehaviour
 
     private void Update()
     {
-        // 1. Düşman Kontrolü (Fireball için)
-        FindNearestEnemy();
-
-        if (currentTarget != null && Vector3.Distance(transform.position, currentTarget.position) <= attackRange)
-        {
-            // Hedefe bak
-            Vector3 dir = (currentTarget.position - transform.position).normalized;
-            dir.y = 0;
-            if (dir != Vector3.zero) transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 5f);
-
-            if (Time.time >= lastFireballTime + fireballCooldown)
-            {
-                ShootFireball();
-            }
-        }
-
-        // 2. Yapı Kontrolü (Fortify/Heal için)
-        if (Time.time >= lastFortifyTime + fortifyCooldown)
-        {
-            TryFortifyNearbyStructure();
-        }
+        // Mage'ler sadece SkillManager komutlarıyla çalışacak, kendi kendilerine hareket etmeyecekler.
     }
 
     private void FindNearestEnemy()

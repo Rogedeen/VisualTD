@@ -123,7 +123,11 @@ public class SkillManager : MonoBehaviour
 
     public void TriggerFireball(Vector3 ignored)
     {
-        if (Time.time < lastMeteorTime + meteorRainCD) return;
+        if (Time.time < lastMeteorTime + meteorRainCD) 
+        {
+            Debug.Log("Meteor on Cooldown!");
+            return;
+        }
         lastMeteorTime = Time.time;
 
         Debug.Log("Commander Command: METEOR RAIN!");
@@ -139,7 +143,9 @@ public class SkillManager : MonoBehaviour
         {
             MeteorRain rainScript = rainObj.GetComponent<MeteorRain>();
             if (rainScript != null) rainScript.Initialize(targetPos);
+            else Debug.LogError("MeteorRain Script missing on prefab!");
         }
+        else Debug.LogError("MeteorRain Prefab not found in Pool!");
     }
 
     private Vector3 FindCrowdedEnemyArea()
@@ -181,6 +187,8 @@ public class SkillManager : MonoBehaviour
 
     public void SetFortifyState(bool active)
     {
+        if (IsFortifying == active) return; // Gereksiz loop ve tetiklemeyi önle
+        
         IsFortifying = active;
         if (commanderAnimator != null) commanderAnimator.SetBool(isFortifyingHash, active);
         
@@ -198,6 +206,8 @@ public class SkillManager : MonoBehaviour
         if (IsFortifying)
         {
             fortifyTimer += Time.deltaTime;
+            // Ekrana dönüt veya efekt tetikleme burada her karede değil, state değişince yapılmalı
+            
             if (fortifyTimer >= fortifyHoldRequired)
             {
                 ApplyFortifyHeal();
@@ -216,11 +226,11 @@ public class SkillManager : MonoBehaviour
         StructureManager[] structures = Object.FindObjectsByType<StructureManager>(FindObjectsInactive.Exclude);
         foreach (var structure in structures)
         {
-            if (!structure.IsDestroyed) // Yıkılmış binalar hariç
+            if (!structure.IsDestroyed) // Yıkılmış binalar hariç (Towerlar dahil)
             {
                 structure.Heal(healAmount);
-                // Hazır Asset: Healing.prefab (Magic effects pack'ten)
-                ObjectPooler.Instance.SpawnFromPool("Heal", structure.transform.position + Vector3.up * 1f, Quaternion.identity);
+                // Görsel geri bildirim: Yere değen kısımda (pivot genellikle yerdedir)
+                ObjectPooler.Instance.SpawnFromPool("Heal", structure.transform.position, Quaternion.identity);
             }
         }
     }

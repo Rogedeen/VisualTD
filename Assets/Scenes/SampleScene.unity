@@ -3545,6 +3545,9 @@ MonoBehaviour:
   - tag: Meteor
     prefab: {fileID: 157282211469997545, guid: 8af091440513834408086654b9d3f856, type: 3}
     size: 4
+  - tag: Heal
+    prefab: {fileID: 1173372460728492548, guid: 2d6381de92fda1f4699be4abf8851cbe, type: 3}
+    size: 20
 --- !u!1001 &317718398
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28253,14 +28256,14 @@ MonoBehaviour:
   lightningDamage: 50
   healAmount: 200
   lightningRadius: 5
-  meteorRainPrefab: {fileID: 0}
+  meteorRainPrefab: {fileID: 157282211469997545, guid: 8af091440513834408086654b9d3f856, type: 3}
   meteorDuration: 5
   arrowVolleyCD: 10
   lightningCD: 15
   fortifyCD: 20
   meteorRainCD: 12
   mainGate: {fileID: 689147832}
-  commanderAnimator: {fileID: 0}
+  commanderAnimator: {fileID: 1900036732}
   fortifyHoldRequired: 8
 --- !u!1001 &1861098201
 PrefabInstance:
@@ -28745,6 +28748,11 @@ Transform:
 --- !u!4 &1900036731 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 628134255196146360, guid: 0cfcff97a637da54d8dfa49c7588b3a4, type: 3}
+  m_PrefabInstance: {fileID: 3052870316951042192}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1900036732 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6834250402922311898, guid: 0cfcff97a637da54d8dfa49c7588b3a4, type: 3}
   m_PrefabInstance: {fileID: 3052870316951042192}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1904669069
@@ -32794,6 +32802,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mage
       objectReference: {fileID: 0}
+    - target: {fileID: 4203587500263287578, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
+      propertyPath: fireballPrefab
+      value: 
+      objectReference: {fileID: 157282211469997545, guid: 8af091440513834408086654b9d3f856, type: 3}
     - target: {fileID: 8202109184974151857, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.3206367
@@ -32848,14 +32860,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 1257164131}
     m_Modifications:
     - target: {fileID: 628134255196146360, guid: 0cfcff97a637da54d8dfa49c7588b3a4, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.20000002
-      objectReference: {fileID: 0}
-    - target: {fileID: 628134255196146360, guid: 0cfcff97a637da54d8dfa49c7588b3a4, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.20000002
-      objectReference: {fileID: 0}
-    - target: {fileID: 628134255196146360, guid: 0cfcff97a637da54d8dfa49c7588b3a4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.9551368
       objectReference: {fileID: 0}
@@ -32897,12 +32901,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5677913572955710195, guid: 0cfcff97a637da54d8dfa49c7588b3a4, type: 3}
       propertyPath: m_Name
-      value: Knight
+      value: Commander
       objectReference: {fileID: 0}
-    - target: {fileID: 6834250402922311898, guid: 0cfcff97a637da54d8dfa49c7588b3a4, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 81816c43d88e27844a34c3de42ed51db, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
