@@ -36,23 +36,28 @@ public class GestureParser : MonoBehaviour
         switch (gestureName)
         {
             case "Hold_Fire":
-                if (SkillManager.Instance != null) SkillManager.Instance.HoldArchers();
+                if (SkillManager.Instance != null) SkillManager.Instance.HoldArchers(true);
                 else Debug.LogError("[GestureParser] SkillManager.Instance is NULL!");
                 break;
             case "Arrow_Volley":
+                if (SkillManager.Instance != null) SkillManager.Instance.HoldArchers(false); // Bırak ve ok yağdır
                 if (SkillManager.Instance != null) SkillManager.Instance.TriggerArrowVolley();
                 break;
             case "Lightning_Strike":
                 if (SkillManager.Instance != null) SkillManager.Instance.TriggerLightningStrike(Vector3.zero);
                 break;
             case "Fortify_Wall":
-                if (SkillManager.Instance != null) SkillManager.Instance.TriggerFortifyWall();
+                if (SkillManager.Instance != null) SkillManager.Instance.SetFortifyState(true);
                 break;
             case "Spiderman_Cast":
-                if (SkillManager.Instance != null) SkillManager.Instance.TriggerMageCast();
+                // Spiderman hareketi şimdilik Lightning veya özel bir büyü tetikleyebilir
+                if (SkillManager.Instance != null) SkillManager.Instance.SetFortifyState(false);
+                if (SkillManager.Instance != null) SkillManager.Instance.TriggerLightningStrike(Vector3.zero);
                 break;
             case "Fireball_Cast":
-                if (SkillManager.Instance != null) SkillManager.Instance.TriggerFireball();
+                // Fireball için bir hedef pozisyonu gerekebilir, şimdilik (0,0,0) veya rastgele bir düşman
+                if (SkillManager.Instance != null) SkillManager.Instance.SetFortifyState(false);
+                if (SkillManager.Instance != null) SkillManager.Instance.TriggerFireball(Vector3.zero);
                 break;
             case "Time_Out":
                 if (GameManager.Instance != null) GameManager.Instance.TogglePause();

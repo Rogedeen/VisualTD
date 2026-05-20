@@ -22,4 +22,7 @@
 - [x] Integrated `GestureParser` with `SkillManager` for webcam-controlled feedback.
 - [x] Implemented `MageAI` defender logic (Auto-repair structures, cast fireballs at enemies).
 - [x] Synchronized Commander and Mage Animator Controllers with gesture-based parameters (`isHolding`, `isFortifying`, `fireball`).
+- [x] Implemented 8-second Fortify hold logic: Commander and Mages sync in a casting loop, structures heal only after successful duration.
+- [x] Fixed Animator parameter case-sensitivity issues (isHolding, isFortifying, fireball).
+- [x] Refactored `SkillManager` and `GestureParser` to support state-based spellcasting (Fortify state).
 - [x] Fixed code-base compilation errors (CS7036, CS1061) regarding method signature mismatches.

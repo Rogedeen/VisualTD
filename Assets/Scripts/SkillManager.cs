@@ -9,15 +9,35 @@ public class SkillManager : MonoBehaviour
     [SerializeField] private float healAmount = 200f;
     [SerializeField] private float lightningRadius = 5f;
 
+    [Header("Cooldowns")]
+    [SerializeField] private float arrowVolleyCD = 10f;
+    [SerializeField] private float lightningCD = 15f;
+    [SerializeField] private float fortifyCD = 20f;
+    [SerializeField] private float fireballCD = 12f;
+
+    private float lastArrowTime = -100f;
+    private float lastLightningTime = -100f;
+    private float lastFortifyTime = -100f;
+    private float lastFireballTime = -100f;
+
     [Header("References")]
     [SerializeField] private StructureManager mainGate; // The main gate
     [Tooltip("The Commander character standing on the tower")]
     [SerializeField] private Animator commanderAnimator;
 
-    // Animator Hashes for Commander
+    [Header("Fortify Balance")]
+    [SerializeField] private float fortifyHoldRequired = 8.0f;
+    private float fortifyTimer = 0f;
+    public bool IsFortifying { get; private set; }
+
+    // Animator Hashes for Commander & Mages
+    private readonly int isHoldingHash = Animator.StringToHash("isHolding");
+    private readonly int isFortifyingHash = Animator.StringToHash("isFortifying");
+    private readonly int fireballHash = Animator.StringToHash("fireball");
+    private readonly int attackHash = Animator.StringToHash("attack");
+    
+    // Legacy / Other
     private readonly int castArrowHash = Animator.StringToHash("CastArrow");
-    private readonly int castLightningHash = Animator.StringToHash("CastLightning");
-    private readonly int castHealHash = Animator.StringToHash("CastHeal");
 
     private void Awake()
     {
@@ -27,125 +47,122 @@ public class SkillManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void HoldArchers()
+    // --- COMMANDER CONTROL SKILLS ---
+
+    public void HoldArchers(bool isHolding)
     {
-        Debug.Log("Skill Triggered: Hold Archers");
-        ArcherAI.isHoldingFire = true;
+        Debug.Log("Skill Context: " + (isHolding ? "HOLDING ARCHERS" : "RELEASING ARCHERS"));
+        ArcherAI.isHoldingFire = isHolding;
+        
+        if (commanderAnimator != null)
+        {
+            commanderAnimator.SetBool(isHoldingHash, isHolding);
+            if (!isHolding) commanderAnimator.SetTrigger(castArrowHash); // Bırakırken CHAAARGE/Shoot hareketi
+        }
     }
 
     public void TriggerArrowVolley()
     {
-        Debug.Log("Skill Triggered: Arrow Volley!");
-        ArcherAI.isHoldingFire = false; // Ateş serbest!
+        if (Time.time < lastArrowTime + arrowVolleyCD) return;
+        lastArrowTime = Time.time;
 
+        Debug.Log("Commander Command: ARROW VOLLEY!");
+        
         if (commanderAnimator != null) commanderAnimator.SetTrigger(castArrowHash);
 
-        // Sahnedeki düşmanlara gökyüzünden ok yağdırma efekti
-        EnemyAI[] enemies = FindObjectsOfType<EnemyAI>();
+        EnemyAI[] enemies = Object.FindObjectsByType<EnemyAI>(FindObjectsInactive.Exclude);
         if (enemies.Length > 0)
         {
             for (int i = 0; i < 20; i++)
             {
-                // Rastgele bir düşman seç
                 EnemyAI randomEnemy = enemies[Random.Range(0, enemies.Length)];
                 if (randomEnemy != null && !randomEnemy.IsDead)
                 {
-                    // Düşmanın biraz tepesinden spawn et (Gökyüzünden yağıyor hissi için)
                     Vector3 spawnPos = randomEnemy.transform.position + new Vector3(Random.Range(-3f, 3f), Random.Range(10f, 15f), Random.Range(-3f, 3f));
                     GameObject arrowObj = ObjectPooler.Instance.SpawnFromPool("Arrow", spawnPos, Quaternion.Euler(90, 0, 0));
-                    
                     if (arrowObj != null)
                     {
                         Arrow arrowScript = arrowObj.GetComponent<Arrow>();
-                        if (arrowScript != null)
-                        {
-                            arrowScript.Initialize(randomEnemy.transform);
-                        }
+                        if (arrowScript != null) arrowScript.Initialize(randomEnemy.transform);
                     }
                 }
             }
         }
     }
 
-    public void TriggerLightningStrike(Vector3 targetPosition)
+    public void TriggerFireball(Vector3 targetPosition)
     {
-        Debug.Log("Skill Triggered: Lightning Strike at " + targetPosition);
-        
-        if (commanderAnimator != null) commanderAnimator.SetTrigger(castLightningHash);
-        
-        // Spawn Visual Effect
-        ObjectPooler.Instance.SpawnFromPool("Lightning", targetPosition, Quaternion.identity);
+        if (Time.time < lastFireballTime + fireballCD) return;
+        lastFireballTime = Time.time;
 
-        // Deal Area of Effect (AoE) Damage
-        Collider[] hitColliders = Physics.OverlapSphere(targetPosition, lightningRadius);
-        foreach (var hitCollider in hitColliders)
+        Debug.Log("Commander Command: FIREBALL STRIKE!");
+        
+        // Commander ve büyücüleri tetikle
+        SyncMagesTrigger(fireballHash);
+        if (commanderAnimator != null) commanderAnimator.SetTrigger(fireballHash);
+
+        ObjectPooler.Instance.SpawnFromPool("Fireball", targetPosition, Quaternion.identity);
+    }
+
+    public void SetFortifyState(bool active)
+    {
+        IsFortifying = active;
+        if (commanderAnimator != null) commanderAnimator.SetBool(isFortifyingHash, active);
+        
+        // Büyücüleri de senkronize et (Duruş/Loop için)
+        SyncMagesBool(isFortifyingHash, active);
+
+        if (!active) 
         {
-            EnemyAI enemy = hitCollider.GetComponent<EnemyAI>();
-            if (enemy != null)
+            fortifyTimer = 0f;
+        }
+    }
+
+    private void Update()
+    {
+        if (IsFortifying)
+        {
+            fortifyTimer += Time.deltaTime;
+            if (fortifyTimer >= fortifyHoldRequired)
             {
-                enemy.TakeDamage(lightningDamage);
+                ApplyFortifyHeal();
+                SetFortifyState(false); // Başarıyla bitti, boz
             }
         }
     }
 
-    public void TriggerFortifyWall()
+    private void ApplyFortifyHeal()
     {
-        Debug.Log("Skill Triggered: Fortify Wall");
+        if (Time.time < lastFortifyTime + fortifyCD) return;
+        lastFortifyTime = Time.time;
 
-        if (commanderAnimator != null) commanderAnimator.SetTrigger(castHealHash);
-
-        if (mainGate != null)
-        {
-            mainGate.HealWall(healAmount);
-            // Optional: Spawn Heal particle effect at castle position
-            // ObjectPooler.Instance.SpawnFromPool("HealEffect", mainGate.transform.position, Quaternion.identity);
-        }
-        else
-        {
-            // Eğer ana kapı atanmadıysa, sahnede hayatta olan tüm duvarları/kapıları bulup can ver
-            StructureManager[] structures = FindObjectsOfType<StructureManager>();
-            foreach (var structure in structures)
-            {
-                structure.HealWall(healAmount);
-            }
-        }
-    }
-
-    public void TriggerMageCast()
-    {
-        Debug.Log("Skill Triggered: Spiderman Web (Yavaşlatma vb. eklenebilir)");
-        // Şimdilik sadece log atıyor, Spiderman için ilerde yavaşlatma eklenebilir.
-    }
-
-    public void TriggerFireball()
-    {
-        Debug.Log("Skill Triggered: Fireball (Adukhet)!");
+        Debug.Log("Commander Command: FORTIFY SUCCESS! HEALING STRUCTURES...");
         
-        EnemyAI[] enemies = FindObjectsOfType<EnemyAI>();
-        if (enemies.Length > 0)
+        StructureManager[] structures = Object.FindObjectsByType<StructureManager>(FindObjectsInactive.Exclude);
+        foreach (var structure in structures)
         {
-            // En kalabalık düşman grubunu bulmak için basitçe ilk düşmanı seçip etrafındakileri buluyoruz.
-            // İlerde daha gelişmiş bir merkez bulma algoritması yazılabilir.
-            EnemyAI target = enemies[Random.Range(0, enemies.Length)];
-            if (target != null && !target.IsDead)
-            {
-                ObjectPooler.Instance.SpawnFromPool("Fireball", target.transform.position, Quaternion.identity);
-                
-                // Alan hasarı
-                float splashRadius = 5f;
-                float splashDamage = 150f;
-                
-                Collider[] colliders = Physics.OverlapSphere(target.transform.position, splashRadius);
-                foreach (var col in colliders)
-                {
-                    EnemyAI enemy = col.GetComponent<EnemyAI>();
-                    if (enemy != null && !enemy.IsDead)
-                    {
-                        enemy.TakeDamage(splashDamage);
-                    }
-                }
-            }
+            structure.Heal(healAmount);
         }
     }
 
+    private void SyncMagesBool(int hash, bool value)
+    {
+        MageAI[] mages = Object.FindObjectsByType<MageAI>(FindObjectsInactive.Exclude);
+        foreach (var mage in mages)
+        {
+            Animator mAnim = mage.GetComponent<Animator>();
+            if (mAnim != null) mAnim.SetBool(hash, value);
+        }
+    }
+
+    private void SyncMagesTrigger(int hash)
+    {
+        MageAI[] mages = Object.FindObjectsByType<MageAI>(FindObjectsInactive.Exclude);
+        foreach (var mage in mages)
+        {
+            Animator mAnim = mage.GetComponent<Animator>();
+            if (mAnim != null) mAnim.SetTrigger(hash);
+        }
+    }
 }
+
