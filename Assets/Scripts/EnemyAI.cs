@@ -428,11 +428,6 @@ public class EnemyAI : MonoBehaviour
         {
             targetStructure.TakeDamage(attackDamage);
         }
-        else if (currentTarget == CoreManager.Instance?.transform)
-        {
-            // Eğer hedefe (Core) ulaştıysak aslında trigger içine girmesi beklenir, ama range'den vuruyorsa diye
-            // Collider'ın OnTriggerEnter kısmı halledecek.
-        }
     }
 
     public void TakeDamage(float amount)

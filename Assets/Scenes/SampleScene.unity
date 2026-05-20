@@ -16109,54 +16109,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 1079953193}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1082061600
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1082061601}
-  - component: {fileID: 1082061602}
-  m_Layer: 0
-  m_Name: CoreManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1082061601
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1082061600}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2124795226}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1082061602
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1082061600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f03669fdb50f274fb0c758630953f19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CoreManager
-  maxPlayerHealth: 20
-  OnGameOver:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1001 &1083562485
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18977,6 +18929,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1291906283}
+  - component: {fileID: 1291906284}
   m_Layer: 0
   m_Name: UpgradeManager
   m_TagString: Untagged
@@ -18999,6 +18952,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2124795226}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1291906284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291906282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a491668a14eca4fb916df859b2ea6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
+  wallUpgradeCost: 50
+  towerUpgradeCost: 100
+  mageUpgradeCost: 150
+  wallLevel: 1
+  towerLevel: 1
+  mageLevel: 1
 --- !u!1001 &1299625786
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21278,6 +21249,7 @@ GameObject:
   - component: {fileID: 1435729674}
   - component: {fileID: 1435729673}
   - component: {fileID: 1435729672}
+  - component: {fileID: 1435729675}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -21335,6 +21307,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2124795226}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1435729675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1435729671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2620b509f4eee940b16dffce323f4ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillUIController
 --- !u!1 &1437305620 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
@@ -33313,9 +33297,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7850185279067718987, guid: c1cc81bdf1201d74986df54ec91e0494, type: 3}
       insertIndex: -1
       addedObject: {fileID: 316606483}
-    - targetCorrespondingSourceObject: {fileID: 7850185279067718987, guid: c1cc81bdf1201d74986df54ec91e0494, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1082061601}
     - targetCorrespondingSourceObject: {fileID: 7850185279067718987, guid: c1cc81bdf1201d74986df54ec91e0494, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1843984021}

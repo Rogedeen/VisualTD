@@ -25,21 +25,21 @@
     </ui:VisualElement>
     <ui:VisualElement name="UpgradeContainer" class="upgrade-bar">
         <ui:VisualElement name="Upgrade_Wall" class="upgrade-card" style="height: 157px; width: 160px;">
-            <ui:Label text="1" class="upgrade-hotkey" />
+            <ui:Label text="1" class="upgrade-hotkey"/>
             <ui:VisualElement name="Icon_Wall" class="upgrade-frame"/>
-            <ui:Label text="WALL FORTIFY" class="card-label" style="font-size: 16px;"/>
+            <ui:Label text="WALL UPGRADE" class="card-label" style="font-size: 16px;"/>
             <ui:Label name="Cost_Wall" text="50G" class="card-cost" style="font-size: 16px;"/>
         </ui:VisualElement>
-        <ui:VisualElement name="Upgrade_Tower" class="upgrade-card" style="width: 160px;">
-            <ui:Label text="2" class="upgrade-hotkey" />
-            <ui:VisualElement name="Icon_Tower" class="upgrade-frame"/>
-            <ui:Label text="BALLISTA DMG" class="card-label" style="font-size: 16px;"/>
-            <ui:Label name="Cost_Tower" text="100G" class="card-cost" style="font-size: 16px;"/>
+        <ui:VisualElement name="Upgrade_Archer" class="upgrade-card" style="width: 160px;">
+            <ui:Label text="2" class="upgrade-hotkey"/>
+            <ui:VisualElement name="Icon_Archer" class="upgrade-frame"/>
+            <ui:Label text="ARCHER DMG" class="card-label" style="font-size: 16px;"/>
+            <ui:Label name="Cost_Archer" text="100G" class="card-cost" style="font-size: 16px;"/>
         </ui:VisualElement>
         <ui:VisualElement name="Upgrade_Mage" class="upgrade-card" style="width: 160px;">
-            <ui:Label text="3" class="upgrade-hotkey" />
+            <ui:Label text="3" class="upgrade-hotkey"/>
             <ui:VisualElement name="Icon_Mage" class="upgrade-frame"/>
-            <ui:Label text="ARCANE FOCUS" class="card-label" style="font-size: 16px;"/>
+            <ui:Label text="ARCANE FOCUS" enable-rich-text="true" class="card-label" style="font-size: 16px;"/>
             <ui:Label name="Cost_Mage" text="150G" class="card-cost" style="font-size: 16px;"/>
         </ui:VisualElement>
     </ui:VisualElement>
