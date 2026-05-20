@@ -25,11 +25,18 @@ public class UpgradeManager : MonoBehaviour
         if (GameManager.Instance.SpendGold(wallUpgradeCost))
         {
             wallLevel++;
-            wallUpgradeCost = Mathf.RoundToInt(wallUpgradeCost * 1.5f);
             Debug.Log($"Wall upgraded to level {wallLevel}");
-            // Uygulama: Tüm duvarların canını artır veya iyileştir
+
             StructureManager[] structures = Object.FindObjectsByType<StructureManager>(FindObjectsInactive.Exclude);
-            foreach(var s in structures) if(s.type == StructureType.Wall) s.Heal(500);
+            foreach (var s in structures)
+            {
+                if (s.type == StructureType.Wall || s.type == StructureType.Gate)
+                {
+                    s.UpgradeMaxHealth(1.2f); // %20 Max HP Artışı
+                    s.Heal(500); // Seviye atlayınca tamir et
+                }
+            }
+            wallUpgradeCost = Mathf.RoundToInt(wallUpgradeCost * 1.5f);
         }
     }
 
@@ -38,8 +45,14 @@ public class UpgradeManager : MonoBehaviour
         if (GameManager.Instance.SpendGold(towerUpgradeCost))
         {
             towerLevel++;
-            towerUpgradeCost = Mathf.RoundToInt(towerUpgradeCost * 1.5f);
             Debug.Log($"Tower upgraded to level {towerLevel}");
+
+            ArcherAI[] archers = Object.FindObjectsByType<ArcherAI>(FindObjectsInactive.Exclude);
+            foreach (var a in archers)
+            {
+                a.damageMultiplier += 0.2f; // Her seviye %20 Hasar Artışı
+            }
+            towerUpgradeCost = Mathf.RoundToInt(towerUpgradeCost * 1.5f);
         }
     }
 
@@ -48,8 +61,12 @@ public class UpgradeManager : MonoBehaviour
         if (GameManager.Instance.SpendGold(mageUpgradeCost))
         {
             mageLevel++;
-            mageUpgradeCost = Mathf.RoundToInt(mageUpgradeCost * 1.5f);
             Debug.Log($"Mage upgraded to level {mageLevel}");
+
+            // SkillManager üzerindeki cooldownları kalıcı olarak düşür
+            SkillManager.Instance.UpgradeMageAbilities(0.9f); // %10 daha hızlı dolum
+
+            mageUpgradeCost = Mathf.RoundToInt(mageUpgradeCost * 1.5f);
         }
     }
 }

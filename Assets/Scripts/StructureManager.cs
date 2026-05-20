@@ -57,7 +57,22 @@ public class StructureManager : MonoBehaviour
 
     public void Heal(float amount)
     {
-        HealWall(amount);
+        currentHealth += amount;
+        if (currentHealth > maxHealth) currentHealth = maxHealth;
+        
+        if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
+        if (type == StructureType.Gate && GameManager.Instance != null)
+            GameManager.Instance.UpdateGateHealth((int)currentHealth);
+    }
+
+    public void UpgradeMaxHealth(float multiplier)
+    {
+        maxHealth *= multiplier;
+        currentHealth *= multiplier; // Mevcut canı da orantılı artır
+        
+        if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
+        if (type == StructureType.Gate && GameManager.Instance != null)
+            GameManager.Instance.UpdateGateHealth((int)currentHealth);
     }
 
     public void TakeDamage(float amount)

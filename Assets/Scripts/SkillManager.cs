@@ -32,6 +32,14 @@ public class SkillManager : MonoBehaviour
     public float GetFortifyProgress() => Mathf.Clamp01((Time.time - lastFortifyTime) / fortifyCD);
     public float GetMeteorProgress() => Mathf.Clamp01((Time.time - lastMeteorTime) / meteorRainCD);
 
+    public void UpgradeMageAbilities(float cdMultiplier)
+    {
+        lightningCD *= cdMultiplier;
+        meteorRainCD *= cdMultiplier;
+        lightningDamage *= 1.2f; // Hasarı da artır
+        Debug.Log($"Mage Skills Upgraded! New Meteor CD: {meteorRainCD}");
+    }
+
     [Tooltip("The Commander character standing on the tower")]
     [SerializeField] private Animator commanderAnimator;
 

@@ -3,9 +3,10 @@ using UnityEngine;
 public class ArcherAI : MonoBehaviour
 {
     [Header("Combat Settings")]
-    [SerializeField] private float fireRate = 1.5f; // Dengeleme raporuna göre 1.5 yapıldı
+    [SerializeField] private float fireRate = 1.5f; 
     [SerializeField] private float range = 15f;
     [SerializeField] private Transform firePoint;
+    public float damageMultiplier = 1f;
     
     [Header("References")]
     [SerializeField] private Animator animator;
