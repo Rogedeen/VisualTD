@@ -22,7 +22,9 @@
 - [x] Integrated `GestureParser` with `SkillManager` for webcam-controlled feedback.
 - [x] Implemented `MageAI` defender logic (Auto-repair structures, cast fireballs at enemies).
 - [x] Synchronized Commander and Mage Animator Controllers with gesture-based parameters (`isHolding`, `isFortifying`, `fireball`).
-- [x] Implemented 8-second Fortify hold logic: Commander and Mages sync in a casting loop, structures heal only after successful duration.
-- [x] Fixed Animator parameter case-sensitivity issues (isHolding, isFortifying, fireball).
-- [x] Refactored `SkillManager` and `GestureParser` to support state-based spellcasting (Fortify state).
-- [x] Fixed code-base compilation errors (CS7036, CS1061) regarding method signature mismatches.
+- [x] Implemented 8-second Fortify hold logic: Commander and Mages sync in a casting loop, structures heal only after successful duration (alive buildings only).
+- [x] Refactored Archer Volley: Releasing a hold now triggers a massive volley + 10 extra targeted arrows.
+- [x] Implemented Meteor Rain: Automatic targeting of crowded areas, persistent ground burn damage, and individual meteor physics/impact damage.
+- [x] Fixed MageAI animation errors: Resolved `Attack` parameter mismatch and standardized "fireball" and "isFortifying" usage.
+- [x] Created `Meteor.cs` and enhanced `MeteorRain.cs` for advanced area-of-effect spell logic.
+- [x] Fixed code-base compilation errors (CS7036, CS1061, CS0102) regarding method signature and redundant definitions.

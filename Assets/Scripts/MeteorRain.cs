@@ -21,23 +21,30 @@ public class MeteorRain : MonoBehaviour
         while (elapsed < duration)
         {
             SpawnMeteor();
-            elapsed += meteorInterval;
-            yield return new WaitForSeconds(meteorInterval);
+            float waitTime = meteorInterval + Random.Range(-0.05f, 0.05f);
+            elapsed += waitTime;
+            yield return new WaitForSeconds(waitTime);
         }
 
-        // Meteor yağmuru bittikten sonra bir süre daha yanmaya devam etmesi için buraya ek mantık gelebilir 
-        // veya prefaba bağlı Particle System bu süreyi yönetebilir.
-        Destroy(gameObject, 3f); // Temizlik
+        // Yağmur bitti, ama yer yanmaya devam ediyor (Ground Burn hala Update'de çalışıyor)
+        Debug.Log("Meteor Rain ended, ground still burning...");
+        yield return new WaitForSeconds(4f); // 4 saniye daha yanmaya devam et
+        
+        gameObject.SetActive(false); // Havuza geri dön
     }
 
     private void SpawnMeteor()
     {
-        Vector3 randomPos = transform.position + new Vector3(Random.Range(-radius, radius), 20f, Random.Range(-radius, radius));
-        // Meteor objesini havuzdan çıkar
-        GameObject meteor = ObjectPooler.Instance.SpawnFromPool("Meteor", randomPos, Quaternion.Euler(90, 0, 0));
-        
-        // Meteor yere çarptığında alan hasarı vermesi Meteor scriptinin içinde olmalı.
-        // Ama biz burada basitçe merkezdeki düşmanlara saniye başı hasar da verebiliriz.
+        Vector3 spawnOffset = new Vector3(Random.Range(-radius, radius), 0, Random.Range(-radius, radius));
+        Vector3 landPos = transform.position + spawnOffset;
+        Vector3 spawnPos = landPos + Vector3.up * 20f;
+
+        GameObject meteorObj = ObjectPooler.Instance.SpawnFromPool("Meteor", spawnPos, Quaternion.Euler(90, 0, 0));
+        if (meteorObj != null)
+        {
+            Meteor meteorScript = meteorObj.GetComponent<Meteor>();
+            if (meteorScript != null) meteorScript.Launch(landPos);
+        }
     }
 
     private void Update()

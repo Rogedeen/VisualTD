@@ -200,15 +200,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7f000655d86258b46b831b945fd784e0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -3.581
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7f000655d86258b46b831b945fd784e0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.03946
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7f000655d86258b46b831b945fd784e0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.069
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7f000655d86258b46b831b945fd784e0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -216,15 +216,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7f000655d86258b46b831b945fd784e0, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7f000655d86258b46b831b945fd784e0, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7f000655d86258b46b831b945fd784e0, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7f000655d86258b46b831b945fd784e0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -365,7 +365,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6006127472301681069}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: b5511eb019a1fd345b80cc6b213298cd, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 4cc608219b4990a468631aea2b289e78, type: 2}
   m_Controller: {fileID: 9100000, guid: 8d88c11b0bd92ae488fda86e080a7448, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -373,12 +373,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'upperarm.l'\n\tTransform 'upperleg.l'\n\tTransform
-    'upperleg.r'\n\tTransform 'hips'\n\tTransform 'upperarm.r'\n\tTransform 'lowerarm.r'\n\tTransform
-    'upperarm.l'\n\tTransform 'chest'\n\tTransform 'lowerarm.l'\n\tTransform 'lowerleg.r'\n\tand
-    more ...\n\tFrom animation clip 'Running_B'\n\tFrom animation clip 'Walking_C'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -474,7 +469,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.62
-  m_Speed: 3.5
+  m_Speed: 1.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -498,10 +493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 652d812e02cf44c4e948f448637a5686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  maxHealth: 200
-  attackDamage: 10
-  attackRange: 1
-  attackCooldown: 2
+  enemyData: {fileID: 11400000, guid: 6f7ceb775a1777c469fc45cf00a513ba, type: 2}
   targetValidationInterval: 1
   healthBar: {fileID: 9092933584173614705}
   damageFlash: {fileID: 7781568516437466088}

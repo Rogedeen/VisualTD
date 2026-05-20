@@ -288,6 +288,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 5133706}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &13698015
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 13698016}
+  - component: {fileID: 13698017}
+  m_Layer: 0
+  m_Name: TargetManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &13698016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 13698015}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.33972, y: 0, z: -1.59619}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2124795226}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &13698017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 13698015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f5a78bdc3ee9f2478deb505db93670f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TargetManager
 --- !u!1001 &16348480
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1194,12 +1238,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 101497468}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.33972, y: 0, z: -1.59619}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2124795226}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &111318119
 PrefabInstance:
@@ -2051,6 +2095,10 @@ PrefabInstance:
     - target: {fileID: 7938680839563534842, guid: d07c0466761bf214da0d2006514706b6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8325962806551729916, guid: d07c0466761bf214da0d2006514706b6, type: 3}
+      propertyPath: dustParticlePrefab
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2923,6 +2971,18 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Wall
       objectReference: {fileID: 0}
+    - target: {fileID: 8676639670864459350, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
+      propertyPath: healthBar
+      value: 
+      objectReference: {fileID: 1717918259}
+    - target: {fileID: 8676639670864459350, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
+      propertyPath: damageFlash
+      value: 
+      objectReference: {fileID: 1717918260}
+    - target: {fileID: 8676639670864459350, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
+      propertyPath: dustParticlePrefab
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4251597619352261234, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
     m_RemovedGameObjects: []
@@ -3482,6 +3542,9 @@ MonoBehaviour:
   - tag: Arrow
     prefab: {fileID: 7850797968815248461, guid: ae8c6c4681ec7584ba043faf0af723f8, type: 3}
     size: 100
+  - tag: Meteor
+    prefab: {fileID: 157282211469997545, guid: 8af091440513834408086654b9d3f856, type: 3}
+    size: 4
 --- !u!1001 &317718398
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4096,79 +4159,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 349272120}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &350218974
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1257164131}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -2.314137
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.309
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 4.2180004
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.43922296
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.8983781
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -127.891
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-      propertyPath: m_Name
-      value: Mage (1)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
 --- !u!1001 &357055247
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6176,7 +6166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -7154,6 +7144,41 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 520534754}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &521074227
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 521074228}
+  m_Layer: 0
+  m_Name: border
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &521074228
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 521074227}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 8.902236, y: -0.5414647, z: 1.2117406}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1911580444}
+  - {fileID: 1478983253}
+  - {fileID: 1585542276}
+  - {fileID: 1518712751}
+  m_Father: {fileID: 735083894}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &522661678
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7399,7 +7424,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -7974,7 +7999,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -8777,7 +8802,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -9117,6 +9142,72 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 188d30652eb967945bbf21e1aee192db, type: 3}
   m_PrefabInstance: {fileID: 617198923}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &621867007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 621867008}
+  - component: {fileID: 621867009}
+  - component: {fileID: 621867010}
+  m_Layer: 0
+  m_Name: EnemyGoal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &621867008
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621867007}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 15.34, y: 0, z: 0.21}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2124795226}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &621867009
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621867007}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0005589, y: 1, z: 6.3866115}
+  m_Center: {x: 0.5002794, y: 0, z: 0.0638845}
+--- !u!114 &621867010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621867007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dab04fbd6456de4bbe75c6587f5da58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyGoal
 --- !u!1001 &622743329
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9317,112 +9408,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 636682146}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &642745366
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 898328576160968675, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.23986
-      objectReference: {fileID: 0}
-    - target: {fileID: 898328576160968675, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.23986
-      objectReference: {fileID: 0}
-    - target: {fileID: 898328576160968675, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.23986
-      objectReference: {fileID: 0}
-    - target: {fileID: 898328576160968675, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -1.5392934
-      objectReference: {fileID: 0}
-    - target: {fileID: 898328576160968675, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.38007
-      objectReference: {fileID: 0}
-    - target: {fileID: 898328576160968675, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1.5798521
-      objectReference: {fileID: 0}
-    - target: {fileID: 898328576160968675, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 898328576160968675, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 898328576160968675, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 898328576160968675, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 898328576160968675, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 898328576160968675, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 898328576160968675, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957833072274404953, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      propertyPath: m_Name
-      value: Meteors AOE
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6281197938758783073, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 642745368}
-  m_SourcePrefab: {fileID: 100100000, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
---- !u!1 &642745367 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6281197938758783073, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
-  m_PrefabInstance: {fileID: 642745366}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &642745368
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 642745367}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
-  m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
-  m_CustomShadowLayers: 0
-  m_LightCookieSize: {x: 1, y: 1}
-  m_LightCookieOffset: {x: 0, y: 0}
-  m_SoftShadowQuality: 0
-  m_RenderingLayersMask:
-    serializedVersion: 0
-    m_Bits: 1
-  m_ShadowRenderingLayersMask:
-    serializedVersion: 0
-    m_Bits: 1
-  m_Version: 4
-  m_LightLayerMask: 1
-  m_ShadowLayerMask: 1
-  m_RenderingLayers: 1
-  m_ShadowRenderingLayers: 1
 --- !u!1001 &645499403
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10243,53 +10228,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 683317666}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &689147826 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 152908001762630522, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
+--- !u!114 &689147832 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8071000920719425320, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
   m_PrefabInstance: {fileID: 3129313192547063145}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &689147827 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6854607942030389418, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
-  m_PrefabInstance: {fileID: 3129313192547063145}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 689147826}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
---- !u!114 &689147828 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2056868862936350576, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
-  m_PrefabInstance: {fileID: 3129313192547063145}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 689147826}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7065dc9622088947b540c0a34032c9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DamageFlash
---- !u!114 &689147832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 689147826}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 805186c902a09e847a92b05b5858f3ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
-  type: 0
-  maxHealth: 2000
-  dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 689147827}
-  damageFlash: {fileID: 689147828}
-  OnStructureDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1001 &694217410
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10726,6 +10675,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 521074228}
   - {fileID: 1547112950}
   - {fileID: 1018514397}
   - {fileID: 46001605}
@@ -11257,7 +11207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -12927,11 +12877,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: e4dad41a7bdb7414784f82ea6b001690, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.00009250641
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e4dad41a7bdb7414784f82ea6b001690, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.0005829036
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e4dad41a7bdb7414784f82ea6b001690, type: 3}
       propertyPath: m_LocalPosition.z
@@ -12939,7 +12889,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e4dad41a7bdb7414784f82ea6b001690, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7365216
+      value: 0.73044765
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e4dad41a7bdb7414784f82ea6b001690, type: 3}
       propertyPath: m_LocalRotation.x
@@ -12951,7 +12901,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e4dad41a7bdb7414784f82ea6b001690, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.6764141
+      value: -0.6829687
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e4dad41a7bdb7414784f82ea6b001690, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -12963,7 +12913,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e4dad41a7bdb7414784f82ea6b001690, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -85.128
+      value: -86.152
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e4dad41a7bdb7414784f82ea6b001690, type: 3}
       propertyPath: m_Name
@@ -14464,7 +14414,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -14871,7 +14821,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -14907,7 +14857,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1661138924}
   m_Father: {fileID: 2124795226}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1019389176
@@ -14926,10 +14877,24 @@ MonoBehaviour:
   - {fileID: 1904669070}
   - {fileID: 789228423}
   - {fileID: 1539551931}
-  waves:
-  - enemyCount: 5
-    spawnRate: 2
-  timeBetweenWaves: 10
+  enemyPool:
+  - data: {fileID: 11400000, guid: 6f7ceb775a1777c469fc45cf00a513ba, type: 2}
+    startWave: 1
+    baseWeight: 100
+    weightIncreasePerWave: -5
+  - data: {fileID: 11400000, guid: 21f643d0cf50cf3438615d3965734b27, type: 2}
+    startWave: 3
+    baseWeight: 10
+    weightIncreasePerWave: 5
+  - data: {fileID: 11400000, guid: efd18218a3671db45bf333e0c379b51d, type: 2}
+    startWave: 5
+    baseWeight: 5
+    weightIncreasePerWave: 8
+  baseEnemyCount: 10
+  enemiesPerWaveIncrease: 3
+  baseSpawnRate: 1.5
+  minSpawnRate: 0.5
+  healthMultiplierPerThreeWaves: 1.05
 --- !u!1001 &1032983788
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16814,7 +16779,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -17972,7 +17937,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -18755,7 +18720,6 @@ Transform:
   - {fileID: 1893732725}
   - {fileID: 1900036731}
   - {fileID: 483858771}
-  - {fileID: 1311244435}
   - {fileID: 744560996}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -18840,7 +18804,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -19072,11 +19036,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 1299625786}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1311244435 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3dcb7923871a02e4288f8c602d3ab3f3, type: 3}
-  m_PrefabInstance: {fileID: 350218974}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1312036531
 PrefabInstance:
@@ -19474,7 +19433,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -19721,7 +19680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -20142,7 +20101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -20287,7 +20246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -20458,6 +20417,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 188d30652eb967945bbf21e1aee192db, type: 3}
   m_PrefabInstance: {fileID: 1401020483}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1408171430
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4175169879118753461, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
+      propertyPath: m_Name
+      value: Mage
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202109184974151857, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.8551893
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202109184974151857, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.306
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202109184974151857, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.937757
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202109184974151857, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.46976265
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202109184974151857, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202109184974151857, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.88279283
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202109184974151857, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202109184974151857, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202109184974151857, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -123.962
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202109184974151857, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
 --- !u!1001 &1409446851
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20616,7 +20632,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -20760,6 +20776,18 @@ PrefabInstance:
     - target: {fileID: 6699781730678759328, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
       propertyPath: m_TagString
       value: Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 7078079162378360382, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
+      propertyPath: healthBar
+      value: 
+      objectReference: {fileID: 1717918259}
+    - target: {fileID: 7078079162378360382, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
+      propertyPath: damageFlash
+      value: 
+      objectReference: {fileID: 1717918260}
+    - target: {fileID: 7078079162378360382, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
+      propertyPath: dustParticlePrefab
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6602520913158319885, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
@@ -21021,31 +21049,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 1412927007}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1413200045 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3111558333548248516, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
-  m_PrefabInstance: {fileID: 100150969501034658}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1413200051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1413200045}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 805186c902a09e847a92b05b5858f3ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StructureManager
-  type: 1
-  maxHealth: 1000
-  dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 1717918259}
-  damageFlash: {fileID: 1717918260}
-  OnStructureDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1420085174 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
@@ -21276,12 +21279,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1435729671}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.33972, y: 0, z: -1.59619}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2124795226}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1437305620 stripped
 GameObject:
@@ -21359,7 +21362,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -21680,7 +21683,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -22419,7 +22422,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -22508,6 +22511,85 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 1471357987}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1478983249
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1478983253}
+  - component: {fileID: 1478983252}
+  - component: {fileID: 1478983250}
+  - component: {fileID: 1478983254}
+  m_Layer: 0
+  m_Name: Cube (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1478983250
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478983249}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &1478983252
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478983249}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1478983253
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478983249}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -15.249999, y: 0, z: -6.68}
+  m_LocalScale: {x: 31.533636, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 521074228}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!208 &1478983254
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478983249}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &1511972972
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22590,6 +22672,85 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 1511972972}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1518712747
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1518712751}
+  - component: {fileID: 1518712750}
+  - component: {fileID: 1518712748}
+  - component: {fileID: 1518712752}
+  m_Layer: 0
+  m_Name: Cube (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1518712748
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518712747}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &1518712750
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518712747}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1518712751
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518712747}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 13.574863, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 521074228}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!208 &1518712752
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518712747}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &1519055689
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23277,6 +23438,85 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 1563509598}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1585542272
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1585542276}
+  - component: {fileID: 1585542275}
+  - component: {fileID: 1585542273}
+  - component: {fileID: 1585542277}
+  m_Layer: 0
+  m_Name: Cube (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1585542273
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585542272}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &1585542275
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585542272}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1585542276
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585542272}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -30.52, y: 0, z: -0.00999999}
+  m_LocalScale: {x: 13.574863, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 521074228}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!208 &1585542277
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585542272}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &1586367168
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23599,7 +23839,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -24420,7 +24660,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -24607,15 +24847,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1661138923}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.9998, y: -0, z: 2.11562}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.6600802, y: 0, z: 0.5194299}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1904669070}
   - {fileID: 789228423}
   - {fileID: 1539551931}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1019389174}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1661484860
 PrefabInstance:
@@ -25006,7 +25246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -25176,7 +25416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -25273,6 +25513,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 588228427}
     m_Modifications:
+    - target: {fileID: 4408394760993430214, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
+      propertyPath: healthBar
+      value: 
+      objectReference: {fileID: 1717918259}
+    - target: {fileID: 4408394760993430214, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
+      propertyPath: damageFlash
+      value: 
+      objectReference: {fileID: 1717918260}
+    - target: {fileID: 4408394760993430214, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
+      propertyPath: dustParticlePrefab
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8514655543931914728, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.42199993
@@ -25704,7 +25956,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -26341,7 +26593,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -27619,7 +27871,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -28001,8 +28253,15 @@ MonoBehaviour:
   lightningDamage: 50
   healAmount: 200
   lightningRadius: 5
+  meteorRainPrefab: {fileID: 0}
+  meteorDuration: 5
+  arrowVolleyCD: 10
+  lightningCD: 15
+  fortifyCD: 20
+  meteorRainCD: 12
   mainGate: {fileID: 689147832}
   commanderAnimator: {fileID: 0}
+  fortifyHoldRequired: 8
 --- !u!1001 &1861098201
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28243,7 +28502,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -28663,6 +28922,85 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 1910685722}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1911580440
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1911580444}
+  - component: {fileID: 1911580443}
+  - component: {fileID: 1911580441}
+  - component: {fileID: 1911580445}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1911580441
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911580440}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &1911580443
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911580440}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1911580444
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911580440}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -15.249999, y: 0, z: 6.5800004}
+  m_LocalScale: {x: 31.533636, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 521074228}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!208 &1911580445
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911580440}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &1912575046
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28908,7 +29246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -29565,7 +29903,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -30054,7 +30392,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -30654,7 +30992,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -31065,7 +31403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -31637,7 +31975,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
-  maxHealth: 300
+  maxHealth: 1000
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 999867366}
   damageFlash: {fileID: 999867364}
@@ -32230,18 +32568,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall-corner-half-tower
       objectReference: {fileID: 0}
-    - target: {fileID: 3111558333548248516, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
-      propertyPath: m_TagString
-      value: Wall
+    - target: {fileID: 8676639670864459350, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
+      propertyPath: healthBar
+      value: 
+      objectReference: {fileID: 1717918259}
+    - target: {fileID: 8676639670864459350, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
+      propertyPath: damageFlash
+      value: 
+      objectReference: {fileID: 1717918260}
+    - target: {fileID: 8676639670864459350, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
+      propertyPath: dustParticlePrefab
+      value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4251597619352261234, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3111558333548248516, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1413200051}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
 --- !u!4 &543450653046235890 stripped
 Transform:
@@ -32269,6 +32611,10 @@ PrefabInstance:
       propertyPath: damageFlash
       value: 
       objectReference: {fileID: 1717918260}
+    - target: {fileID: 1867082545753289165, guid: be9635490ae994649a81c66d59b46d9e, type: 3}
+      propertyPath: dustParticlePrefab
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6276796746447205507, guid: be9635490ae994649a81c66d59b46d9e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.421
@@ -32427,6 +32773,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8325962806551729916, guid: d07c0466761bf214da0d2006514706b6, type: 3}
+      propertyPath: dustParticlePrefab
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -32443,14 +32793,6 @@ PrefabInstance:
     - target: {fileID: 4175169879118753461, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
       propertyPath: m_Name
       value: Mage
-      objectReference: {fileID: 0}
-    - target: {fileID: 8202109184974151857, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.19999999
-      objectReference: {fileID: 0}
-    - target: {fileID: 8202109184974151857, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.19999999
       objectReference: {fileID: 0}
     - target: {fileID: 8202109184974151857, guid: 13ee82627fdb477428d193c1b37235bb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -32557,6 +32899,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Knight
       objectReference: {fileID: 0}
+    - target: {fileID: 6834250402922311898, guid: 0cfcff97a637da54d8dfa49c7588b3a4, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 81816c43d88e27844a34c3de42ed51db, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -32573,10 +32919,6 @@ PrefabInstance:
     - target: {fileID: 152908001762630522, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
       propertyPath: m_Name
       value: gate
-      objectReference: {fileID: 0}
-    - target: {fileID: 152908001762630522, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
-      propertyPath: m_TagString
-      value: Gate
       objectReference: {fileID: 0}
     - target: {fileID: 672423554000617920, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
       propertyPath: m_LocalPosition.x
@@ -32618,14 +32960,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4817479616322400333, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
+    - target: {fileID: 8071000920719425320, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
+      propertyPath: healthBar
+      value: 
+      objectReference: {fileID: 1717918259}
+    - target: {fileID: 8071000920719425320, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
+      propertyPath: damageFlash
+      value: 
+      objectReference: {fileID: 1717918260}
+    - target: {fileID: 8071000920719425320, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
+      propertyPath: dustParticlePrefab
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 152908001762630522, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 689147832}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
 --- !u!1001 &5012488725913262820
 PrefabInstance:
@@ -32736,6 +33086,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall-narrow-stairs
       objectReference: {fileID: 0}
+    - target: {fileID: 7078079162378360382, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
+      propertyPath: dustParticlePrefab
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7078079162378360382, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
+      propertyPath: OnStructureDestroyed.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7078079162378360382, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
+      propertyPath: OnStructureDestroyed.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -32757,6 +33119,10 @@ PrefabInstance:
       propertyPath: damageFlash
       value: 
       objectReference: {fileID: 1717918260}
+    - target: {fileID: 4408394760993430214, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
+      propertyPath: dustParticlePrefab
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8514655543931914728, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.42199993
@@ -32888,6 +33254,18 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7850185279067718987, guid: c1cc81bdf1201d74986df54ec91e0494, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1843984021}
+    - targetCorrespondingSourceObject: {fileID: 7850185279067718987, guid: c1cc81bdf1201d74986df54ec91e0494, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 621867008}
+    - targetCorrespondingSourceObject: {fileID: 7850185279067718987, guid: c1cc81bdf1201d74986df54ec91e0494, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 13698016}
+    - targetCorrespondingSourceObject: {fileID: 7850185279067718987, guid: c1cc81bdf1201d74986df54ec91e0494, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 101497470}
+    - targetCorrespondingSourceObject: {fileID: 7850185279067718987, guid: c1cc81bdf1201d74986df54ec91e0494, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1435729674}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7466342480464203330, guid: c1cc81bdf1201d74986df54ec91e0494, type: 3}
       insertIndex: -1
@@ -32937,7 +33315,4 @@ SceneRoots:
   - {fileID: 1257164131}
   - {fileID: 2135098819}
   - {fileID: 111318119}
-  - {fileID: 1661138924}
-  - {fileID: 101497470}
-  - {fileID: 642745366}
-  - {fileID: 1435729674}
+  - {fileID: 1408171430}

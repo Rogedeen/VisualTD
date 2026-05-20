@@ -19,7 +19,6 @@ public class StructureManager : MonoBehaviour
     public UnityEvent OnStructureDestroyed;
     public bool IsDestroyed => isDestroyed;
     private bool isDestroyed = false;
-    public bool IsDestroyed => isDestroyed;
 
     private UnityEngine.AI.NavMeshObstacle obstacle;
 

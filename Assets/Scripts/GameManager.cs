@@ -44,6 +44,12 @@ public class GameManager : MonoBehaviour
         Debug.Log($"[Economy] {amount} Altın Kazanıldı! Toplam: {Gold}");
     }
 
+    public void WinGame()
+    {
+        Debug.Log(">>> VICTORY! DALGALAR TEMİZLENDİ! <<<");
+        // Gelecekte Win UI tetiklemek için burası kullanılacak
+    }
+
     public void PurchaseUpgrade(int upgradeId)
     {
         int cost = upgradeId * 50; // Örn: 1. yükseltme 50 altın, 2. yükseltme 100 altın

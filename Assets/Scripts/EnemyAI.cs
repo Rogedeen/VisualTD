@@ -6,10 +6,14 @@ using System.Collections;
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] private float maxHealth = 50f;
-    [SerializeField] private float attackDamage = 5f;
-    [SerializeField] private float attackRange = 3f;
-    [SerializeField] private float attackCooldown = 1.5f;
+    [SerializeField] private EnemyData enemyData;
+    
+    // Stats will be loaded from EnemyData
+    private float maxHealth;
+    private float attackDamage;
+    private float attackRange;
+    private float attackCooldown;
+    
     [SerializeField] private float targetValidationInterval = 1f;
 
     [Header("UI & Feedback")]
@@ -32,6 +36,10 @@ public class EnemyAI : MonoBehaviour
     private float lastTargetValidationTime;
     private bool isDead = false;
 
+    // DEBUG: Field'ları dışarıya açıyoruz
+    public Transform CurrentTarget => currentTarget;
+    public StructureManager TargetStructure => targetStructure;
+
     public bool IsDead => isDead;
     public bool IsSpawning => currentState == EnemyState.Spawning;
 
@@ -53,13 +61,50 @@ public class EnemyAI : MonoBehaviour
         if (healthBar == null) healthBar = GetComponentInChildren<HealthBar>();
         if (damageFlash == null) damageFlash = GetComponent<DamageFlash>();
         
-        // NOTE: Do not override NavMeshAgent.speed here so prefab/inspector values are respected.
+        // GAZ-FREN VE TİTREME DÜZELTMESİ:
+        if (agent != null)
+        {
+            agent.acceleration = 1000f; // Anında hızlanma
+            agent.autoBraking = false; // Hedefe yaklaşırken yavaşlama yapma
+            
+            // TİTREME İÇİN KRİTİK: Agent kendi transformunu güncellemeyecek, biz Update'te yapacağız.
+            agent.updatePosition = false;
+            agent.updateRotation = true; 
+        }
+    }
+
+    public void SetEnemyData(EnemyData data)
+    {
+        enemyData = data;
+        if (enemyData != null)
+        {
+            maxHealth = enemyData.maxHealth;
+            currentHealth = maxHealth;
+            attackDamage = enemyData.attackDamage;
+            attackRange = enemyData.attackRange;
+            attackCooldown = enemyData.attackCooldown;
+            
+            if (agent != null)
+            {
+                agent.speed = enemyData.moveSpeed;
+                agent.stoppingDistance = attackRange - 0.5f;
+            }
+
+            if (animator != null && enemyData.animatorController != null)
+            {
+                animator.runtimeAnimatorController = enemyData.animatorController;
+            }
+        }
     }
 
     private void OnEnable()
     {
         currentState = EnemyState.Spawning;
-        currentHealth = maxHealth;
+        
+        // Eğer data atanmışsa değerleri güncelle, yoksa mevcutları kullan
+        if (enemyData != null) SetEnemyData(enemyData);
+        else currentHealth = maxHealth;
+
         isDead = false;
         lastAttackTime = -Mathf.Infinity;
         lastTargetValidationTime = Time.time;
@@ -92,17 +137,20 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
-
-        if (!FindTarget())
+        // ÖNEMLİ: Eğer pooler henüz objeleri hazırlıyorsa (Awake sırasında instantiate ediyorsa) 
+        // hedef arama; çünkü henüz TargetManager veya CoreManager hazır olmayabilir.
+        if (gameObject.activeInHierarchy && Time.frameCount > 0)
         {
-            Debug.LogWarning("[EnemyAI] Hedef bulunamadı!");
-            StartCoroutine(ReturnToPoolNextFrame());
-            return;
-        }
+            if (!FindTarget())
+            {
+                Debug.LogWarning("[EnemyAI] Hedef bulunamadı!");
+                StartCoroutine(ReturnToPoolNextFrame());
+                return;
+            }
 
-        if (spawnCoroutine != null) StopCoroutine(spawnCoroutine);
-        spawnCoroutine = StartCoroutine(SpawnSequence());
+            if (spawnCoroutine != null) StopCoroutine(spawnCoroutine);
+            spawnCoroutine = StartCoroutine(SpawnSequence());
+        }
     }
 
     private void OnDisable()
@@ -129,63 +177,15 @@ public class EnemyAI : MonoBehaviour
 
     private bool FindTarget()
     {
-        StructureManager[] structures = FindObjectsOfType<StructureManager>();
-        StructureManager gate = null;
-        
-        // Önce Kapıyı (Gate) bul
-        foreach (var s in structures)
-        {
-            if (s.type == StructureType.Gate && !s.IsDestroyed && s.gameObject.activeInHierarchy)
-            {
-                gate = s;
-                break;
-            }
-        }
+        if (TargetManager.Instance == null) return false;
 
-        if (gate != null)
-        {
-            currentTarget = gate.transform;
-            targetStructure = gate;
-            
-            // Kapıya yol var mı bak?
-            TryUpdateDestination();
-            NavMeshPath path = new NavMeshPath();
-            if (agent.CalculatePath(navMeshDestination, path) && path.status == NavMeshPathStatus.PathComplete)
-            {
-                // Mevcut yol tam, kapıya git
-                return true;
-            }
-            
-            // Kapıya yol yoksa (duvarlar kapalıysa), en yakın Duvara (Wall) yönel
-            StructureManager closestWall = null;
-            float minDist = Mathf.Infinity;
-            foreach (var s in structures)
-            {
-                if (s.type == StructureType.Wall && !s.IsDestroyed && s.gameObject.activeInHierarchy)
-                {
-                    float d = Vector3.Distance(transform.position, s.transform.position);
-                    if (d < minDist)
-                    {
-                        minDist = d;
-                        closestWall = s;
-                    }
-                }
-            }
-
-            if (closestWall != null)
-            {
-                currentTarget = closestWall.transform;
-                targetStructure = closestWall;
-                TryUpdateDestination();
-                return true;
-            }
-        }
+        StructureManager sTarget;
+        Transform decision = TargetManager.Instance.GetDecision(transform.position, agent, out sTarget);
         
-        // Kapı yoksa veya yıkıldıysa (veya kapıya giden yol/duvar kalmadıysa) İçeriye (Core) git
-        if (CoreManager.Instance != null)
+        if (decision != null)
         {
-            currentTarget = CoreManager.Instance.transform;
-            targetStructure = null;
+            currentTarget = decision;
+            targetStructure = sTarget;
             TryUpdateDestination();
             return true;
         }
@@ -197,15 +197,29 @@ public class EnemyAI : MonoBehaviour
     {
         if (currentTarget == null || agent == null) return false;
 
+        // Hedefi debug etmek için log ekleyelim
+        // Debug.Log($"[EnemyAI] {name} setting destination to {currentTarget.name} at {currentTarget.position}");
+
         NavMeshHit hit;
-        if (NavMesh.SamplePosition(currentTarget.position, out hit, TARGET_SAMPLE_RADIUS, NavMesh.AllAreas))
+        // Radius'u genişletiyoruz ve daha agresif bir kontrol yapıyoruz
+        if (NavMesh.SamplePosition(currentTarget.position, out hit, 10f, NavMesh.AllAreas))
         {
             navMeshDestination = hit.position;
-            return true;
+            // TargetManager'dan gelen kule/kapı ise tam noktaya gitmeye çalış
+            if (targetStructure != null) navMeshDestination = hit.position;
+        }
+        else
+        {
+            navMeshDestination = currentTarget.position;
         }
 
-        navMeshDestination = currentTarget.position;
-        return false;
+        // Eğer hedef (-1, 0, 2) gibi garip bir yerse burada yakalayabiliriz
+        if (Vector3.Distance(navMeshDestination, Vector3.zero) < 5f && Vector3.Distance(currentTarget.position, Vector3.zero) > 10f)
+        {
+            Debug.LogWarning($"[EnemyAI] {name} suspicious destination detected: {navMeshDestination} for target {currentTarget.name}");
+        }
+
+        return true;
     }
 
     private IEnumerator SpawnSequence()
@@ -255,6 +269,24 @@ public class EnemyAI : MonoBehaviour
     {
         if (isDead) return;
 
+        // NavMesh Agent'ın pozisyonu ile Transform'u manuel senkronize ederek titremeyi engelle
+        if (agent != null && agent.isOnNavMesh)
+        {
+             // Agent bir sonraki karede nerede olacağını biliyor, ona yumuşakça (veya direkt) geç
+             Vector3 targetPos = agent.nextPosition;
+             transform.position = new Vector3(targetPos.x, targetPos.y, targetPos.z);
+             
+             // Agent'ın kendi transform güncellemesini kapatalım ki bizimle savaşmasın
+             agent.updatePosition = false;
+        }
+        else
+        {
+            transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+        }
+        
+        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+
+        // Hedef validasyonu ve zeka güncellemelerini daha seyrek yapıyoruz (Smooth karar verme için)
         if (Time.time >= lastTargetValidationTime + targetValidationInterval)
         {
             ValidateTarget();
@@ -269,14 +301,35 @@ public class EnemyAI : MonoBehaviour
 
         if (agent == null || !agent.isActiveAndEnabled || !agent.isOnNavMesh) return;
 
+        // Hedefe bakması için yönlenme (Saldırırken de yararlı)
+        if (currentTarget != null)
+        {
+            Vector3 direction = (currentTarget.position - transform.position).normalized;
+            direction.y = 0;
+            if (direction != Vector3.zero)
+            {
+                Quaternion lookRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+            }
+        }
+
+        // ANIMASYON DÜZELTME: Daha kararlı hız kontrolü
         if (animator != null)
-            animator.SetFloat(speedHash, agent.velocity.magnitude);
+        {
+            // Agent'ın gerçek hareket hızına bakıyoruz
+            float currentVelocity = agent.velocity.magnitude;
+            // Eğer hareket ediyorsa (ve durdurulmamışsa) Speed 1, yoksa 0
+            float animationSpeed = (currentVelocity > 0.1f && !agent.isStopped) ? 1.0f : 0f; 
+
+            animator.SetFloat(speedHash, animationSpeed);
+        }
 
         if (!agent.pathPending && agent.isOnNavMesh)
         {
             float distanceToTarget = Vector3.Distance(transform.position, navMeshDestination);
 
-            if (distanceToTarget <= attackRange)
+            // Daha güvenli bir mesafe kontrolü (Hem AttackRange hem de NavMesh StoppingDistance)
+            if (distanceToTarget <= attackRange || agent.remainingDistance <= agent.stoppingDistance + 0.1f)
                 TransitionToAttack();
             else
                 TransitionToMoving();
@@ -285,57 +338,47 @@ public class EnemyAI : MonoBehaviour
 
     private void ValidateTarget()
     {
+        // Smooth Karar Verme: Sadece hedef yoksa veya hedef öldüyse yeni hedef ara.
+        // Sürekli yol hesaplamak titreşime (jitter) sebep olur.
         if (currentTarget == null || !currentTarget.gameObject.activeInHierarchy || (targetStructure != null && targetStructure.IsDestroyed))
         {
-            if (!FindTarget())
+            if (FindTarget())
             {
-                if (agent.isOnNavMesh) agent.isStopped = true;
-                currentState = EnemyState.Spawning; // Durum korumak için geçici
-            }
-            else if (currentState == EnemyState.Moving && agent.isOnNavMesh)
-            {
-                TryUpdateDestination();
-                agent.SetDestination(navMeshDestination);
-            }
-        }
-        else if (agent.isOnNavMesh)
-        {
-            // Eğer hedefe giden yol tıkalıysa (duvar varsa) en yakın duvara saldır
-            if (agent.pathStatus == NavMeshPathStatus.PathPartial)
-            {
-                StructureManager[] structures = FindObjectsOfType<StructureManager>();
-                StructureManager closestWall = null;
-                float minDist = Mathf.Infinity;
-                foreach (var s in structures)
+                if (currentState == EnemyState.Moving && agent.isOnNavMesh)
                 {
-                    if (s.type == StructureType.Wall && !s.IsDestroyed && s.gameObject.activeInHierarchy)
-                    {
-                        float d = Vector3.Distance(transform.position, s.transform.position);
-                        if (d < minDist)
-                        {
-                            minDist = d;
-                            closestWall = s;
-                        }
-                    }
-                }
-
-                if (closestWall != null)
-                {
-                    currentTarget = closestWall.transform;
-                    targetStructure = closestWall;
-                    TryUpdateDestination();
                     agent.SetDestination(navMeshDestination);
                 }
+            }
+            else
+            {
+                if (agent.isActiveAndEnabled && agent.isOnNavMesh) agent.isStopped = true;
             }
         }
     }
 
     private void TransitionToAttack()
     {
-        if (currentState == EnemyState.Attacking) return;
+        // Hedefe bakmayı zorla
+        if (currentTarget != null)
+        {
+            Vector3 dir = (currentTarget.position - transform.position).normalized;
+            dir.y = 0;
+            if (dir != Vector3.zero) transform.rotation = Quaternion.LookRotation(dir);
+        }
+
+        if (currentState == EnemyState.Attacking)
+        {
+            if (Time.time >= lastAttackTime + attackCooldown)
+                AttackTarget();
+            return;
+        }
 
         currentState = EnemyState.Attacking;
-        agent.isStopped = true;
+        if (agent.isActiveAndEnabled && agent.isOnNavMesh)
+        {
+            agent.isStopped = true;
+            agent.velocity = Vector3.zero; // Kaymayı durdur
+        }
 
         if (Time.time >= lastAttackTime + attackCooldown)
             AttackTarget();
@@ -358,7 +401,27 @@ public class EnemyAI : MonoBehaviour
     private void AttackTarget()
     {
         lastAttackTime = Time.time;
-        if (animator != null) animator.SetTrigger(attackHash);
+        
+        // Güvenlik: Hedef hala yaşıyor mu ve menzilde mi?
+        if (currentTarget == null || !currentTarget.gameObject.activeInHierarchy)
+        {
+            TransitionToMoving();
+            return;
+        }
+
+        // Atak anında tekrar hedefe bakmayı zorla
+        if (currentTarget != null)
+        {
+            Vector3 dir = (currentTarget.position - transform.position).normalized;
+            dir.y = 0;
+            if (dir != Vector3.zero) transform.rotation = Quaternion.LookRotation(dir);
+        }
+
+        if (animator != null)
+        {
+            animator.SetTrigger(attackHash);
+            // Debug için log ekleyebilirsiniz: Debug.Log($"{name} is attacking {currentTarget.name}");
+        }
 
         // Hedef bir binaysa ona hasar ver
         if (targetStructure != null && !targetStructure.IsDestroyed)
@@ -389,6 +452,13 @@ public class EnemyAI : MonoBehaviour
         isDead = true;
         agent.isStopped = true;
         GetComponent<Collider>().enabled = false;
+
+        // Altın ödülünü ver
+        if (enemyData != null && GameManager.Instance != null)
+        {
+            GameManager.Instance.AddGold(enemyData.goldReward);
+        }
+
         if (animator != null) animator.SetTrigger(dieHash);
         StartCoroutine(DeathSequence());
     }

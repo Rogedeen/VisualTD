@@ -104,9 +104,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9df67e22489cd6458f86a5f98dd4fb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arrow
-  speed: 8
+  speed: 6
   damage: 50
-  arcHeight: 3
+  arcHeight: 2
 --- !u!65 &-9000394298147085906
 BoxCollider:
   m_ObjectHideFlags: 0

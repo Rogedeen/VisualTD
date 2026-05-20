@@ -29,28 +29,45 @@ public class ArcherAI : MonoBehaviour
     private void OnEnable()
     {
         // Okçuların aynı anda senkronize ok atmasını önlemek için rastgele bir başlangıç süresi
-        nextFireTime = Time.time + Random.Range(0.5f, fireRate);
+        ApplyRandomOffset();
+    }
+
+    private void ApplyRandomOffset()
+    {
+        nextFireTime = Time.time + Random.Range(0f, fireRate);
     }
 
     // Gesture control variables
     public static bool isHoldingFire = false;
 
+    private bool wasHolding = false;
+
     private void Update()
     {
+        EnemyAI target = FindNearestEnemy();
+        
+        // Eğer sahnede hedef yoksa okçular bekleme (Idle) pozisyonuna geçsin
+        bool shouldHold = (isHoldingFire || target == null);
+
         if (animator != null)
         {
-            animator.SetBool(holdHash, isHoldingFire);
+            animator.SetBool(holdHash, shouldHold);
+            if (target == null) animator.ResetTrigger(attackHash); // Hedef yoksa atak animasyonunu temizle
         }
 
-        if (isDead || isHoldingFire) return; // Yumruk yapıldıysa veya ölüyse ok atma
-
-        if (Time.time >= nextFireTime)
+        // Hold bırakıldığında (veya ok yağmuru atılıp bitince) tekrar hepsi aynı anda
+        // ateş etmesin diye rastgele bir bekleme (offset) ekliyoruz.
+        if (wasHolding && !shouldHold)
         {
-            EnemyAI target = FindNearestEnemy();
-            if (target != null)
-            {
-                Shoot(target);
-            }
+            ApplyRandomOffset();
+        }
+        wasHolding = shouldHold;
+
+        if (isDead || shouldHold) return;
+
+        if (target != null && Time.time >= nextFireTime)
+        {
+            Shoot(target);
         }
     }
 

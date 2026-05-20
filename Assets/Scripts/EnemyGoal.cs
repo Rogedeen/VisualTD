@@ -2,6 +2,14 @@ using UnityEngine;
 
 public class EnemyGoal : MonoBehaviour
 {
+    public static EnemyGoal Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         // Eğer collider'ın veya üst objesinin EnemyAI componenti varsa düşmandır.
