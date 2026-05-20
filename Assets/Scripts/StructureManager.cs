@@ -17,14 +17,29 @@ public class StructureManager : MonoBehaviour
     [SerializeField] private DamageFlash damageFlash;
 
     public UnityEvent OnStructureDestroyed;
+    public bool IsDestroyed => isDestroyed;
     private bool isDestroyed = false;
     public bool IsDestroyed => isDestroyed;
 
     private UnityEngine.AI.NavMeshObstacle obstacle;
 
+    private void OnEnable()
+    {
+        if (TargetManager.Instance != null) TargetManager.Instance.RegisterStructure(this);
+    }
+
+    private void OnDisable()
+    {
+        if (TargetManager.Instance != null) TargetManager.Instance.UnregisterStructure(this);
+    }
+
     private void Start()
     {
         currentHealth = maxHealth;
+        // Start'ta tekrar zorla kayıt dene
+        if (TargetManager.Instance != null) TargetManager.Instance.RegisterStructure(this);
+        else Debug.LogWarning($"[StructureManager] {name} TargetManager'ı bulamadı!");
+        
         obstacle = GetComponent<UnityEngine.AI.NavMeshObstacle>();
 
         if (healthBar == null) healthBar = GetComponentInChildren<HealthBar>();
@@ -33,12 +48,28 @@ public class StructureManager : MonoBehaviour
         if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
     }
 
+    public bool IsDamaged()
+    {
+        return !isDestroyed && currentHealth < maxHealth;
+    }
+
+    public void Heal(float amount)
+    {
+        HealWall(amount);
+    }
+
     public void TakeDamage(float amount)
     {
         if (isDestroyed) return;
 
         currentHealth -= amount;
         
+        // Eğer bu bir Kapı (Gate) ise GameManager'a haber ver
+        if (type == StructureType.Gate && GameManager.Instance != null)
+        {
+            GameManager.Instance.UpdateGateHealth((int)currentHealth);
+        }
+
         if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
         if (damageFlash != null) damageFlash.Flash();
 

@@ -9,21 +9,27 @@ public class SkillManager : MonoBehaviour
     [SerializeField] private float healAmount = 200f;
     [SerializeField] private float lightningRadius = 5f;
 
+    [Header("Meteor Settings")]
+    [SerializeField] private GameObject meteorRainPrefab;
+    [SerializeField] private float meteorDuration = 5f;
+
     [Header("Cooldowns")]
     [SerializeField] private float arrowVolleyCD = 10f;
     [SerializeField] private float lightningCD = 15f;
     [SerializeField] private float fortifyCD = 20f;
-    [SerializeField] private float fireballCD = 12f;
+    [SerializeField] private float meteorRainCD = 12f;
 
     private float lastArrowTime = -100f;
     private float lastLightningTime = -100f;
     private float lastFortifyTime = -100f;
-    private float lastFireballTime = -100f;
+    private float lastMeteorTime = -100f;
 
     [Header("References")]
     [SerializeField] private StructureManager mainGate; // The main gate
     [Tooltip("The Commander character standing on the tower")]
     [SerializeField] private Animator commanderAnimator;
+
+    private readonly int castLightningHash = Animator.StringToHash("CastLightning");
 
     [Header("Fortify Balance")]
     [SerializeField] private float fortifyHoldRequired = 8.0f;
@@ -57,7 +63,32 @@ public class SkillManager : MonoBehaviour
         if (commanderAnimator != null)
         {
             commanderAnimator.SetBool(isHoldingHash, isHolding);
-            if (!isHolding) commanderAnimator.SetTrigger(castArrowHash); // Bırakırken CHAAARGE/Shoot hareketi
+            if (!isHolding) 
+            {
+                commanderAnimator.SetTrigger(castArrowHash); // Bırakırken CHAAARGE/Shoot hareketi
+                TriggerExtraArrowVolley(10); // Bırakınca fazladan 10 ok
+            }
+        }
+    }
+
+    private void TriggerExtraArrowVolley(int count)
+    {
+        EnemyAI[] enemies = Object.FindObjectsByType<EnemyAI>(FindObjectsInactive.Exclude);
+        if (enemies.Length == 0) return;
+
+        for (int i = 0; i < count; i++)
+        {
+            EnemyAI randomEnemy = enemies[Random.Range(0, enemies.Length)];
+            if (randomEnemy != null && !randomEnemy.IsDead)
+            {
+                Vector3 spawnPos = randomEnemy.transform.position + new Vector3(Random.Range(-2f, 2f), 12f, Random.Range(-2f, 2f));
+                GameObject arrowObj = ObjectPooler.Instance.SpawnFromPool("Arrow", spawnPos, Quaternion.Euler(90, 0, 0));
+                if (arrowObj != null)
+                {
+                    Arrow arrowScript = arrowObj.GetComponent<Arrow>();
+                    if (arrowScript != null) arrowScript.Initialize(randomEnemy.transform);
+                }
+            }
         }
     }
 
@@ -90,18 +121,62 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    public void TriggerFireball(Vector3 targetPosition)
+    public void TriggerFireball(Vector3 ignored)
     {
-        if (Time.time < lastFireballTime + fireballCD) return;
-        lastFireballTime = Time.time;
+        if (Time.time < lastMeteorTime + meteorRainCD) return;
+        lastMeteorTime = Time.time;
 
-        Debug.Log("Commander Command: FIREBALL STRIKE!");
+        Debug.Log("Commander Command: METEOR RAIN!");
         
-        // Commander ve büyücüleri tetikle
         SyncMagesTrigger(fireballHash);
         if (commanderAnimator != null) commanderAnimator.SetTrigger(fireballHash);
 
-        ObjectPooler.Instance.SpawnFromPool("Fireball", targetPosition, Quaternion.identity);
+        Vector3 targetPos = FindCrowdedEnemyArea();
+        
+        // MeteorRain aseti/scripti olan bir objeyi çıkarıyoruz
+        GameObject rainObj = ObjectPooler.Instance.SpawnFromPool("MeteorRain", targetPos, Quaternion.identity);
+        if (rainObj != null)
+        {
+            MeteorRain rainScript = rainObj.GetComponent<MeteorRain>();
+            if (rainScript != null) rainScript.Initialize(targetPos);
+        }
+    }
+
+    private Vector3 FindCrowdedEnemyArea()
+    {
+        EnemyAI[] enemies = Object.FindObjectsByType<EnemyAI>(FindObjectsInactive.Exclude);
+        if (enemies.Length == 0) return Vector3.zero;
+
+        // Basitçe en çok düşmanın olduğu merkezi bul (veya en öndeki kalabalığı)
+        Vector3 averagePos = Vector3.zero;
+        int count = 0;
+        foreach (var e in enemies)
+        {
+            if (!e.IsDead)
+            {
+                averagePos += e.transform.position;
+                count++;
+            }
+        }
+        return count > 0 ? averagePos / count : Vector3.zero;
+    }
+
+    public void TriggerLightningStrike(Vector3 targetPosition)
+    {
+        if (Time.time < lastLightningTime + lightningCD) return;
+        lastLightningTime = Time.time;
+
+        Debug.Log("Commander Command: LIGHTNING STRIKE!");
+        if (commanderAnimator != null) commanderAnimator.SetTrigger(castLightningHash);
+        
+        ObjectPooler.Instance.SpawnFromPool("Lightning", targetPosition, Quaternion.identity);
+
+        Collider[] hitColliders = Physics.OverlapSphere(targetPosition, lightningRadius);
+        foreach (var hitCollider in hitColliders)
+        {
+            EnemyAI enemy = hitCollider.GetComponent<EnemyAI>();
+            if (enemy != null) enemy.TakeDamage(lightningDamage);
+        }
     }
 
     public void SetFortifyState(bool active)
@@ -141,7 +216,12 @@ public class SkillManager : MonoBehaviour
         StructureManager[] structures = Object.FindObjectsByType<StructureManager>(FindObjectsInactive.Exclude);
         foreach (var structure in structures)
         {
-            structure.Heal(healAmount);
+            if (!structure.IsDestroyed) // Yıkılmış binalar hariç
+            {
+                structure.Heal(healAmount);
+                // Görsel geri bildirim: Yeşil artılar vs.
+                ObjectPooler.Instance.SpawnFromPool("HealEffect", structure.transform.position + Vector3.up * 2f, Quaternion.identity);
+            }
         }
     }
 
