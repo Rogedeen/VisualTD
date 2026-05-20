@@ -219,8 +219,8 @@ public class SkillManager : MonoBehaviour
             if (!structure.IsDestroyed) // Yıkılmış binalar hariç
             {
                 structure.Heal(healAmount);
-                // Görsel geri bildirim: Yeşil artılar vs.
-                ObjectPooler.Instance.SpawnFromPool("HealEffect", structure.transform.position + Vector3.up * 2f, Quaternion.identity);
+                // Hazır Asset: Healing.prefab (Magic effects pack'ten)
+                ObjectPooler.Instance.SpawnFromPool("Heal", structure.transform.position + Vector3.up * 1f, Quaternion.identity);
             }
         }
     }
