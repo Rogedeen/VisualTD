@@ -45,3 +45,59 @@
     -unity-font-style: bold;
     color: white;
 }
+
+/* SKILL UI STYLES */
+.skill-container {
+    position: absolute;
+    right: 40px;
+    top: 55%;
+    translate: 0 -50%;
+    flex-direction: column;
+}
+
+.skill-slot {
+    align-items: center;
+    margin-bottom: 25px;
+    width: 90px;
+}
+
+.skill-icon {
+    width: 70px;
+    height: 70px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 35px;
+    border-width: 5px;
+    border-color: rgb(255, 0, 0); /* Default to red (cooling) */
+    margin-bottom: 8px;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition-property: scale, border-color;
+    transition-duration: 0.3s, 0.2s;
+}
+
+.skill-label {
+    font-size: 11px;
+    color: rgb(220, 220, 220);
+    -unity-font-style: bold;
+    -unity-text-align: center;
+    letter-spacing: 1px;
+}
+
+.skill-ready {
+    border-color: rgb(0, 255, 100);
+    scale: 1.1;
+}
+
+.skill-cooldown-overlay {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 100%;
+    bottom: 0;
+    height: 100%; /* Will be animated in C# */
+}
+
+/* Animations */
+.pulse-animation {
+    scale: 1.2;
+}

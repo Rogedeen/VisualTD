@@ -22,4 +22,30 @@
         <ui:Label text="DETECTED GESTURE" class="gesture-label" />
         <ui:Label name="GestureText" text="None" class="gesture-value" />
     </ui:VisualElement>
+
+    <ui:VisualElement name="SkillContainer" class="skill-container">
+        <ui:VisualElement name="Skill_Arrow" class="skill-slot">
+            <ui:VisualElement name="Icon_Arrow" class="skill-icon" style="background-image: none;" />
+            <ui:VisualElement name="CooldownBar_Arrow" class="skill-cooldown-overlay" />
+            <ui:Label text="ARROW VOLLEY" class="skill-label" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="Skill_Lightning" class="skill-slot">
+            <ui:VisualElement name="Icon_Lightning" class="skill-icon" style="background-image: none;" />
+            <ui:VisualElement name="CooldownBar_Lightning" class="skill-cooldown-overlay" />
+            <ui:Label text="LIGHTNING" class="skill-label" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="Skill_Fortify" class="skill-slot">
+            <ui:VisualElement name="Icon_Fortify" class="skill-icon" style="background-image: none;" />
+            <ui:VisualElement name="CooldownBar_Fortify" class="skill-cooldown-overlay" />
+            <ui:Label text="FORTIFY" class="skill-label" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="Skill_Meteor" class="skill-slot">
+            <ui:VisualElement name="Icon_Meteor" class="skill-icon" style="background-image: none;" />
+            <ui:VisualElement name="CooldownBar_Meteor" class="skill-cooldown-overlay" />
+            <ui:Label text="METEOR RAIN" class="skill-label" />
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

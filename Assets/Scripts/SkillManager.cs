@@ -26,6 +26,13 @@ public class SkillManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private StructureManager mainGate; // The main gate
+
+    // Cooldown Progress Helpers (0 to 1)
+    public float GetArrowProgress() => Mathf.Clamp01((Time.time - lastArrowTime) / arrowVolleyCD);
+    public float GetLightningProgress() => Mathf.Clamp01((Time.time - lastLightningTime) / lightningCD);
+    public float GetFortifyProgress() => Mathf.Clamp01((Time.time - lastFortifyTime) / fortifyCD);
+    public float GetMeteorProgress() => Mathf.Clamp01((Time.time - lastMeteorTime) / meteorRainCD);
+
     [Tooltip("The Commander character standing on the tower")]
     [SerializeField] private Animator commanderAnimator;
 
