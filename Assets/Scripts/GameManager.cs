@@ -44,6 +44,19 @@ public class GameManager : MonoBehaviour
         Debug.Log($"[Economy] {amount} Altın Kazanıldı! Toplam: {Gold}");
     }
 
+    public int GetGold() => Gold;
+
+    public bool SpendGold(int amount)
+    {
+        if (Gold >= amount)
+        {
+            Gold -= amount;
+            Debug.Log($"[Economy] {amount} Altın Harcandı! Kalan: {Gold}");
+            return true;
+        }
+        return false;
+    }
+
     public void WinGame()
     {
         Debug.Log(">>> VICTORY! DALGALAR TEMİZLENDİ! <<<");

@@ -11,7 +11,6 @@ public class SkillManager : MonoBehaviour
 
     [Header("Meteor Settings")]
     [SerializeField] private GameObject meteorRainPrefab;
-    [SerializeField] private float meteorDuration = 5f;
 
     [Header("Cooldowns")]
     [SerializeField] private float arrowVolleyCD = 10f;

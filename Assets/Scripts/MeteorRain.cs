@@ -4,10 +4,8 @@ using System.Collections;
 public class MeteorRain : MonoBehaviour
 {
     [SerializeField] private float mainDuration = 5f;
-    [SerializeField] private float burnDuration = 4f;
     [SerializeField] private float radius = 8f;
     [SerializeField] private float damagePerSec = 40f;
-    [SerializeField] private string groundBurnVFX = "GroundBurnEffect";
 
     public void Initialize(Vector3 center)
     {
