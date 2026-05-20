@@ -435,7 +435,13 @@ public class EnemyAI : MonoBehaviour
         if (isDead) return;
 
         currentHealth -= amount;
-        if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
+        
+        // --- SAĞLIK BARINI GÜNCELLE ---
+        if (healthBar != null)
+        {
+            healthBar.UpdateHealth(currentHealth, maxHealth);
+        }
+
         if (damageFlash != null) damageFlash.Flash();
 
         if (currentHealth <= 0) Die();

@@ -201,27 +201,27 @@
 
 /* Skill Icons */
 #Icon_Arrow {
-    background-image: url("project:/Assets/UI/Icons/ArrowVolleyIcon.png");
+    background-image: url("project://database/Assets/UI/Icons/ArrowVolleyIcon.png");
 }
 #Icon_Lightning {
-    background-image: url("project:/Assets/UI/Icons/LightningIcon.png");
+    background-image: url("project://database/Assets/UI/Icons/LightningIcon.png");
 }
 #Icon_Fortify {
-    background-image: url("project:/Assets/UI/Icons/HealIcon.png");
+    background-image: url("project://database/Assets/UI/Icons/HealIcon.png");
 }
 #Icon_Meteor {
-    background-image: url("project:/Assets/UI/Icons/MeteorIcon.png");
+    background-image: url("project://database/Assets/UI/Icons/MeteorIcon.png");
 }
 
 /* Upgrade Icons */
 #Icon_Wall {
-    background-image: url("project:/Assets/UI/Icons/WallUpgradeIcon.png");
+    background-image: url("project://database/Assets/UI/Icons/WallUpgradeIcon.png");
 }
-#Icon_Tower {
-    background-image: url("project:/Assets/UI/Icons/ArcherUpgradeIcon.png");
+#Icon_Archer {
+    background-image: url("project://database/Assets/UI/Icons/ArcherUpgradeIcon.png");
 }
 #Icon_Mage {
-    background-image: url("project:/Assets/UI/Icons/MageUpgradeIcon.png");
+    background-image: url("project://database/Assets/UI/Icons/MageUpgradeIcon.png");
 }
 
 .skill-ready {
@@ -231,29 +231,4 @@
 
 .pulse {
     scale: 1.2;
-}
-
-/* Skill İkonları */
-#Icon_Arrow {
-    background-image: url("project:/Assets/UI/Icons/ArrowVolleyIcon.png");
-}
-#Icon_Lightning {
-    background-image: url("project:/Assets/UI/Icons/LightningIcon.png");
-}
-#Icon_Fortify {
-    background-image: url("project:/Assets/UI/Icons/HealIcon.png");
-}
-#Icon_Meteor {
-    background-image: url("project:/Assets/UI/Icons/MeteorIcon.png");
-}
-
-/* Upgrade İkonları */
-#Icon_Wall {
-    background-image: url("project:/Assets/UI/Icons/WallUpgradeIcon.png");
-}
-#Icon_Tower {
-    background-image: url("project:/Assets/UI/Icons/TowerUpgradeIcon.png");
-}
-#Icon_Mage {
-    background-image: url("project:/Assets/UI/Icons/MageUpgradeIcon.png");
 }

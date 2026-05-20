@@ -205,6 +205,13 @@ public class SkillManager : MonoBehaviour
     {
         if (IsFortifying == active) return; // Gereksiz loop ve tetiklemeyi önle
         
+        // Cooldown kontrolü (Eğer aktif edilmeye çalışılıyorsa)
+        if (active && Time.time < lastFortifyTime + fortifyCD)
+        {
+            Debug.Log("Fortify is on cooldown!");
+            return;
+        }
+
         IsFortifying = active;
         if (commanderAnimator != null) commanderAnimator.SetBool(isFortifyingHash, active);
         
@@ -226,7 +233,8 @@ public class SkillManager : MonoBehaviour
             if (fortifyTimer >= fortifyHoldRequired)
             {
                 ApplyFortifyHeal();
-                SetFortifyState(false); // Başarıyla bitti, boz
+                SetFortifyState(false); // Başarıyla bitti, boz (bu SetFortifyState cooldown time'ı güncellemeyecek)
+                lastFortifyTime = Time.time; // Cooldown'ı şimdi başlat
             }
         }
     }
@@ -239,8 +247,7 @@ public class SkillManager : MonoBehaviour
 
     private void ApplyFortifyHeal()
     {
-        if (Time.time < lastFortifyTime + fortifyCD) return;
-        lastFortifyTime = Time.time;
+        // NOT: Artık burada cooldown kontrolü yapmaya gerek yok, SetFortifyState ve lastFortifyTime ataması hallediyor.
 
         Debug.Log("Commander Command: FORTIFY SUCCESS! HEALING STRUCTURES...");
         
