@@ -7,7 +7,10 @@ public class StructureManager : MonoBehaviour
 {
     public StructureType type = StructureType.Wall;
     [SerializeField] private float maxHealth = 300f;
-    private float currentHealth;
+    [SerializeField] private float currentHealth;
+
+    public float CurrentHealth => currentHealth;
+    public float MaxHealth => maxHealth;
 
     [Header("Destruction Effects")]
     [SerializeField] private ParticleSystem dustParticlePrefab;

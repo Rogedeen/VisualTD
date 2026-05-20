@@ -26,6 +26,9 @@ public class MeteorRain : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
 
+        // Animasyonları kapat (Meteorlar bitti ama yer yanmaya devam edebilir)
+        if (SkillManager.Instance != null) SkillManager.Instance.EndMeteorAnimation();
+
         // 2. Yer Yanması Aşaması (Meteorlar bitti, yer alevli kalıyor)
         // Eğer yer yanması için ayrı bir prefab varsa onu burada açabiliriz
         GameObject burnEffect = ObjectPooler.Instance.SpawnFromPool(groundBurnVFX, transform.position, Quaternion.identity);

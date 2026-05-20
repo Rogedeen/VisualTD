@@ -39,6 +39,7 @@ public class SkillManager : MonoBehaviour
     // Animator Hashes for Commander & Mages
     private readonly int isHoldingHash = Animator.StringToHash("isHolding");
     private readonly int isFortifyingHash = Animator.StringToHash("isFortifying");
+    private readonly int isAttackingHash = Animator.StringToHash("isAttacking");
     private readonly int fireballHash = Animator.StringToHash("fireball");
     private readonly int attackHash = Animator.StringToHash("attack");
     
@@ -132,8 +133,9 @@ public class SkillManager : MonoBehaviour
 
         Debug.Log("Commander Command: METEOR RAIN!");
         
-        SyncMagesTrigger(fireballHash);
-        if (commanderAnimator != null) commanderAnimator.SetTrigger(fireballHash);
+        // Animasyonu başlat (isAttacking = true)
+        SyncMagesBool(isAttackingHash, true);
+        if (commanderAnimator != null) commanderAnimator.SetBool(isAttackingHash, true);
 
         Vector3 targetPos = FindCrowdedEnemyArea();
         
@@ -206,7 +208,6 @@ public class SkillManager : MonoBehaviour
         if (IsFortifying)
         {
             fortifyTimer += Time.deltaTime;
-            // Ekrana dönüt veya efekt tetikleme burada her karede değil, state değişince yapılmalı
             
             if (fortifyTimer >= fortifyHoldRequired)
             {
@@ -214,6 +215,12 @@ public class SkillManager : MonoBehaviour
                 SetFortifyState(false); // Başarıyla bitti, boz
             }
         }
+    }
+
+    public void EndMeteorAnimation()
+    {
+        SyncMagesBool(isAttackingHash, false);
+        if (commanderAnimator != null) commanderAnimator.SetBool(isAttackingHash, false);
     }
 
     private void ApplyFortifyHeal()

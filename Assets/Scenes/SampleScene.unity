@@ -3542,7 +3542,7 @@ MonoBehaviour:
   - tag: Arrow
     prefab: {fileID: 7850797968815248461, guid: ae8c6c4681ec7584ba043faf0af723f8, type: 3}
     size: 100
-  - tag: Meteor
+  - tag: MeteorRain
     prefab: {fileID: 157282211469997545, guid: 8af091440513834408086654b9d3f856, type: 3}
     size: 4
   - tag: Heal
