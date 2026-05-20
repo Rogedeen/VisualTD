@@ -1,147 +1,184 @@
-.glass-panel {
-    background-color: rgba(15, 20, 30, 0.85);
-    border-radius: 12px;
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.1);
-    padding: 12px 24px;
-    margin: 16px;
-    min-width: 150px;
+/* Fantasy Theme Colors */
+:root {
+    --color-gold: #D4AF37;
+    --color-gold-bright: #FFD700;
+    --color-slate: #1A1C23;
+    --color-parchment: #F1E9D2;
+    --color-arcane: #4A90E2;
+    --color-crimson: #B22222;
+    --panel-bg: rgba(20, 22, 28, 0.92);
 }
 
-.resource-text {
-    font-size: 36px;
+/* TOP RESOURCE PANELS */
+.fantasy-panel {
+    background-color: var(--panel-bg);
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: var(--color-gold);
+    padding: 10px 20px;
+    min-width: 140px;
+    border-bottom-width: 4px; 
+}
+
+.panel-header {
+    font-size: 11px;
+    color: #AAA;
     -unity-font-style: bold;
-    color: rgb(255, 215, 0); /* Gold color */
+    letter-spacing: 1px;
+    margin-bottom: 2px;
 }
 
-.health-text {
-    font-size: 36px;
+.resource-gold {
+    font-size: 32px;
     -unity-font-style: bold;
-    color: rgb(255, 60, 60); /* Red color */
+    color: var(--color-gold-bright);
 }
 
+.resource-gold-suffix {
+    font-size: 18px;
+    color: var(--color-gold);
+    margin-left: 4px;
+    margin-top: 8px;
+}
+
+.resource-health {
+    font-size: 32px;
+    -unity-font-style: bold;
+    color: #FF4444;
+}
+
+.panel-highlight-red {
+    border-color: var(--color-crimson);
+}
+
+/* GESTURE FEEDBACK (BOTTOM CENTER) */
 .gesture-panel {
     position: absolute;
-    bottom: 40px;
+    bottom: 50px;
     align-self: center;
+    background-color: rgba(10, 12, 18, 0.95);
+    border-width: 2px;
+    border-color: var(--color-arcane);
+    border-radius: 40px;
+    padding: 12px 40px;
     align-items: center;
-    background-color: rgba(10, 15, 25, 0.95);
-    border-radius: 20px;
-    padding: 16px 32px;
-    border-top-width: 3px;
-    border-top-color: rgb(46, 163, 255);
+    transition-property: scale;
+    transition-duration: 0.1s;
 }
 
-.gesture-label {
-    font-size: 14px;
-    color: rgb(160, 196, 255);
+.gesture-header {
+    font-size: 10px;
+    color: var(--color-arcane);
     -unity-font-style: bold;
     letter-spacing: 2px;
-    margin-bottom: 4px;
 }
 
 .gesture-value {
-    font-size: 42px;
+    font-size: 38px;
     -unity-font-style: bold;
     color: white;
 }
 
-/* UPGRADE UI STYLES */
-.upgrade-container {
+/* UPGRADE DECK (BOTTOM HORIZONTAL) */
+.upgrade-bar {
     position: absolute;
-    bottom: 20px;
-    left: 60%;
+    bottom: 30px;
+    left: 40px;
     flex-direction: row;
+    gap: 15px;
 }
 
-.upgrade-slot {
+.upgrade-card {
+    background-color: var(--panel-bg);
+    border-width: 2px;
+    border-color: #444;
+    border-radius: 6px;
+    padding: 8px;
+    width: 90px;
     align-items: center;
-    margin-right: 20px;
-    width: 80px;
+    transition-property: scale, border-color, translate;
+    transition-duration: 0.2s;
 }
 
-.upgrade-icon {
-    width: 60px;
-    height: 60px;
-    background-color: rgba(20, 25, 35, 0.9);
-    border-radius: 10px;
-    border-width: 3px;
-    border-color: rgb(150, 0, 0); 
-    margin-bottom: 5px;
-    transition-property: scale, border-color;
-    transition-duration: 0.3s, 0.2s;
+.upgrade-frame {
+    width: 50px;
+    height: 50px;
+    background-color: #000;
+    border-radius: 4px;
+    border-width: 1px;
+    border-color: #555;
+    margin-bottom: 6px;
 }
 
-.upgrade-label {
+.card-label {
     font-size: 10px;
-    color: rgb(180, 180, 180);
+    color: #DDD;
     -unity-font-style: bold;
     -unity-text-align: center;
 }
 
-.upgrade-cost {
+.card-cost {
     font-size: 12px;
-    color: rgb(255, 215, 0);
+    color: var(--color-gold-bright);
     -unity-font-style: bold;
 }
 
 .ready-to-buy {
-    border-color: rgb(0, 255, 100);
-    scale: 1.1;
+    border-color: var(--color-gold-bright);
+    scale: 1.05;
 }
 
-/* SKILL UI STYLES */
-.skill-container {
+/* SKILL ORBS (RIGHT VERTICAL) */
+.skill-dock {
     position: absolute;
-    right: 40px;
-    top: 55%;
+    right: 30px;
+    top: 50%;
     translate: 0 -50%;
-    flex-direction: column;
+    gap: 20px;
 }
 
-.skill-slot {
-    align-items: center;
-    margin-bottom: 25px;
-    width: 90px;
-}
-
-.skill-icon {
-    width: 70px;
-    height: 70px;
-    background-color: rgba(0, 0, 0, 0.6);
-    border-radius: 35px;
-    border-width: 5px;
-    border-color: rgb(255, 0, 0); /* Default to red (cooling) */
-    margin-bottom: 8px;
+.skill-orb {
+    width: 84px;
+    height: 84px;
+    background-color: #000;
+    border-radius: 42px;
+    border-width: 4px;
+    border-color: #880000;
     justify-content: center;
     align-items: center;
     overflow: hidden;
     transition-property: scale, border-color;
-    transition-duration: 0.3s, 0.2s;
+    transition-duration: 0.2s;
 }
 
-.skill-label {
-    font-size: 11px;
-    color: rgb(220, 220, 220);
+.orb-inner {
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+    background-color: rgba(255,255,255,0.05);
+}
+
+.orb-wipe {
+    position: absolute;
+    background-color: rgba(0,0,0,0.75);
+    width: 100%;
+    bottom: 0;
+    height: 100%;
+}
+
+.orb-label {
+    position: absolute;
+    bottom: -18px;
+    font-size: 10px;
+    color: #AAA;
     -unity-font-style: bold;
-    -unity-text-align: center;
-    letter-spacing: 1px;
 }
 
 .skill-ready {
-    border-color: rgb(0, 255, 100);
+    border-color: var(--color-gold-bright);
     scale: 1.1;
 }
 
-.skill-cooldown-overlay {
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.7);
-    width: 100%;
-    bottom: 0;
-    height: 100%; /* Will be animated in C# */
-}
-
-/* Animations */
-.pulse-animation {
+.pulse {
     scale: 1.2;
 }

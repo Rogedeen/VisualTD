@@ -46,20 +46,20 @@ public class SkillUIController : MonoBehaviour
 
     private class UpgradeSlotUI
     {
-        private VisualElement icon;
+        private VisualElement frame;
         private Label costLabel;
         private bool canAfford = false;
 
         public UpgradeSlotUI(VisualElement slot)
         {
             if (slot == null) return;
-            icon = slot.Q<VisualElement>(className: "upgrade-icon");
-            costLabel = slot.Q<Label>(className: "upgrade-cost");
+            frame = slot.Q<VisualElement>(className: "upgrade-frame");
+            costLabel = slot.Q<Label>(className: "card-cost");
         }
 
         public void UpdateState(int currentGold, int cost, MonoBehaviour owner)
         {
-            if (icon == null || costLabel == null) return;
+            if (frame == null || costLabel == null) return;
 
             costLabel.text = cost + "G";
 
@@ -70,62 +70,65 @@ public class SkillUIController : MonoBehaviour
                     canAfford = true;
                     owner.StartCoroutine(PlayReadyEffect());
                 }
-                icon.style.borderTopColor = Color.green;
-                icon.style.borderBottomColor = Color.green;
-                icon.style.borderLeftColor = Color.green;
-                icon.style.borderRightColor = Color.green;
+                frame.style.borderTopColor = new Color(1f, 0.84f, 0f); // Gold
+                frame.style.borderBottomColor = new Color(1f, 0.84f, 0f);
+                frame.style.borderLeftColor = new Color(1f, 0.84f, 0f);
+                frame.style.borderRightColor = new Color(1f, 0.84f, 0f);
             }
             else
             {
                 canAfford = false;
-                icon.style.borderTopColor = Color.red;
-                icon.style.borderBottomColor = Color.red;
-                icon.style.borderLeftColor = Color.red;
-                icon.style.borderRightColor = Color.red;
+                frame.style.borderTopColor = new Color(0.3f, 0.3f, 0.3f); // Gray
+                frame.style.borderBottomColor = new Color(0.3f, 0.3f, 0.3f);
+                frame.style.borderLeftColor = new Color(0.3f, 0.3f, 0.3f);
+                frame.style.borderRightColor = new Color(0.3f, 0.3f, 0.3f);
             }
         }
 
         private IEnumerator PlayReadyEffect()
         {
-            icon.AddToClassList("ready-to-buy");
+            frame.AddToClassList("ready-to-buy");
             yield return new WaitForSeconds(0.5f);
-            icon.RemoveFromClassList("ready-to-buy");
+            frame.RemoveFromClassList("ready-to-buy");
         }
     }
 
     private class SkillSlotUI
     {
-        private VisualElement icon;
+        private VisualElement orbInner;
         private VisualElement overlay;
+        private VisualElement slotRoot;
         private bool isReady = false;
 
         public SkillSlotUI(VisualElement slot)
         {
             if (slot == null) return;
-            icon = slot.Q<VisualElement>(className: "skill-icon");
-            overlay = slot.Q<VisualElement>(className: "skill-cooldown-overlay");
+            slotRoot = slot;
+            orbInner = slot.Q<VisualElement>(className: "orb-inner");
+            overlay = slot.Q<VisualElement>(className: "orb-wipe");
         }
 
         public void UpdateProgress(float progress, MonoBehaviour owner)
         {
-            if (icon == null || overlay == null) return;
+            if (slotRoot == null || overlay == null) return;
 
-            // Cooldown doluluk oranı (Yükseklik azalır)
             overlay.style.height = Length.Percent((1f - progress) * 100f);
 
-            // Renk Geçişi: Kırmızı -> Turuncu -> Sarı -> Yeşil
             Color targetColor;
-            if (progress < 0.5f)
-                targetColor = Color.Lerp(Color.red, new Color(1f, 0.5f, 0f), progress * 2f);
+            if (progress < 1f)
+            {
+                targetColor = Color.Lerp(new Color(0.5f, 0f, 0f), new Color(1f, 0.5f, 0f), progress);
+            }
             else
-                targetColor = Color.Lerp(new Color(1f, 0.5f, 0f), Color.green, (progress - 0.5f) * 2f);
+            {
+                targetColor = new Color(1f, 0.84f, 0f); // Gold when ready
+            }
 
-            icon.style.borderTopColor = targetColor;
-            icon.style.borderBottomColor = targetColor;
-            icon.style.borderLeftColor = targetColor;
-            icon.style.borderRightColor = targetColor;
+            slotRoot.style.borderTopColor = targetColor;
+            slotRoot.style.borderBottomColor = targetColor;
+            slotRoot.style.borderLeftColor = targetColor;
+            slotRoot.style.borderRightColor = targetColor;
 
-            // Hazır olma efekti (1 defalık parlayıp büyüme)
             if (progress >= 1f && !isReady)
             {
                 isReady = true;
@@ -139,13 +142,9 @@ public class SkillUIController : MonoBehaviour
 
         private IEnumerator PlayReadyEffect()
         {
-            icon.AddToClassList("skill-ready");
-            // Hafif bir parlama ve büyüme CSS tarafında transition ile yapılıyor
+            slotRoot.AddToClassList("skill-ready");
             yield return new WaitForSeconds(0.5f);
-            icon.RemoveFromClassList("skill-ready");
-            
-            // Sabit yeşil ve hazır durumda kalması için class'ı tekrar değil farklı bir state ekleyelim?
-            // User: "en sonda da yeşil olacak" demiş, zaten borderColor yeşil kalıyor.
+            slotRoot.RemoveFromClassList("skill-ready");
         }
     }
 }
