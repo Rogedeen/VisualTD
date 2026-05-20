@@ -17,31 +17,23 @@ public class MeteorRain : MonoBehaviour
 
     private IEnumerator FullEffectRoutine()
     {
-        // 1. Meteor Yağmuru Aşaması (Hazır Asset zaten prefabın içinde çalışıyor olmalı)
+        // Meteor yağmuru ve yer yanması etkileri hazır prefabın içinde kendiliğinden 
+        // başlıyorsa (VFX Graph veya Auto-Play PS), burada sadece hasar süresini sayıyoruz.
+        // Tekrar oluşup başlamaması için döngü içinde Spawn çağrısı yapmıyoruz.
+        
+        float totalDuration = mainDuration;
         float elapsed = 0f;
-        while (elapsed < mainDuration)
+        
+        while (elapsed < totalDuration)
         {
             ApplyAreaDamage(damagePerSec);
             elapsed += 0.5f;
             yield return new WaitForSeconds(0.5f);
         }
 
-        // Animasyonları kapat (Meteorlar bitti ama yer yanmaya devam edebilir)
+        // Büyü bitti, animasyonları kapat
         if (SkillManager.Instance != null) SkillManager.Instance.EndMeteorAnimation();
-
-        // 2. Yer Yanması Aşaması (Meteorlar bitti, yer alevli kalıyor)
-        // Eğer yer yanması için ayrı bir prefab varsa onu burada açabiliriz
-        GameObject burnEffect = ObjectPooler.Instance.SpawnFromPool(groundBurnVFX, transform.position, Quaternion.identity);
         
-        elapsed = 0f;
-        while (elapsed < burnDuration)
-        {
-            ApplyAreaDamage(damagePerSec * 0.5f); // Yanma hasarı biraz daha az olabilir
-            elapsed += 0.5f;
-            yield return new WaitForSeconds(0.5f);
-        }
-
-        if (burnEffect != null) burnEffect.SetActive(false);
         gameObject.SetActive(false);
     }
 

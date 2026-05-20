@@ -44,7 +44,7 @@ public class SkillManager : MonoBehaviour
     private readonly int attackHash = Animator.StringToHash("attack");
     
     // Legacy / Other
-    private readonly int castArrowHash = Animator.StringToHash("CastArrow");
+    private readonly int castArrowHash = Animator.StringToHash("attack");
 
     private void Awake()
     {
@@ -236,7 +236,9 @@ public class SkillManager : MonoBehaviour
             if (!structure.IsDestroyed) // Yıkılmış binalar hariç (Towerlar dahil)
             {
                 structure.Heal(healAmount);
-                // Görsel geri bildirim: Yere değen kısımda (pivot genellikle yerdedir)
+                
+                // Kulelerin de tam dibinde (ground level) çıkması için transform.position kullanıyoruz.
+                // Pivotlar genellikle yerdedir. Eğer havada kalırsa offset ekleyebiliriz.
                 ObjectPooler.Instance.SpawnFromPool("Heal", structure.transform.position, Quaternion.identity);
             }
         }
