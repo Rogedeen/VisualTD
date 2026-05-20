@@ -199,6 +199,31 @@
     border-color: var(--color-gold);
 }
 
+/* Skill Icons */
+#Icon_Arrow {
+    background-image: url("project:/Assets/UI/Icons/ArrowVolleyIcon.png");
+}
+#Icon_Lightning {
+    background-image: url("project:/Assets/UI/Icons/LightningIcon.png");
+}
+#Icon_Fortify {
+    background-image: url("project:/Assets/UI/Icons/HealIcon.png");
+}
+#Icon_Meteor {
+    background-image: url("project:/Assets/UI/Icons/MeteorIcon.png");
+}
+
+/* Upgrade Icons */
+#Icon_Wall {
+    background-image: url("project:/Assets/UI/Icons/WallUpgradeIcon.png");
+}
+#Icon_Tower {
+    background-image: url("project:/Assets/UI/Icons/TowerUpgradeIcon.png");
+}
+#Icon_Mage {
+    background-image: url("project:/Assets/UI/Icons/MageUpgradeIcon.png");
+}
+
 .skill-ready {
     border-color: var(--color-gold-bright);
     scale: 1.1;
@@ -206,4 +231,29 @@
 
 .pulse {
     scale: 1.2;
+}
+
+/* Skill İkonları */
+#Icon_Arrow {
+    background-image: url("project:/Assets/UI/Icons/ArrowVolleyIcon.png");
+}
+#Icon_Lightning {
+    background-image: url("project:/Assets/UI/Icons/LightningIcon.png");
+}
+#Icon_Fortify {
+    background-image: url("project:/Assets/UI/Icons/HealIcon.png");
+}
+#Icon_Meteor {
+    background-image: url("project:/Assets/UI/Icons/MeteorIcon.png");
+}
+
+/* Upgrade İkonları */
+#Icon_Wall {
+    background-image: url("project:/Assets/UI/Icons/WallUpgradeIcon.png");
+}
+#Icon_Tower {
+    background-image: url("project:/Assets/UI/Icons/TowerUpgradeIcon.png");
+}
+#Icon_Mage {
+    background-image: url("project:/Assets/UI/Icons/MageUpgradeIcon.png");
 }
