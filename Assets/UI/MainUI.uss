@@ -162,10 +162,10 @@
     border-color: #880000;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow: visible; /* Changed from hidden to show labels */
     transition-property: scale, border-color;
     transition-duration: 0.2s;
-    margin-bottom: 25px;
+    margin-bottom: 40px; /* Increased margin for labels */
 }
 
 .orb-inner {
@@ -173,6 +173,7 @@
     height: 70px;
     border-radius: 4px; /* Slightly rounded square */
     background-color: rgba(255,255,255,0.05);
+    overflow: hidden; /* Overlay stays inside the icon area */
 }
 
 .orb-wipe {
@@ -185,14 +186,17 @@
 
 .orb-label {
     position: absolute;
-    bottom: -22px;
-    font-size: 11px;
-    color: #FFF;
+    bottom: -28px;
+    width: 100px;
+    font-size: 13px;
+    color: #FFFFFF;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
-    background-color: rgba(0,0,0,0.5);
-    padding: 2px 4px;
+    background-color: rgba(0,0,0,0.8);
+    padding: 3px 0;
     border-radius: 4px;
+    border-width: 1px;
+    border-color: var(--color-gold);
 }
 
 .skill-ready {
