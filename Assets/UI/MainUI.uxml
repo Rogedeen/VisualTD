@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/MainUI.uss?fileID=7433441132597879392&amp;guid=9ff3846b73ce3ba47befab8e858dfc2c&amp;type=3#MainUI"/>
+    <Style src="project://database/Assets/UI/MainUI.uss" />
+    <Style src="project://database/Assets/UI/MenuUI.uss" />
     <ui:VisualElement name="TopContainer" style="position: absolute; top: 20px; left: 20px; right: 20px; flex-direction: row; justify-content: space-between;">
         <ui:VisualElement name="EconomyPanel" class="fantasy-panel">
             <ui:Label text="SAVINGS" class="panel-header"/>
@@ -63,6 +64,25 @@
             <ui:VisualElement name="Icon_Meteor" class="orb-inner"/>
             <ui:VisualElement name="CooldownBar_Meteor" class="orb-wipe"/>
             <ui:Label text="METEOR" class="orb-label"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+
+    <!-- Overlay Screens -->
+    <ui:VisualElement name="StartScreen" class="menu-container" style="display: flex;">
+        <ui:VisualElement class="menu-panel">
+            <ui:Label text="VISUAL TD" class="menu-title" />
+            <ui:Label text="COMMANDER'S GESTURE" class="menu-subtitle" />
+            <ui:Button name="BtnStart" text="DEFEND THE CASTLE" class="menu-button" />
+            <ui:Button name="BtnQuit" text="FORFEIT" class="menu-button quit-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+
+    <ui:VisualElement name="EndScreen" class="menu-container" style="display: none;">
+        <ui:VisualElement class="menu-panel">
+            <ui:Label name="EndTitle" text="VICTORY" class="menu-title win-text" />
+            <ui:Label name="EndMessage" text="The waves have been repelled!" class="menu-subtitle" />
+            <ui:Button name="BtnRestart" text="REGAIN HONOR" class="menu-button" />
+            <ui:Button name="BtnMenu" text="QUIT GAME" class="menu-button quit-button" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

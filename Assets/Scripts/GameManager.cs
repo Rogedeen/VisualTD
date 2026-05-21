@@ -21,9 +21,29 @@ public class GameManager : MonoBehaviour
         if (PlayerHealth <= 0)
         {
             PlayerHealth = 0;
-            Debug.Log(">>> GAME OVER! KALEN DÜŞTÜ! <<<");
-            Time.timeScale = 0f; // Oyunu durdur
+            GameOver(false);
         }
+    }
+
+    public void StartGame()
+    {
+        Time.timeScale = 1f;
+        Debug.Log(">>> GAME STARTED! <<<");
+    }
+
+    public void GameOver(bool win)
+    {
+        Time.timeScale = 0f;
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowEndMenu(win);
+        }
+    }
+
+    public void RestartGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        Time.timeScale = 1f;
     }
 
     public void UpdateGateHealth(int currentHealth)
@@ -40,8 +60,9 @@ public class GameManager : MonoBehaviour
 
     public void AddGold(int amount)
     {
-        Gold += amount;
-        Debug.Log($"[Economy] {amount} Altın Kazanıldı! Toplam: {Gold}");
+         Gold += amount;
+         if (UIManager.Instance != null) UIManager.Instance.FlashGold();
+         Debug.Log($"[Economy] {amount} Altın Kazanıldı! Toplam: {Gold}");
     }
 
     public int GetGold() => Gold;
@@ -59,8 +80,7 @@ public class GameManager : MonoBehaviour
 
     public void WinGame()
     {
-        Debug.Log(">>> VICTORY! DALGALAR TEMİZLENDİ! <<<");
-        // Gelecekte Win UI tetiklemek için burası kullanılacak
+        GameOver(true);
     }
 
     public void PurchaseUpgrade(int upgradeId)

@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/MenuUI.uss?fileID=7433441132597879392&amp;guid=6df7b2bce628d36488d68f2762a1b160&amp;type=3#MenuUI"/>
+    <ui:VisualElement name="StartMenu" class="menu-container">
+        <ui:VisualElement class="menu-panel">
+            <ui:Label text="VISUAL TD" class="menu-title" />
+            <ui:Label text="COMMANDER'S GESTURE" class="menu-subtitle" />
+            <ui:Button name="BtnStart" text="DEFEND THE CASTLE" class="menu-button" />
+            <ui:Button name="BtnQuit" text="FORFEIT" class="menu-button quit-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
