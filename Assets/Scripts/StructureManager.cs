@@ -96,17 +96,8 @@ public class StructureManager : MonoBehaviour
             isDestroyed = true;
             OnStructureDestroyed?.Invoke();
             
-            // --- KULE YIKILINCA OKÇUYU ÖLDÜR/DÜŞÜR ---
-            if (type == StructureType.Tower)
-            {
-                ArcherAI archer = GetComponentInChildren<ArcherAI>();
-                if (archer != null)
-                {
-                    archer.OnTowerDestroyed();
-                }
-            }
-
             if (dustParticlePrefab != null)
+            {
                 ParticleSystem dust = Instantiate(dustParticlePrefab, transform.position, Quaternion.identity);
                 dust.Play();
                 Destroy(dust.gameObject, 3f);
@@ -125,16 +116,12 @@ public class StructureManager : MonoBehaviour
                 ArcherAI archer = GetComponentInChildren<ArcherAI>();
                 if (archer != null)
                 {
-                    // Ayrıl - okçu artık bağımsız olsun
-                    archer.transform.SetParent(null);
-                    archer.FallAndDie();
+                    archer.OnTowerDestroyed();
                 }
 
-                // Kule görsellerini ve collider'ını kapat (çocuk objeleri arka planda kalabilir)
+                // Kule görsellerini kapat
                 Renderer[] rends = GetComponentsInChildren<Renderer>(true);
                 foreach (var r in rends) r.enabled = false;
-
-                // Baz collider zaten kapatıldı; engeli devre dışı bırakıldı.
 
                 // Kısa süre sonra GameObject'i devre dışı bırak (efektler için bekle)
                 StartCoroutine(DisableAfterDelay(4f));
