@@ -28,15 +28,45 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         Time.timeScale = 1f;
+        if (CameraController.Instance != null)
+        {
+            CameraController.Instance.SwitchToGameplay();
+        }
         Debug.Log(">>> GAME STARTED! <<<");
     }
 
     public void GameOver(bool win)
     {
-        Time.timeScale = 0f;
+        // Cinematic Slow-Mo
+        Time.timeScale = 0.2f;
+        
+        if (CameraController.Instance != null)
+        {
+            CameraController.Instance.SwitchToMenu();
+        }
+
+        if (win)
+        {
+            TriggerVictoryCelebration();
+        }
+
         if (UIManager.Instance != null)
         {
             UIManager.Instance.ShowEndMenu(win);
+        }
+    }
+
+    private void TriggerVictoryCelebration()
+    {
+        // Find all defense units and trigger victory animation
+        var animators = Object.FindObjectsByType<Animator>(FindObjectsInactive.Exclude);
+        foreach (var anim in animators)
+        {
+            // Usually defense units have ArcherAI, MageAI or are in DefenceArmy
+            if (anim.GetComponent<ArcherAI>() != null || anim.GetComponent<MageAI>() != null)
+            {
+                anim.SetTrigger("Victory");
+            }
         }
     }
 

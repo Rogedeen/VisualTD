@@ -39,10 +39,10 @@ public class HealthBar : MonoBehaviour
 
     private void LateUpdate()
     {
-        // Billboard effect: Only rotate the UI image to face camera
+        // Billboard effect: Match camera rotation to keep UI flat and facing forward
         if (mainCamera != null)
         {
-            transform.LookAt(transform.position + mainCamera.forward);
+            transform.rotation = mainCamera.rotation;
         }
     }
 
