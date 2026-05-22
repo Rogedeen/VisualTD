@@ -1,11 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/MenuUI.uss?fileID=7433441132597879392&amp;guid=6df7b2bce628d36488d68f2762a1b160&amp;type=3#MenuUI"/>
+    <Style src="project://database/Assets/UI/MenuUI.uss?fileID=7433441132597879392&amp;guid=d8944b446db1bb1448ed80c1afda5129&amp;type=3#MenuUI"/>
     <ui:VisualElement name="EndMenu" class="menu-container">
         <ui:VisualElement class="menu-panel">
-            <ui:Label name="EndTitle" text="VICTORY" class="menu-title win-text" />
-            <ui:Label name="EndMessage" text="The waves have been repelled!" class="menu-subtitle" />
-            <ui:Button name="BtnRestart" text="REGAIN HONOR" class="menu-button" />
-            <ui:Button name="BtnMenu" text="RETURN TO CAMP" class="menu-button quit-button" />
+            <ui:Label name="EndTitle" text="VICTORY" class="menu-title win-text"/>
+            <ui:Label name="EndMessage" text="The waves have been repelled!" class="menu-subtitle"/>
+            <ui:Button name="BtnRestart" text="REGAIN HONOR" class="menu-button"/>
+            <ui:Button name="BtnMenu" text="RETURN TO CAMP" class="menu-button quit-button"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

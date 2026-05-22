@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Skeleton_Minion
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyType: Skeleton
+  poolTag: Minion
   maxHealth: 250
   moveSpeed: 1.5
   attackDamage: 5

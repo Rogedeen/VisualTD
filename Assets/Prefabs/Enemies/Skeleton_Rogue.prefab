@@ -75,6 +75,9 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: b08d60a39ff5c344dab327499f0fe3b1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8748997805363601633}
     - targetCorrespondingSourceObject: {fileID: -5515783359193845756, guid: b08d60a39ff5c344dab327499f0fe3b1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8682091987931866466}
@@ -91,9 +94,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b08d60a39ff5c344dab327499f0fe3b1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1681151522330887774}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b08d60a39ff5c344dab327499f0fe3b1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7683282753687224367}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b08d60a39ff5c344dab327499f0fe3b1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6358067394047727860}
@@ -128,12 +128,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'upperarm.l'\n\tTransform 'upperleg.l'\n\tTransform
-    'upperleg.r'\n\tTransform 'hips'\n\tTransform 'upperarm.r'\n\tTransform 'lowerarm.r'\n\tTransform
-    'upperarm.l'\n\tTransform 'chest'\n\tTransform 'lowerarm.l'\n\tTransform 'lowerleg.r'\n\tand
-    more ...\n\tFrom animation clip 'Running_A'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -198,49 +193,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &7683282753687224367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2573335740017588587}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &6358067394047727860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,8 +207,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
   enemyData: {fileID: 11400000, guid: 21f643d0cf50cf3438615d3965734b27, type: 2}
   targetValidationInterval: 1
-  healthBar: {fileID: 7683282753687224367}
+  microBar: {fileID: 5865986058754335176}
   damageFlash: {fileID: 1681151522330887774}
+  healthyFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!54 &3385799986035966510
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -284,6 +238,84 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!4 &2953661603194659793 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b08d60a39ff5c344dab327499f0fe3b1, type: 3}
+  m_PrefabInstance: {fileID: 3420267215681586234}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6300744023185211043
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2953661603194659793}
+    m_Modifications:
+    - target: {fileID: 361606856783757103, guid: 224b8bdb03899c44ab5b3f7e0cb06d7a, type: 3}
+      propertyPath: m_Name
+      value: HealthBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 3321987913893289538, guid: 224b8bdb03899c44ab5b3f7e0cb06d7a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3321987913893289538, guid: 224b8bdb03899c44ab5b3f7e0cb06d7a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 3321987913893289538, guid: 224b8bdb03899c44ab5b3f7e0cb06d7a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3321987913893289538, guid: 224b8bdb03899c44ab5b3f7e0cb06d7a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3321987913893289538, guid: 224b8bdb03899c44ab5b3f7e0cb06d7a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3321987913893289538, guid: 224b8bdb03899c44ab5b3f7e0cb06d7a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3321987913893289538, guid: 224b8bdb03899c44ab5b3f7e0cb06d7a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3321987913893289538, guid: 224b8bdb03899c44ab5b3f7e0cb06d7a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3321987913893289538, guid: 224b8bdb03899c44ab5b3f7e0cb06d7a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3321987913893289538, guid: 224b8bdb03899c44ab5b3f7e0cb06d7a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 224b8bdb03899c44ab5b3f7e0cb06d7a, type: 3}
+--- !u!114 &5865986058754335176 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 439266387889528683, guid: 224b8bdb03899c44ab5b3f7e0cb06d7a, type: 3}
+  m_PrefabInstance: {fileID: 6300744023185211043}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09da2f98b89e85d4daf792708bdc0f06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &8748997805363601633 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3321987913893289538, guid: 224b8bdb03899c44ab5b3f7e0cb06d7a, type: 3}
+  m_PrefabInstance: {fileID: 6300744023185211043}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9220634066897650313
 PrefabInstance:
   m_ObjectHideFlags: 0

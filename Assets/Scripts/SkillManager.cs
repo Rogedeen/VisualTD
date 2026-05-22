@@ -251,20 +251,26 @@ public class SkillManager : MonoBehaviour
 
     private void ApplyFortifyHeal()
     {
-        // NOT: Artık burada cooldown kontrolü yapmaya gerek yok, SetFortifyState ve lastFortifyTime ataması hallediyor.
-
         Debug.Log("Commander Command: FORTIFY SUCCESS! HEALING STRUCTURES...");
         
         StructureManager[] structures = Object.FindObjectsByType<StructureManager>(FindObjectsInactive.Exclude);
+        
+        // --- İYİLEŞTİRME: Her bina için değil, sadece bir veya birkaç ana noktadan AOE efekti çıkar ---
+        // Veya tüm binaların altına tek tek ama pivotu düzgün ayarlanmış şekilde koy.
+        // Kullanıcı 10 kere oynuyor dediği için belki sahnede bir tane merkezi efekt daha iyidir.
+        // Şimdilik kulelerin dibine (y=0) sabitleyerek düzeltiyoruz.
+        
         foreach (var structure in structures)
         {
-            if (!structure.IsDestroyed) // Yıkılmış binalar hariç (Towerlar dahil)
+            if (!structure.IsDestroyed) 
             {
                 structure.Heal(healAmount);
                 
-                // Kulelerin de tam dibinde (ground level) çıkması için transform.position kullanıyoruz.
-                // Pivotlar genellikle yerdedir. Eğer havada kalırsa offset ekleyebiliriz.
-                ObjectPooler.Instance.SpawnFromPool("Heal", structure.transform.position, Quaternion.identity);
+                // Efekti binanın tam altına (Zero Y) koyuyoruz ki havada durmasın.
+                Vector3 spawnPos = structure.transform.position;
+                spawnPos.y = 0.1f; // Hafifçe yerin üstünde
+                
+                ObjectPooler.Instance.SpawnFromPool("Heal", spawnPos, Quaternion.identity);
             }
         }
     }

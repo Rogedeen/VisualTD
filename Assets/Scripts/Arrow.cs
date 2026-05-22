@@ -6,16 +6,57 @@ public class Arrow : MonoBehaviour
     [SerializeField] private float damage = 25f;
     [SerializeField] private float arcHeight = 5f; // Kingdom Rush style kavis
 
-    private Vector3 startPos;
-    private Transform target;
-    private Vector3 targetPos;
-    private float progress;
+    public Vector3 startPos;
+    public Transform target;
+    public Vector3 targetPos;
+    public float progress;
+    public TrailRenderer trail;
+
+    private void Awake()
+    {
+        trail = GetComponentInChildren<TrailRenderer>();
+        SetupTrail();
+    }
+
+    private void SetupTrail()
+    {
+        if (trail == null) return;
+
+        // Daha ince ve zarif rüzgar/hava efekti
+        trail.startWidth = 0.08f;  // Önceki 0.05'ten biraz daha belirgin ama hala ince
+        trail.endWidth = 0.01f;
+        trail.time = 0.25f;        // İz süresi
+        trail.minVertexDistance = 0.1f;
+        
+        // Açık gri, saydam rüzgar rengi
+        Gradient gradient = new Gradient();
+        gradient.SetKeys(
+            new GradientColorKey[] { 
+                new GradientColorKey(new Color(0.9f, 0.9f, 0.95f), 0.0f), 
+                new GradientColorKey(new Color(0.7f, 0.7f, 0.8f), 1.0f) 
+            },
+            new GradientAlphaKey[] { 
+                new GradientAlphaKey(0.3f, 0.0f), // %30 saydamlık
+                new GradientAlphaKey(0.0f, 1.0f)  // Sona doğru tamamen kaybol
+            }
+        );
+        trail.colorGradient = gradient;
+
+        // Default materyal genelde mor olduğu için, eğer atanmış bir materyal yoksa 
+        // Unity'nin standart şeffaf materyalini kullanmaya çalışalım
+        if (trail.material == null || trail.material.name.Contains("Default"))
+        {
+            trail.material = new Material(Shader.Find("Sprites/Default"));
+        }
+    }
 
     public void Initialize(Transform enemyTarget)
     {
         target = enemyTarget;
         startPos = transform.position;
         progress = 0f;
+
+        if (trail != null) trail.Clear();
 
         if (target != null)
         {

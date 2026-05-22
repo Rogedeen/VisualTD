@@ -44,7 +44,10 @@ public class Meteor : MonoBehaviour
             if (enemy != null) enemy.TakeDamage(directDamage);
         }
 
-        // Objeyi havuza geri gönder (veya inaktif yap)
-        gameObject.SetActive(false);
+        // Objeyi havuza geri gönder
+        if (ObjectPooler.Instance != null)
+            ObjectPooler.Instance.ReturnToPool("Meteor", gameObject);
+        else
+            gameObject.SetActive(false);
     }
 }

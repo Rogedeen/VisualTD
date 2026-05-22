@@ -12,6 +12,25 @@ public class MageAI : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+        if (animator == null) animator = GetComponentInChildren<Animator>();
+        
+        RandomizeAnimation();
+    }
+
+    private void OnEnable()
+    {
+        RandomizeAnimation();
+    }
+
+    private void RandomizeAnimation()
+    {
+        if (animator != null)
+        {
+            // Farklı karelerde başlamalarını sağlar
+            animator.Play(0, -1, Random.value);
+            // Hızlarını hafif değiştirir
+            animator.speed = Random.Range(0.85f, 1.15f);
+        }
     }
 
     private void Update()

@@ -9,7 +9,9 @@ public class MeteorRain : MonoBehaviour
 
     public void Initialize(Vector3 center)
     {
-        transform.position = center;
+        // Meteor yağmuru görselinin yere (y=0) denk gelmesi için
+        Vector3 floorPos = new Vector3(center.x, 0.1f, center.z);
+        transform.position = floorPos;
         StartCoroutine(FullEffectRoutine());
     }
 
@@ -32,7 +34,10 @@ public class MeteorRain : MonoBehaviour
         // Büyü bitti, animasyonları kapat
         if (SkillManager.Instance != null) SkillManager.Instance.EndMeteorAnimation();
         
-        gameObject.SetActive(false);
+        if (ObjectPooler.Instance != null)
+            ObjectPooler.Instance.ReturnToPool("MeteorRain", gameObject);
+        else
+            gameObject.SetActive(false);
     }
 
     private void ApplyAreaDamage(float amount)

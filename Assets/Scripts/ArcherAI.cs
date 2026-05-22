@@ -27,12 +27,34 @@ public class ArcherAI : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        ApplyRandomOffset();
+        RandomizeAnimationStart();
+    }
+
     private void OnEnable()
     {
         isDead = false;
-        // Okçuların aynı anda senkronize ok atmasını önlemek için rastgele bir başlangıç süresi
         ApplyRandomOffset();
-        if (animator != null) animator.ResetTrigger(dieHash);
+        RandomizeAnimationStart();
+        if (animator != null && animator.hasBoundPlayables) 
+        {
+            // Parametre kontrolü ekleyerek hatayı engelle
+            foreach(var param in animator.parameters)
+            {
+                if(param.nameHash == dieHash) animator.ResetTrigger(dieHash);
+            }
+        }
+    }
+
+    private void RandomizeAnimationStart()
+    {
+        if (animator != null)
+        {
+            animator.Play(0, -1, Random.value);
+            animator.speed = Random.Range(0.9f, 1.1f);
+        }
     }
 
     // Kule yıkıldığında çağrılacak metod
@@ -121,6 +143,9 @@ public class ArcherAI : MonoBehaviour
 
         foreach (var hit in hits)
         {
+            // Performans için önce tag kontrolü yapıyoruz
+            if (!hit.CompareTag("Enemy")) continue;
+
             EnemyAI enemy = hit.GetComponent<EnemyAI>();
             // Sadece aktif, hayatta olan ve uyanma (spawn) animasyonu bitmiş düşmanları hedef al!
             if (enemy != null && enemy.gameObject.activeInHierarchy && !enemy.IsDead && !enemy.IsSpawning)

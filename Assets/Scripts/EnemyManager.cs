@@ -111,7 +111,8 @@ public class EnemyManager : MonoBehaviour
         Transform spawnPoint = spawnPoints[spawnPointIndex];
         spawnPointIndex = (spawnPointIndex + 1) % spawnPoints.Length;
 
-        GameObject enemyObj = ObjectPooler.Instance.SpawnFromPool("Enemy", spawnPoint.position, spawnPoint.rotation);
+        // EnemyData içindeki poolTag'i kullanarak havuzdan çağırıyoruz
+        GameObject enemyObj = ObjectPooler.Instance.SpawnFromPool(data.poolTag, spawnPoint.position, spawnPoint.rotation);
         
         if (enemyObj != null)
         {

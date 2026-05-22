@@ -7,6 +7,7 @@ using System.Collections;
 public class EnemyAI : MonoBehaviour
 {
     [SerializeField] private EnemyData enemyData;
+    private string currentPoolTag = "Enemy";
     
     // Stats will be loaded from EnemyData
     private float maxHealth;
@@ -17,8 +18,12 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float targetValidationInterval = 1f;
 
     [Header("UI & Feedback")]
-    [SerializeField] private HealthBar healthBar;
+    [SerializeField] private Microlight.MicroBar.MicroBar microBar;
     [SerializeField] private DamageFlash damageFlash;
+    
+    [Header("Aesthetic Hit Flash Settings")]
+    [SerializeField] private Color healthyFlashColor = Color.green;
+    [SerializeField] private Color damagedFlashColor = Color.red;
 
     // State Machine
     private enum EnemyState { Spawning, Moving, Attacking, Dead }
@@ -58,7 +63,6 @@ public class EnemyAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
-        if (healthBar == null) healthBar = GetComponentInChildren<HealthBar>();
         if (damageFlash == null) damageFlash = GetComponent<DamageFlash>();
         
         // GAZ-FREN VE TİTREME DÜZELTMESİ:
@@ -78,12 +82,18 @@ public class EnemyAI : MonoBehaviour
         enemyData = data;
         if (enemyData != null)
         {
+            currentPoolTag = enemyData.poolTag; // Pool tag'ini hafızaya alıyoruz
             maxHealth = enemyData.maxHealth;
             currentHealth = maxHealth;
             attackDamage = enemyData.attackDamage;
             attackRange = enemyData.attackRange;
             attackCooldown = enemyData.attackCooldown;
             
+            if (microBar != null)
+            {
+                microBar.Initialize(maxHealth);
+            }
+
             if (agent != null)
             {
                 agent.speed = enemyData.moveSpeed;
@@ -172,7 +182,7 @@ public class EnemyAI : MonoBehaviour
     private IEnumerator ReturnToPoolNextFrame()
     {
         yield return null;
-        ObjectPooler.Instance.ReturnToPool("Enemy", gameObject);
+        ObjectPooler.Instance.ReturnToPool(currentPoolTag, gameObject);
     }
 
     private bool FindTarget()
@@ -244,7 +254,7 @@ public class EnemyAI : MonoBehaviour
             if (!agent.isOnNavMesh)
             {
                 Debug.LogWarning($"[EnemyAI] NavMesh'e oturulamadı: {transform.position}");
-                ObjectPooler.Instance.ReturnToPool("Enemy", gameObject);
+                ObjectPooler.Instance.ReturnToPool(currentPoolTag, gameObject);
                 yield break;
             }
         }
@@ -261,7 +271,7 @@ public class EnemyAI : MonoBehaviour
         else
         {
             Debug.LogWarning($"[EnemyAI] SetDestination başarısız: {transform.position}");
-            ObjectPooler.Instance.ReturnToPool("Enemy", gameObject);
+            ObjectPooler.Instance.ReturnToPool(currentPoolTag, gameObject);
         }
     }
 
@@ -437,12 +447,17 @@ public class EnemyAI : MonoBehaviour
         currentHealth -= amount;
         
         // --- SAĞLIK BARINI GÜNCELLE ---
-        if (healthBar != null)
+        if (microBar != null)
         {
-            healthBar.UpdateHealth(currentHealth, maxHealth);
+            microBar.UpdateBar(currentHealth);
         }
 
-        if (damageFlash != null) damageFlash.Flash();
+        if (damageFlash != null)
+        {
+            float healthPercent = currentHealth / maxHealth;
+            Color currentFlashColor = Color.Lerp(damagedFlashColor, healthyFlashColor, healthPercent);
+            damageFlash.Flash(currentFlashColor);
+        }
 
         if (currentHealth <= 0) Die();
     }
@@ -467,6 +482,6 @@ public class EnemyAI : MonoBehaviour
     private IEnumerator DeathSequence()
     {
         yield return new WaitForSeconds(2f);
-        ObjectPooler.Instance.ReturnToPool("Enemy", gameObject);
+        ObjectPooler.Instance.ReturnToPool(currentPoolTag, gameObject);
     }
 }

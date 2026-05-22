@@ -20,6 +20,10 @@ public class GestureParser : MonoBehaviour
         // Process all queued gestures from the background thread safely on the Main Thread
         while (udpReceiver.gestureQueue.TryDequeue(out GestureData data))
         {
+            // OYUN DURAKLATILDIYSA (ve gelen hareket PAUSE değilse) hareketleri işleme!
+            bool isPaused = Time.timeScale == 0f;
+            if (isPaused && data.gesture != "Palm") continue;
+
             ParseGesture(data.gesture);
         }
     }
@@ -37,31 +41,28 @@ public class GestureParser : MonoBehaviour
         {
             case "Hold_Fire":
                 if (SkillManager.Instance != null) SkillManager.Instance.HoldArchers(true);
-                else Debug.LogError("[GestureParser] SkillManager.Instance is NULL!");
                 break;
             case "Arrow_Volley":
-                if (SkillManager.Instance != null) SkillManager.Instance.HoldArchers(false); // Bırak ve ok yağdır
+                if (SkillManager.Instance != null) SkillManager.Instance.HoldArchers(false); 
                 if (SkillManager.Instance != null) SkillManager.Instance.TriggerArrowVolley();
                 break;
             case "Lightning_Strike":
+                if (SkillManager.Instance != null) SkillManager.Instance.SetFortifyState(false);
                 if (SkillManager.Instance != null) SkillManager.Instance.TriggerLightningStrike(Vector3.zero);
                 break;
             case "Fortify_Wall":
                 if (SkillManager.Instance != null) SkillManager.Instance.SetFortifyState(true);
                 break;
             case "Spiderman_Cast":
-                // Spiderman hareketi şimdilik Lightning veya özel bir büyü tetikleyebilir
                 if (SkillManager.Instance != null) SkillManager.Instance.SetFortifyState(false);
                 if (SkillManager.Instance != null) SkillManager.Instance.TriggerLightningStrike(Vector3.zero);
                 break;
             case "Fireball_Cast":
-                // Fireball için bir hedef pozisyonu gerekebilir, şimdilik (0,0,0) veya rastgele bir düşman
                 if (SkillManager.Instance != null) SkillManager.Instance.SetFortifyState(false);
                 if (SkillManager.Instance != null) SkillManager.Instance.TriggerFireball(Vector3.zero);
                 break;
-            case "Time_Out":
+            case "Palm": // "Time_Out" yerine daha doğal "Palm" hareketi
                 if (GameManager.Instance != null) GameManager.Instance.TogglePause();
-                else Debug.LogError("[GestureParser] GameManager.Instance is NULL!");
                 break;
             case "Upgrade_1":
                 if (GameManager.Instance != null) GameManager.Instance.PurchaseUpgrade(1);

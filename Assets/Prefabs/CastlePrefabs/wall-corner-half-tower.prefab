@@ -77,9 +77,6 @@ PrefabInstance:
       addedObject: {fileID: 5111821429704872144}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 48ff052c4ca397b448b53ea4969826f7, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 494216107225578629}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 48ff052c4ca397b448b53ea4969826f7, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8676639670864459350}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 48ff052c4ca397b448b53ea4969826f7, type: 3}
       insertIndex: -1
@@ -102,52 +99,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7065dc9622088947b540c0a34032c9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageFlash
-  flashColor: {r: 1, g: 0, b: 0, a: 1}
+  flashColor: {r: 1, g: 0, b: 0, a: 0.5882353}
   flashDuration: 0.1
   renderers: []
---- !u!114 &494216107225578629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3111558333548248516}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &8676639670864459350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,9 +116,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 1
   maxHealth: 1000
+  currentHealth: 0
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 0}
-  damageFlash: {fileID: 0}
+  damageFlash: {fileID: 5111821429704872144}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []

@@ -38,11 +38,16 @@ public class DamageFlash : MonoBehaviour
 
     public void Flash()
     {
-        StopAllCoroutines();
-        StartCoroutine(FlashRoutine());
+        Flash(flashColor);
     }
 
-    private IEnumerator FlashRoutine()
+    public void Flash(Color customColor)
+    {
+        StopAllCoroutines();
+        StartCoroutine(FlashRoutine(customColor));
+    }
+
+    private IEnumerator FlashRoutine(Color targetColor)
     {
         // 1. Change to Flash Color
         for (int i = 0; i < renderers.Length; i++)
@@ -50,9 +55,9 @@ public class DamageFlash : MonoBehaviour
             if (renderers[i] != null)
             {
                 if (renderers[i].material.HasProperty("_Color"))
-                    renderers[i].material.color = flashColor;
+                    renderers[i].material.color = targetColor;
                 else if (renderers[i].material.HasProperty("_BaseColor"))
-                    renderers[i].material.SetColor("_BaseColor", flashColor);
+                    renderers[i].material.SetColor("_BaseColor", targetColor);
             }
         }
 

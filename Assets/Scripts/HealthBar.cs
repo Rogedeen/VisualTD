@@ -3,13 +3,17 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    [Tooltip("The Image component that represents the health fill. Must be Image Type: Filled")]
-    [SerializeField] private Image fillImage;
-    [SerializeField] private Gradient healthGradient; // Optional: colors from low to high health
+    [Header("UI References")]
+    [Tooltip("The Slider component for health display")]
+    [SerializeField] private Slider healthSlider;
     
-    [Header("Colors")]
-    [SerializeField] private Color fullColor = Color.red;
-    [SerializeField] private Color emptyColor = Color.white;
+    [Header("Colors (Optional)")]
+    [SerializeField] private Gradient healthGradient; // Can azaldıkça rengin değişmesi için
+    [SerializeField] private Image fillImage;        // Gradient uygulayacaksak Fill Image gerekir
+
+    [Header("Billboard Settings")]
+    [Tooltip("If this script is on the root object, drag the UI/Canvas child here. If null, rotates this object.")]
+    [SerializeField] private Transform billboardTransform;
 
     private Transform mainCamera;
 
@@ -20,48 +24,61 @@ public class HealthBar : MonoBehaviour
             mainCamera = Camera.main.transform;
         }
 
-        // Başlangıçta renkleri ayarla
-        if (fillImage != null)
+        // AUTO-DETECTION: Don't rotate the parent! 
+        // Find the specific child that should be face the camera (Canvas or UI container)
+        if (billboardTransform == null)
         {
-            // Eğer Image Type: Filled ise arkadaki beyazlık Background objesinden gelir.
-            // Biz sadece doluluk rengini kırmızı yapıyoruz.
-            fillImage.color = fullColor;
-            
-            // Eğer arka planı kodla beyaz yapmak istersen:
-            Transform bg = transform.Find("Background");
-            if (bg != null)
+            // 1. Try to find a child Canvas first (standard for world-space health bars)
+            Canvas childCanvas = GetComponentInChildren<Canvas>();
+            if (childCanvas != null && childCanvas.transform != transform)
             {
-                Image bgImg = bg.GetComponent<Image>();
-                if (bgImg != null) bgImg.color = emptyColor;
+                billboardTransform = childCanvas.transform;
+            }
+            // 2. Fallback to any child that looks like a UI element
+            else
+            {
+                foreach (Transform child in transform)
+                {
+                    if (child.name.ToLower().Contains("canvas") || 
+                        child.name.ToLower().Contains("health") || 
+                        child.name.ToLower().Contains("ui") ||
+                        child.name.ToLower().Contains("bar"))
+                    {
+                        billboardTransform = child;
+                        break;
+                    }
+                }
             }
         }
+
+        if (billboardTransform == transform) billboardTransform = null;
     }
 
     private void LateUpdate()
     {
-        // Billboard effect: Match camera rotation to keep UI flat and facing forward
-        if (mainCamera != null)
+        // Billboard effect: Only rotate the target (Health Bar visual) to face camera
+        // CRITICAL: billboardTransform MUST be a child, otherwise the whole object (Tower/Enemy) rotates!
+        if (mainCamera != null && billboardTransform != null && billboardTransform != transform)
         {
-            transform.rotation = mainCamera.rotation;
+            Vector3 direction = mainCamera.position - billboardTransform.position;
+            direction.y = 0; // Keep it upright
+            
+            if (direction != Vector3.zero)
+            {
+                billboardTransform.rotation = Quaternion.LookRotation(-direction);
+            }
         }
     }
 
     public void UpdateHealth(float currentHealth, float maxHealth)
     {
-        if (fillImage == null) return;
+        if (healthSlider == null) return;
 
         float fillAmount = Mathf.Clamp01(currentHealth / maxHealth);
+        healthSlider.value = fillAmount;
         
-        // --- SMOTTH SLIDER (OPSİYONEL): Direkt setlemek yerine Coroutine ile de yapılabilir 
-        // ama performans için şimdilik direkt setliyoruz ---
-        fillImage.fillAmount = fillAmount;
-        
-        // Eğer gradient kullanılmıyorsa direkt renk geçişi (Opsiyonel)
-        if (healthGradient == null || healthGradient.colorKeys.Length <= 1)
-        {
-            fillImage.color = Color.Lerp(emptyColor, fullColor, fillAmount);
-        }
-        else
+        // Eğer gradient (renk geçişi) kullanıyorsan:
+        if (healthGradient != null && fillImage != null)
         {
             fillImage.color = healthGradient.Evaluate(fillAmount);
         }

@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - Gate
   - Tower
+  - Arrow
   layers:
   - Default
   - TransparentFX

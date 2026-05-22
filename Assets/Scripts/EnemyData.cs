@@ -4,6 +4,7 @@ using UnityEngine;
 public class EnemyData : ScriptableObject
 {
     public string enemyType = "Skeleton";
+    public string poolTag = "Enemy"; // ObjectPooler'daki tag ile eşleşmeli
     
     [Header("Stats")]
     public float maxHealth = 50f;

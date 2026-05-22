@@ -6,14 +6,14 @@ public class CameraController : MonoBehaviour
     public static CameraController Instance { get; private set; }
 
     [Header("Positions")]
-    [SerializeField] private Vector3 gameplayPos = new Vector3(1.15f, 4.51f, -5.21f);
-    [SerializeField] private Vector3 gameplayRot = new Vector3(38.92f, 1.54f, 0f);
+    [SerializeField] private Vector3 gameplayPos;
+    [SerializeField] private Vector3 gameplayRot;
     
-    [SerializeField] private Vector3 menuPos = new Vector3(15f, 6f, -15f); // Side-angle view of the castle
-    [SerializeField] private Vector3 menuRot = new Vector3(15f, -30f, 0f); // Looking towards the gate area
+    [SerializeField] private Vector3 menuPos; 
+    [SerializeField] private Vector3 menuRot;
 
     [Header("Settings")]
-    [SerializeField] private float transitionDuration = 2.0f;
+    [SerializeField] private float transitionDuration = 1.5f;
     [SerializeField] private AnimationCurve transitionCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
     private Coroutine transitionCoroutine;
@@ -26,9 +26,29 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
-        // Start in menu position
+        // Set initial position immediately without transition
         transform.position = menuPos;
         transform.rotation = Quaternion.Euler(menuRot);
+    }
+
+    [ContextMenu("Capture Current as Menu")]
+    public void CaptureMenu()
+    {
+        menuPos = transform.position;
+        menuRot = transform.eulerAngles;
+#if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+#endif
+    }
+
+    [ContextMenu("Capture Current as Gameplay")]
+    public void CaptureGameplay()
+    {
+        gameplayPos = transform.position;
+        gameplayRot = transform.eulerAngles;
+#if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+#endif
     }
 
     public void SwitchToGameplay()

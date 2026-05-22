@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Skeleton_Warrior
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyType: Skeleton
+  poolTag: Warrior
   maxHealth: 500
   moveSpeed: 1
   attackDamage: 10

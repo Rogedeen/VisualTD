@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Skeleton_Rogue
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyType: Skeleton
+  poolTag: Rogue
   maxHealth: 150
   moveSpeed: 2
   attackDamage: 15

@@ -1211,6 +1211,7 @@ GameObject:
   m_Component:
   - component: {fileID: 101497470}
   - component: {fileID: 101497469}
+  - component: {fileID: 101497471}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1245,6 +1246,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2124795226}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &101497471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 101497468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 791fa4dd6f086f642b312ac2ae50c002, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BackgroundRunner
 --- !u!1001 &111318119
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2100,6 +2113,14 @@ PrefabInstance:
       propertyPath: dustParticlePrefab
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8325962806551729916, guid: d07c0466761bf214da0d2006514706b6, type: 3}
+      propertyPath: OnStructureDestroyed.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8325962806551729916, guid: d07c0466761bf214da0d2006514706b6, type: 3}
+      propertyPath: OnStructureDestroyed.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2823,9 +2844,6 @@ PrefabInstance:
       addedObject: {fileID: 1019102316}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1019102315}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1019102314}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &215900004 stripped
@@ -2967,30 +2985,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall-corner-half-tower (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 3111558333548248516, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
-      propertyPath: m_TagString
-      value: Wall
-      objectReference: {fileID: 0}
-    - target: {fileID: 8676639670864459350, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
-      propertyPath: healthBar
-      value: 
-      objectReference: {fileID: 1717918259}
-    - target: {fileID: 8676639670864459350, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
+    - target: {fileID: 7109658213638771860, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
       propertyPath: damageFlash
       value: 
       objectReference: {fileID: 1717918260}
     - target: {fileID: 8676639670864459350, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
-      propertyPath: dustParticlePrefab
+      propertyPath: damageFlash
       value: 
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4251597619352261234, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
+      objectReference: {fileID: 2030206661}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3111558333548248516, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2030206657}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
 --- !u!4 &250600047 stripped
 Transform:
@@ -3536,9 +3542,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPooler
   pools:
-  - tag: Enemy
+  - tag: Minion
     prefab: {fileID: 6006127472301681069, guid: 5727671b9dd95334dab30445358ba6a3, type: 3}
     size: 60
+  - tag: Rogue
+    prefab: {fileID: 2573335740017588587, guid: 481383b206898304ba701e4948668ae0, type: 3}
+    size: 50
+  - tag: Warrior
+    prefab: {fileID: 7430277818792170807, guid: e1311ae1b03e79b4c9caff1b5151f050, type: 3}
+    size: 50
   - tag: Arrow
     prefab: {fileID: 7850797968815248461, guid: ae8c6c4681ec7584ba043faf0af723f8, type: 3}
     size: 100
@@ -3806,6 +3818,7 @@ GameObject:
   - component: {fileID: 330585545}
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
+  - component: {fileID: 330585548}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3880,8 +3893,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.33311862, y: 0.012670904, z: -0.0044770497, w: 0.9427892}
-  m_LocalPosition: {x: 2.4897199, y: 4.51, z: -6.80619}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3931,6 +3944,47 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &330585548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb9dada6be3cb944eb607f34245d05b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraController
+  gameplayPos: {x: 1.15, y: 4.51, z: -5.21}
+  gameplayRot: {x: 38.92, y: 1.54, z: 0}
+  menuPos: {x: -2, y: 0.3, z: 0}
+  menuRot: {x: -7, y: 90, z: 0}
+  transitionDuration: 2
+  transitionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &332330358 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
@@ -4485,9 +4539,6 @@ PrefabInstance:
       addedObject: {fileID: 1706920443}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1706920442}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1706920441}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &366102830 stripped
@@ -4898,9 +4949,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 561998338}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 561998337}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 561998336}
@@ -5440,9 +5488,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 768155526}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 768155525}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 768155524}
@@ -6088,9 +6133,6 @@ PrefabInstance:
       addedObject: {fileID: 458085335}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 458085334}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 458085333}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &458085330 stripped
@@ -6113,49 +6155,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &458085334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 435461847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &458085335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6172,8 +6171,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -7260,9 +7261,6 @@ PrefabInstance:
       addedObject: {fileID: 1265542749}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1265542748}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1265542747}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &522661679 stripped
@@ -7347,9 +7345,6 @@ PrefabInstance:
       addedObject: {fileID: 535763400}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 535763399}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 535763398}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &535763395 stripped
@@ -7372,49 +7367,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &535763399
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 332330358}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &535763400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7431,8 +7383,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -7948,49 +7902,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &561998337
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 561998333}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &561998338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8007,8 +7918,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -8087,9 +8000,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1927534140}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1927534139}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1927534138}
@@ -8179,9 +8089,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2088842194}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2088842193}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2088842192}
@@ -8635,9 +8542,6 @@ PrefabInstance:
       addedObject: {fileID: 999867365}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 999867366}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 999867364}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &596164675 stripped
@@ -8722,9 +8626,6 @@ PrefabInstance:
       addedObject: {fileID: 607371788}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 607371787}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 607371786}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &601382947 stripped
@@ -8752,49 +8653,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &607371787
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 607371783}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &607371788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8811,8 +8669,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -8973,9 +8833,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1597087716}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1597087715}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1597087714}
@@ -11158,49 +11015,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &768155525
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 768155521}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &768155526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11217,8 +11031,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -11743,9 +11559,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1437305625}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1437305624}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1437305623}
@@ -12783,9 +12596,6 @@ PrefabInstance:
       addedObject: {fileID: 1320457712}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1320457711}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1320457710}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &872727487 stripped
@@ -13325,9 +13135,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1385409461}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1385409460}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1385409459}
@@ -14137,9 +13944,6 @@ PrefabInstance:
       addedObject: {fileID: 1825807043}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1825807042}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1825807041}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &990510584 stripped
@@ -14425,54 +14229,13 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &999867366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 999867361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!1001 &1007705302
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14774,49 +14537,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1019102315
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1019102311}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1019102316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14833,8 +14553,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -15150,68 +14872,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 1040127088}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &1049300134
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1142157003}
-    m_Modifications:
-    - target: {fileID: 2179926711155479788, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_Name
-      value: Ranger (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.584
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
---- !u!4 &1049300135 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-  m_PrefabInstance: {fileID: 1049300134}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1053441580
 PrefabInstance:
@@ -16027,6 +15687,68 @@ Transform:
   - {fileID: 1456748832}
   m_Father: {fileID: 735083894}
   m_LocalEulerAnglesHint: {x: 0, y: 145.344, z: 0}
+--- !u!1001 &1070003359
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1142157003}
+    m_Modifications:
+    - target: {fileID: 2179926711155479788, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_Name
+      value: Ranger (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.004000187
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.4379998
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70925814
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.70494884
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -89.651
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+--- !u!4 &1070003360 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+  m_PrefabInstance: {fileID: 1070003359}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1079953193
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16660,9 +16382,6 @@ PrefabInstance:
       addedObject: {fileID: 1110062856}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1110062855}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1110062854}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &1110062851 stripped
@@ -16685,49 +16404,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1110062855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 711635011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1110062856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16744,8 +16420,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -17069,6 +16747,68 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 1125909161}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1127847545
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1142157003}
+    m_Modifications:
+    - target: {fileID: 2179926711155479788, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_Name
+      value: Ranger (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.001999855
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.5799998
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70925814
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.70494884
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -89.651
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+--- !u!4 &1127847546 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+  m_PrefabInstance: {fileID: 1127847545}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1142157002
 GameObject:
   m_ObjectHideFlags: 0
@@ -17098,11 +16838,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 543450653046235890}
-  - {fileID: 1908183687}
-  - {fileID: 1818266057}
-  - {fileID: 1049300135}
-  - {fileID: 2123095487}
+  - {fileID: 1921209587}
+  - {fileID: 1070003360}
+  - {fileID: 1835361019}
+  - {fileID: 1127847546}
+  - {fileID: 1651900347}
   m_Father: {fileID: 1257164131}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1143856907
@@ -17182,9 +16922,6 @@ PrefabInstance:
       addedObject: {fileID: 1447710430}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1447710429}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1447710428}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &1143856908 stripped
@@ -17192,6 +16929,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
   m_PrefabInstance: {fileID: 1143856907}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1150523252 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2056868862936350576, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
+  m_PrefabInstance: {fileID: 3129313192547063145}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7065dc9622088947b540c0a34032c9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageFlash
 --- !u!1001 &1152623511
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17336,6 +17084,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 188d30652eb967945bbf21e1aee192db, type: 3}
   m_PrefabInstance: {fileID: 1159550776}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1161264226
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6006127472301681069, guid: 5727671b9dd95334dab30445358ba6a3, type: 3}
+      propertyPath: m_Name
+      value: Skeleton_Minion
+      objectReference: {fileID: 0}
+    - target: {fileID: 6346097104988009239, guid: 5727671b9dd95334dab30445358ba6a3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.268
+      objectReference: {fileID: 0}
+    - target: {fileID: 6346097104988009239, guid: 5727671b9dd95334dab30445358ba6a3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0000006386483
+      objectReference: {fileID: 0}
+    - target: {fileID: 6346097104988009239, guid: 5727671b9dd95334dab30445358ba6a3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.585
+      objectReference: {fileID: 0}
+    - target: {fileID: 6346097104988009239, guid: 5727671b9dd95334dab30445358ba6a3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6346097104988009239, guid: 5727671b9dd95334dab30445358ba6a3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6346097104988009239, guid: 5727671b9dd95334dab30445358ba6a3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6346097104988009239, guid: 5727671b9dd95334dab30445358ba6a3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6346097104988009239, guid: 5727671b9dd95334dab30445358ba6a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6346097104988009239, guid: 5727671b9dd95334dab30445358ba6a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6346097104988009239, guid: 5727671b9dd95334dab30445358ba6a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5727671b9dd95334dab30445358ba6a3, type: 3}
 --- !u!1001 &1180036589
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17819,9 +17624,6 @@ PrefabInstance:
       addedObject: {fileID: 1191431692}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1191431691}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1191431690}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &1191431687 stripped
@@ -17844,49 +17646,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1191431691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 60193974}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1191431692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17903,8 +17662,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -18477,9 +18238,6 @@ PrefabInstance:
       addedObject: {fileID: 1381951021}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1381951020}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1381951019}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &1230017068 stripped
@@ -18712,49 +18470,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1265542748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1265542744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1265542749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18771,8 +18486,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -19392,49 +19109,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1320457711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1320457707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1320457712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19451,8 +19125,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -19615,9 +19291,6 @@ PrefabInstance:
       addedObject: {fileID: 1334023583}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1334023582}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1334023581}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &1334023578 stripped
@@ -19640,49 +19313,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1334023582
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 907185473}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1334023583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19699,8 +19329,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -19950,9 +19582,6 @@ PrefabInstance:
       addedObject: {fileID: 1873581336}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1873581335}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1873581334}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &1356668558 stripped
@@ -20062,49 +19691,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1381951020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1381951016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1381951021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20121,8 +19707,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -20208,49 +19796,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1385409460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1385409456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1385409461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20267,8 +19812,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -20570,9 +20117,6 @@ PrefabInstance:
       addedObject: {fileID: 1409446857}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1409446856}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1409446855}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &1409446852 stripped
@@ -20595,49 +20139,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1409446856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1262438488}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1409446857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20654,8 +20155,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -20749,6 +20252,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 588228427}
     m_Modifications:
+    - target: {fileID: 627359306217856347, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
+      propertyPath: damageFlash
+      value: 
+      objectReference: {fileID: 1717918260}
     - target: {fileID: 6319033307131675930, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.4039998
@@ -20793,30 +20300,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall-narrow-stairs (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 6699781730678759328, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
-      propertyPath: m_TagString
-      value: Wall
-      objectReference: {fileID: 0}
-    - target: {fileID: 7078079162378360382, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
-      propertyPath: healthBar
-      value: 
-      objectReference: {fileID: 1717918259}
     - target: {fileID: 7078079162378360382, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
       propertyPath: damageFlash
       value: 
-      objectReference: {fileID: 1717918260}
-    - target: {fileID: 7078079162378360382, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
-      propertyPath: dustParticlePrefab
-      value: 
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6602520913158319885, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
+      objectReference: {fileID: 1535061200}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6699781730678759328, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1535061196}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
 --- !u!4 &1409920607 stripped
 Transform:
@@ -21250,6 +20741,7 @@ GameObject:
   - component: {fileID: 1435729673}
   - component: {fileID: 1435729672}
   - component: {fileID: 1435729675}
+  - component: {fileID: 1435729676}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -21319,6 +20811,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2620b509f4eee940b16dffce323f4ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkillUIController
+--- !u!114 &1435729676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1435729671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58dd923115aae4e4fbde5c17708c7d50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FrameReceiver
+  port: 5053
 --- !u!1 &1437305620 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
@@ -21339,49 +20844,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1437305624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1437305620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1437305625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21398,8 +20860,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -21661,49 +21125,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1447710429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1447710425}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1447710430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21720,8 +21141,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -22376,9 +21799,6 @@ PrefabInstance:
       addedObject: {fileID: 1469736839}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1469736838}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1469736837}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &1469736834 stripped
@@ -22401,49 +21821,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1469736838
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1059090125}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1469736839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22460,8 +21837,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -23107,32 +22486,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 1522912635}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1535061190 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6699781730678759328, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
+--- !u!114 &1535061200 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 81314086571362919, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
   m_PrefabInstance: {fileID: 1409920606}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1535061196
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1535061190}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 805186c902a09e847a92b05b5858f3ab, type: 3}
+  m_Script: {fileID: 11500000, guid: b7065dc9622088947b540c0a34032c9c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StructureManager
-  type: 1
-  maxHealth: 1000
-  currentHealth: 0
-  dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 1717918259}
-  damageFlash: {fileID: 1717918260}
-  OnStructureDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
+  m_EditorClassIdentifier: Assembly-CSharp::DamageFlash
 --- !u!1001 &1539467723
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23820,49 +23184,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1597087715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1597087711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1597087716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23879,8 +23200,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -24617,9 +23940,6 @@ PrefabInstance:
       addedObject: {fileID: 1637564188}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1637564187}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1637564186}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &1637564183 stripped
@@ -24642,49 +23962,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1637564187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 159627544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1637564188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24701,8 +23978,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -24783,6 +24062,68 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 56b4a0ca8daa0154387f58eb3154ab99, type: 3}
   m_PrefabInstance: {fileID: 1641446183}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1651900346
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1142157003}
+    m_Modifications:
+    - target: {fileID: 2179926711155479788, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_Name
+      value: Ranger (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.0049996376
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.1609999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70925814
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.70494884
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -89.651
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+--- !u!4 &1651900347 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+  m_PrefabInstance: {fileID: 1651900346}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1658998563
 PrefabInstance:
@@ -24977,11 +24318,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 188d30652eb967945bbf21e1aee192db, type: 3}
   m_PrefabInstance: {fileID: 1661484860}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1674405232 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9034769192362906450, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
-  m_PrefabInstance: {fileID: 1716390006}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1676503149
 PrefabInstance:
@@ -25204,9 +24540,6 @@ PrefabInstance:
       addedObject: {fileID: 1691520199}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1691520198}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1691520197}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &1691520194 stripped
@@ -25229,49 +24562,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1691520198
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 567183129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1691520199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25288,8 +24578,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -25400,49 +24692,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1706920442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1706920438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1706920443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25459,8 +24708,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -25554,18 +24805,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 588228427}
     m_Modifications:
-    - target: {fileID: 4408394760993430214, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
-      propertyPath: healthBar
-      value: 
-      objectReference: {fileID: 1717918259}
-    - target: {fileID: 4408394760993430214, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
+    - target: {fileID: 1704120893472028669, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
       propertyPath: damageFlash
       value: 
       objectReference: {fileID: 1717918260}
     - target: {fileID: 4408394760993430214, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
-      propertyPath: dustParticlePrefab
+      propertyPath: damageFlash
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1716390017}
     - target: {fileID: 8514655543931914728, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.42199993
@@ -25610,45 +24857,27 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall-pillar (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 9034769192362906450, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
-      propertyPath: m_TagString
-      value: Wall
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3967140604944675983, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 9034769192362906450, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1716390013}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
 --- !u!4 &1716390007 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8514655543931914728, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
   m_PrefabInstance: {fileID: 1716390006}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1716390013
+--- !u!114 &1716390017 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 5297776935865928274, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
+  m_PrefabInstance: {fileID: 1716390006}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1674405232}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 805186c902a09e847a92b05b5858f3ab, type: 3}
+  m_Script: {fileID: 11500000, guid: b7065dc9622088947b540c0a34032c9c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StructureManager
-  type: 1
-  maxHealth: 1000
-  currentHealth: 0
-  dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 1717918259}
-  damageFlash: {fileID: 1717918260}
-  OnStructureDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
+  m_EditorClassIdentifier: Assembly-CSharp::DamageFlash
 --- !u!1001 &1716929038
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25736,17 +24965,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6319033307131675930, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
   m_PrefabInstance: {fileID: 6018117254814403047}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1717918259 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4630143046321030739, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
-  m_PrefabInstance: {fileID: 6018117254814403047}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
 --- !u!114 &1717918260 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 81314086571362919, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
@@ -25917,9 +25135,6 @@ PrefabInstance:
       addedObject: {fileID: 1727297539}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1727297538}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1727297537}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &1727297534 stripped
@@ -25942,49 +25157,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1727297538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1420085174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1727297539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26001,8 +25173,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -26555,9 +25729,6 @@ PrefabInstance:
       addedObject: {fileID: 1755896745}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1755896744}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1755896743}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &1755896740 stripped
@@ -26580,49 +25751,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1755896744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 538871}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1755896745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26639,8 +25767,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -27613,68 +26743,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
   m_PrefabInstance: {fileID: 2112172030}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &1818266056
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1142157003}
-    m_Modifications:
-    - target: {fileID: 2179926711155479788, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_Name
-      value: Ranger (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1.012
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
---- !u!4 &1818266057 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-  m_PrefabInstance: {fileID: 1818266056}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1818830023
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27859,49 +26927,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1825807042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1825807038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1825807043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27918,8 +26943,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -28086,6 +27113,68 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 1826398445}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1835361018
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1142157003}
+    m_Modifications:
+    - target: {fileID: 2179926711155479788, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_Name
+      value: Ranger (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.0010004044
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.0039998
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70925814
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.70494884
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -89.651
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+--- !u!4 &1835361019 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+  m_PrefabInstance: {fileID: 1835361018}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1836667637
 PrefabInstance:
@@ -28490,49 +27579,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1873581335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1873581331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1873581336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28549,8 +27595,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -28828,68 +27876,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1661138924}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1908183686
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1142157003}
-    m_Modifications:
-    - target: {fileID: 2179926711155479788, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_Name
-      value: Ranger (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1.431
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
---- !u!4 &1908183687 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-  m_PrefabInstance: {fileID: 1908183686}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1910685722
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29133,6 +28119,68 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 1912575046}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1921209586
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1142157003}
+    m_Modifications:
+    - target: {fileID: 2179926711155479788, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_Name
+      value: Ranger (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.0068798065
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.8690859
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70925814
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.70494884
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -89.651
+      objectReference: {fileID: 0}
+    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+--- !u!4 &1921209587 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
+  m_PrefabInstance: {fileID: 1921209586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1921725735
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29240,49 +28288,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1927534139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1927534135}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1927534140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29299,8 +28304,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -29873,9 +28880,6 @@ PrefabInstance:
       addedObject: {fileID: 1971895565}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1971895564}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1971895563}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &1971895560 stripped
@@ -29898,49 +28902,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1971895564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 277548377}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1971895565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29957,8 +28918,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -30363,9 +29326,6 @@ PrefabInstance:
       addedObject: {fileID: 1993976540}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1993976539}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1993976538}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &1993976535 stripped
@@ -30388,49 +29348,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &1993976539
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1692889688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &1993976540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30447,8 +29364,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -30698,32 +29617,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 2024063588}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2030206651 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3111558333548248516, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
+--- !u!114 &2030206661 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5111821429704872144, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
   m_PrefabInstance: {fileID: 250600046}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2030206657
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2030206651}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 805186c902a09e847a92b05b5858f3ab, type: 3}
+  m_Script: {fileID: 11500000, guid: b7065dc9622088947b540c0a34032c9c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StructureManager
-  type: 1
-  maxHealth: 1000
-  currentHealth: 0
-  dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 1717918259}
-  damageFlash: {fileID: 1717918260}
-  OnStructureDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
+  m_EditorClassIdentifier: Assembly-CSharp::DamageFlash
 --- !u!1001 &2031512334
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30965,9 +29869,6 @@ PrefabInstance:
       addedObject: {fileID: 2046839830}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2046839829}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2046839828}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &2046839825 stripped
@@ -30990,49 +29891,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &2046839829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 799322185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &2046839830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31049,8 +29907,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -31402,49 +30262,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &2088842193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2088842189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &2088842194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31461,8 +30278,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -31950,9 +30769,6 @@ PrefabInstance:
       addedObject: {fileID: 2112172036}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2112172035}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2112172034}
   m_SourcePrefab: {fileID: 100100000, guid: bf228096e3732a946ab2f1c77ac99d2b, type: 3}
 --- !u!4 &2112172031 stripped
@@ -31975,49 +30791,6 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   renderers: []
---- !u!114 &2112172035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1815921041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abb237a1bd22154e8fa4efb797cbd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  fillImage: {fileID: 0}
-  healthGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
 --- !u!114 &2112172036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32034,8 +30807,10 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   dustParticlePrefab: {fileID: 0}
-  healthBar: {fileID: 999867366}
+  healthBar: {fileID: 0}
   damageFlash: {fileID: 999867364}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -32202,68 +30977,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5a2213b70c8439a4dbac607fae4a6958, type: 3}
   m_PrefabInstance: {fileID: 2120401164}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &2123095486
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1142157003}
-    m_Modifications:
-    - target: {fileID: 2179926711155479788, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_Name
-      value: Ranger (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.125
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
---- !u!4 &2123095487 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-  m_PrefabInstance: {fileID: 2123095486}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &2124795226 stripped
 Transform:
@@ -32625,28 +31338,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall-corner-half-tower
       objectReference: {fileID: 0}
-    - target: {fileID: 8676639670864459350, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
-      propertyPath: healthBar
-      value: 
-      objectReference: {fileID: 1717918259}
-    - target: {fileID: 8676639670864459350, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
-      propertyPath: damageFlash
-      value: 
-      objectReference: {fileID: 1717918260}
-    - target: {fileID: 8676639670864459350, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
-      propertyPath: dustParticlePrefab
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce7a01855cbb1ae4bb5978a044c9c051, type: 3}
---- !u!4 &543450653046235890 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-  m_PrefabInstance: {fileID: 5012488725913262820}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &543450653361611332 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2183797889109912751, guid: a379bad4defd6b749a078952268254f8, type: 3}
@@ -32661,15 +31357,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 588228427}
     m_Modifications:
     - target: {fileID: 1867082545753289165, guid: be9635490ae994649a81c66d59b46d9e, type: 3}
-      propertyPath: healthBar
-      value: 
-      objectReference: {fileID: 1717918259}
-    - target: {fileID: 1867082545753289165, guid: be9635490ae994649a81c66d59b46d9e, type: 3}
       propertyPath: damageFlash
-      value: 
-      objectReference: {fileID: 1717918260}
-    - target: {fileID: 1867082545753289165, guid: be9635490ae994649a81c66d59b46d9e, type: 3}
-      propertyPath: dustParticlePrefab
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6276796746447205507, guid: be9635490ae994649a81c66d59b46d9e, type: 3}
@@ -32716,7 +31404,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall-narrow-gate
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7871815805976945941, guid: be9635490ae994649a81c66d59b46d9e, type: 3}
+    - {fileID: 1867082545753289165, guid: be9635490ae994649a81c66d59b46d9e, type: 3}
+    - {fileID: -5017429648729301912, guid: be9635490ae994649a81c66d59b46d9e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -32790,6 +31481,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tower
       objectReference: {fileID: 0}
+    - target: {fileID: 6492541451938233704, guid: d07c0466761bf214da0d2006514706b6, type: 3}
+      propertyPath: flashColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492541451938233704, guid: d07c0466761bf214da0d2006514706b6, type: 3}
+      propertyPath: flashColor.b
+      value: 0.27536482
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492541451938233704, guid: d07c0466761bf214da0d2006514706b6, type: 3}
+      propertyPath: flashColor.g
+      value: 0.27536482
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492541451938233704, guid: d07c0466761bf214da0d2006514706b6, type: 3}
+      propertyPath: flashColor.r
+      value: 0.735849
+      objectReference: {fileID: 0}
     - target: {fileID: 7938680839563534842, guid: d07c0466761bf214da0d2006514706b6, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.016092777
@@ -32829,10 +31536,6 @@ PrefabInstance:
     - target: {fileID: 7938680839563534842, guid: d07c0466761bf214da0d2006514706b6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8325962806551729916, guid: d07c0466761bf214da0d2006514706b6, type: 3}
-      propertyPath: dustParticlePrefab
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -33010,79 +31713,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8071000920719425320, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
-      propertyPath: healthBar
-      value: 
-      objectReference: {fileID: 1717918259}
-    - target: {fileID: 8071000920719425320, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
       propertyPath: damageFlash
       value: 
-      objectReference: {fileID: 1717918260}
-    - target: {fileID: 8071000920719425320, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
-      propertyPath: dustParticlePrefab
-      value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1150523252}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01ef0fbacdd6cf74c9855fe387d14e01, type: 3}
---- !u!1001 &5012488725913262820
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1142157003}
-    m_Modifications:
-    - target: {fileID: 2179926711155479788, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_Name
-      value: Ranger
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1.8559997
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972370755288613924, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 243a4ed557434fe4fa760e4e94ea6457, type: 3}
 --- !u!1001 &6018117254814403047
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33135,18 +31773,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall-narrow-stairs
       objectReference: {fileID: 0}
-    - target: {fileID: 7078079162378360382, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
-      propertyPath: dustParticlePrefab
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7078079162378360382, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
-      propertyPath: OnStructureDestroyed.m_PersistentCalls.m_Calls.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7078079162378360382, guid: 143cf25486631154496fe183b1cdaaec, type: 3}
-      propertyPath: OnStructureDestroyed.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -33160,18 +31786,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 588228427}
     m_Modifications:
-    - target: {fileID: 4408394760993430214, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
-      propertyPath: healthBar
-      value: 
-      objectReference: {fileID: 1717918259}
-    - target: {fileID: 4408394760993430214, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
-      propertyPath: damageFlash
-      value: 
-      objectReference: {fileID: 1717918260}
-    - target: {fileID: 4408394760993430214, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
-      propertyPath: dustParticlePrefab
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 8514655543931914728, guid: 9a47542d8c1daad40942505c4dc0d353, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.42199993
@@ -33365,3 +31979,4 @@ SceneRoots:
   - {fileID: 2135098819}
   - {fileID: 111318119}
   - {fileID: 1408171430}
+  - {fileID: 1161264226}

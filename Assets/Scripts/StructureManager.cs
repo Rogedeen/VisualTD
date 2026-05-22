@@ -18,6 +18,10 @@ public class StructureManager : MonoBehaviour
     [Header("UI & Feedback")]
     [SerializeField] private HealthBar healthBar;
     [SerializeField] private DamageFlash damageFlash;
+    
+    [Header("Aesthetic Hit Flash Settings")]
+    [SerializeField] private Color healthyFlashColor = Color.green;
+    [SerializeField] private Color damagedFlashColor = Color.red;
 
     public UnityEvent OnStructureDestroyed;
     public bool IsDestroyed => isDestroyed;
@@ -61,6 +65,7 @@ public class StructureManager : MonoBehaviour
         if (currentHealth > maxHealth) currentHealth = maxHealth;
         
         if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
+        
         if (type == StructureType.Gate && GameManager.Instance != null)
             GameManager.Instance.UpdateGateHealth((int)currentHealth);
     }
@@ -71,6 +76,7 @@ public class StructureManager : MonoBehaviour
         currentHealth *= multiplier; // Mevcut canı da orantılı artır
         
         if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
+        
         if (type == StructureType.Gate && GameManager.Instance != null)
             GameManager.Instance.UpdateGateHealth((int)currentHealth);
     }
@@ -88,7 +94,14 @@ public class StructureManager : MonoBehaviour
         }
 
         if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
-        if (damageFlash != null) damageFlash.Flash();
+
+        if (damageFlash != null)
+        {
+            // Cana göre flash rengini belirle (Yeşilden Kırmızıya)
+            float healthPercent = currentHealth / maxHealth;
+            Color currentFlashColor = Color.Lerp(damagedFlashColor, healthyFlashColor, healthPercent);
+            damageFlash.Flash(currentFlashColor);
+        }
 
         if (currentHealth <= 0)
         {

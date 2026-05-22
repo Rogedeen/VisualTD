@@ -109,3 +109,13 @@ InitTestScene*.unity*
 # External Assets
 /[Aa]ssets/externalAssets/
 /[Aa]ssets/externalAssets.meta
+
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.class
+.pytest_cache/
+.coverage

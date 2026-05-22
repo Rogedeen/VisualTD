@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class UIManager : MonoBehaviour
     private Label playerHealthText;
     private Label gestureText;
     private VisualElement gesturePanel;
+    private VisualElement webcamContainer;
+    private Image webcamPreview;
 
     [Header("Menu Elements")]
     private VisualElement startScreen;
@@ -41,6 +44,8 @@ public class UIManager : MonoBehaviour
         playerHealthText = root.Q<Label>("PlayerHealthText");
         gestureText = root.Q<Label>("GestureText");
         gesturePanel = root.Q<VisualElement>("GesturePanel");
+        webcamContainer = root.Q<VisualElement>("WebcamContainer");
+        webcamPreview = webcamContainer?.Q<Image>("WebcamPreview");
 
         // Menus
         startScreen = root.Q<VisualElement>("StartScreen");
@@ -63,7 +68,28 @@ public class UIManager : MonoBehaviour
     private void StartGame()
     {
         if (startScreen != null) startScreen.style.display = DisplayStyle.None;
+        
+        // Python'dan gelen işlenmiş görüntüleri almayı başlat
+        ToggleWebcam(true);
+        
         GameManager.Instance.StartGame();
+    }
+
+    public void ToggleWebcam(bool active)
+    {
+        if (webcamContainer == null) return;
+        
+        if (active)
+        {
+            if (FrameReceiver.Instance != null)
+                FrameReceiver.Instance.StartReceiving();
+            
+            webcamContainer.style.display = DisplayStyle.Flex;
+        }
+        else
+        {
+            webcamContainer.style.display = DisplayStyle.None;
+        }
     }
 
     public void ShowStartMenu()
@@ -95,8 +121,78 @@ public class UIManager : MonoBehaviour
         // Basit bir scale efekti eklenebilir
     }
 
+    private System.Diagnostics.Process pythonProcess;
+
+    private void Start()
+    {
+        // Her zaman Python'u başlatmaya çalış (Editor'deysen de otomatik açılsın istersen #if kaldırılabilir)
+        StartPythonProcess();
+    }
+
+    private void StartPythonProcess()
+    {
+        try
+        {
+            // Proje kök dizinindeki python_cv/main.py yolunu bul
+            string projectRoot = System.IO.Path.GetDirectoryName(Application.dataPath);
+            string pythonPath = System.IO.Path.Combine(projectRoot, "python_cv/main.py");
+            
+            // Eğer venv kullanılıyorsa onun interpreter'ını kullanmak en sağlıklısıdır
+            string venvPython = System.IO.Path.Combine(projectRoot, ".venv/Scripts/python.exe");
+            
+            if (!System.IO.File.Exists(venvPython)) venvPython = "python"; // venv yoksa globale düş
+
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = venvPython,
+                Arguments = pythonPath,
+                UseShellExecute = false,
+                CreateNoWindow = true, // Terminal açılmasın, her şey arka planda olsun
+                RedirectStandardInput = true // Kapatmak için sinyal gönderebilmek adına
+            };
+
+            pythonProcess = System.Diagnostics.Process.Start(startInfo);
+            Debug.Log("[UIManager] Python süreci başlatıldı.");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Python başlatılamadı: " + e.Message);
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (pythonProcess != null && !pythonProcess.HasExited)
+        {
+            pythonProcess.Kill();
+            // Process.Kill() bazen hemen sonuçlanmayabilir, garantiye alalım
+            pythonProcess.WaitForExit(1000); 
+            pythonProcess.Dispose();
+            Debug.Log("[UIManager] Python süreci kapatıldı.");
+        }
+    }
+
     private void Update()
     {
+        // 'V' tuşuna basıldığında kamerayı aç/kapat (New Input System)
+        if (Keyboard.current != null && Keyboard.current.vKey.wasPressedThisFrame)
+        {
+            if (webcamContainer != null)
+            {
+                bool isVisible = webcamContainer.style.display == DisplayStyle.Flex;
+                ToggleWebcam(!isVisible);
+            }
+        }
+
+        // Python'dan gelen kareleri UI'da güncelle
+        if (webcamContainer != null && webcamContainer.style.display == DisplayStyle.Flex)
+        {
+            if (FrameReceiver.Instance != null && webcamPreview != null)
+            {
+                FrameReceiver.Instance.UpdateTexture(webcamPreview);
+            }
+        }
+
         if (GameManager.Instance != null)
         {
             if (goldText != null) goldText.text = GameManager.Instance.Gold.ToString();
