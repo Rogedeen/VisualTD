@@ -115,38 +115,22 @@ public class GameManager : MonoBehaviour
 
     public void PurchaseUpgrade(int upgradeId)
     {
-        int cost = upgradeId * 50; // Örn: 1. yükseltme 50 altın, 2. yükseltme 100 altın
-        
-        if (Gold >= cost)
-        {
-            Gold -= cost;
-            Debug.Log($"[Upgrade] Yükseltme {upgradeId} SATIN ALINDI! Kalan Altın: {Gold}");
-            
-            ApplyUpgradeEffects(upgradeId);
-        }
-        else
-        {
-            Debug.Log($"[Upgrade] Yetersiz Altın! Gereken: {cost}, Mevcut: {Gold}");
-        }
-    }
-
-    private void ApplyUpgradeEffects(int upgradeId)
-    {
         switch (upgradeId)
         {
             case 1:
-                Debug.Log("Etki: Okçuların hasarı %25 artırıldı!");
-                // İlerde ArcherAI üzerinden hasar artışı yapılabilir
+                if (UpgradeManager.Instance != null) UpgradeManager.Instance.UpgradeWall();
                 break;
             case 2:
-                Debug.Log("Etki: Kapıların maksimum canı %50 artırıldı!");
+                if (UpgradeManager.Instance != null) UpgradeManager.Instance.UpgradeTower();
                 break;
             case 3:
-                Debug.Log("Etki: Düşman yürüme hızları %20 yavaşlatıldı (Buz büyüsü aktif)!");
+                if (UpgradeManager.Instance != null) UpgradeManager.Instance.UpgradeMage();
                 break;
             case 4:
-                Debug.Log("Etki: Dev büyü saldırısı (Ultimate) kilidi açıldı!");
+                if (UpgradeManager.Instance != null) UpgradeManager.Instance.BuyRebuildTower();
                 break;
         }
     }
+
+    private void ApplyUpgradeEffects(int upgradeId) { }
 }

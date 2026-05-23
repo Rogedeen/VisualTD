@@ -23,9 +23,14 @@ public class StructureManager : MonoBehaviour
     [SerializeField] private Color healthyFlashColor = Color.green;
     [SerializeField] private Color damagedFlashColor = Color.red;
 
+    [Header("Rebuild & Archer Settings")]
+    [SerializeField] private GameObject archerPrefab;
+    [SerializeField] private Transform archerSpawnPoint;
+
     public UnityEvent OnStructureDestroyed;
     public bool IsDestroyed => isDestroyed;
     private bool isDestroyed = false;
+    private Vector3 originalPosition;
 
     private UnityEngine.AI.NavMeshObstacle obstacle;
 
@@ -41,6 +46,7 @@ public class StructureManager : MonoBehaviour
 
     private void Start()
     {
+        originalPosition = transform.position;
         currentHealth = maxHealth;
         // Start'ta tekrar zorla kayıt dene
         if (TargetManager.Instance != null) TargetManager.Instance.RegisterStructure(this);
@@ -79,6 +85,61 @@ public class StructureManager : MonoBehaviour
         
         if (type == StructureType.Gate && GameManager.Instance != null)
             GameManager.Instance.UpdateGateHealth((int)currentHealth);
+    }
+
+    public void Rebuild()
+    {
+        if (!isDestroyed) return;
+
+        isDestroyed = false;
+        currentHealth = maxHealth;
+        
+        // Görselleri ve fizik bileşenlerini geri getir
+        gameObject.SetActive(true);
+        Renderer[] rends = GetComponentsInChildren<Renderer>(true);
+        foreach (var r in rends) r.enabled = true;
+        
+        if (obstacle != null) obstacle.enabled = true;
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = true;
+        
+        if (healthBar != null) healthBar.UpdateHealth(currentHealth, maxHealth);
+
+        // Yerin altından çıkma animasyonunu başlat
+        StartCoroutine(RiseFromUnderground());
+
+        // Kule ise yeni okçu spawn et
+        if (type == StructureType.Tower && archerPrefab != null && archerSpawnPoint != null)
+        {
+            // Eski okçu zaten OnTowerDestroyed ile ayrıldı ve Destroy edildi/edilecek
+            GameObject newArcher = Instantiate(archerPrefab, archerSpawnPoint.position, archerSpawnPoint.rotation, transform);
+            // Yeni okçu kuleyle birlikte yükselsin
+        }
+        
+        // TargetManager'a kendini tekrar kaydettir
+        if (TargetManager.Instance != null) TargetManager.Instance.RegisterStructure(this);
+    }
+
+    private System.Collections.IEnumerator RiseFromUnderground()
+    {
+        float duration = 1.5f;
+        float elapsed = 0f;
+        Vector3 startPos = originalPosition + Vector3.down * 10f; // 10 birim aşağıdan başla
+        
+        transform.position = startPos;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            // Smooth step (yumuşak geçiş) için t'yi modifiye edelim
+            t = Mathf.SmoothStep(0, 1, t);
+            
+            transform.position = Vector3.Lerp(startPos, originalPosition, t);
+            yield return null;
+        }
+
+        transform.position = originalPosition;
     }
 
     public void TakeDamage(float amount)

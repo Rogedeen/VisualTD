@@ -40,6 +40,8 @@ public class EnemyAI : MonoBehaviour
     private float lastAttackTime = -Mathf.Infinity;
     private float lastTargetValidationTime;
     private bool isDead = false;
+    private bool isStunned = false;
+    private Coroutine stunFlashCoroutine;
 
     // DEBUG: Field'ları dışarıya açıyoruz
     public Transform CurrentTarget => currentTarget;
@@ -51,6 +53,7 @@ public class EnemyAI : MonoBehaviour
     private readonly int speedHash = Animator.StringToHash("Speed");
     private readonly int attackHash = Animator.StringToHash("Attack");
     private readonly int dieHash = Animator.StringToHash("Die");
+    private readonly int shockedHash = Animator.StringToHash("isShocked");
 
     private Coroutine spawnCoroutine;
     private const float SPAWN_ANIMATION_DURATION = 2f;
@@ -329,7 +332,7 @@ public class EnemyAI : MonoBehaviour
             // Agent'ın gerçek hareket hızına bakıyoruz
             float currentVelocity = agent.velocity.magnitude;
             // Eğer hareket ediyorsa (ve durdurulmamışsa) Speed 1, yoksa 0
-            float animationSpeed = (currentVelocity > 0.1f && !agent.isStopped) ? 1.0f : 0f; 
+            float animationSpeed = (currentVelocity > 0.1f && !agent.isStopped && !isStunned) ? 1.0f : 0f; 
 
             animator.SetFloat(speedHash, animationSpeed);
         }
@@ -460,6 +463,59 @@ public class EnemyAI : MonoBehaviour
         }
 
         if (currentHealth <= 0) Die();
+    }
+
+    public void ApplyStun(float duration)
+    {
+        if (isDead) return;
+        
+        if (stunFlashCoroutine != null) StopCoroutine(stunFlashCoroutine);
+        StartCoroutine(StunRoutine(duration));
+        stunFlashCoroutine = StartCoroutine(StunFlashEffect(duration));
+    }
+
+    private IEnumerator StunFlashEffect(float duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            if (damageFlash != null)
+            {
+                // Mavi ve Beyaz arasında hızlıca gidip gelen elektrik efekti
+                Color flashCol = Color.Lerp(Color.blue, Color.white, Mathf.PingPong(Time.time * 15f, 1f));
+                damageFlash.Flash(flashCol);
+            }
+            yield return new WaitForSeconds(0.1f);
+            elapsed += 0.1f;
+        }
+    }
+
+    private IEnumerator StunRoutine(float duration)
+    {
+        isStunned = true;
+        if (agent != null && agent.isActiveAndEnabled)
+        {
+            agent.isStopped = true;
+            agent.velocity = Vector3.zero;
+        }
+
+        if (animator != null)
+        {
+            animator.SetBool(shockedHash, true);
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        isStunned = false;
+        if (animator != null)
+        {
+            animator.SetBool(shockedHash, false);
+        }
+
+        if (agent != null && agent.isActiveAndEnabled && !isDead && currentState != EnemyState.Spawning)
+        {
+            agent.isStopped = false;
+        }
     }
 
     private void Die()

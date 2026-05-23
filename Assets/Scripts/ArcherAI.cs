@@ -31,6 +31,17 @@ public class ArcherAI : MonoBehaviour
     {
         ApplyRandomOffset();
         RandomizeAnimationStart();
+        SyncWithUpgrades();
+    }
+
+    private void SyncWithUpgrades()
+    {
+        if (UpgradeManager.Instance != null)
+        {
+            // UpgradeManager'daki mevcut seviyeye göre hasarı güncelle
+            // Her seviye %20 artış (1f, 1.2f, 1.4f...)
+            damageMultiplier = 1f + (UpgradeManager.Instance.towerLevel - 1) * 0.2f;
+        }
     }
 
     private void OnEnable()
@@ -38,6 +49,15 @@ public class ArcherAI : MonoBehaviour
         isDead = false;
         ApplyRandomOffset();
         RandomizeAnimationStart();
+
+        // Başlangıçta yerçekimi kapalı ve kinematic açık (kule üzerinde durması için)
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.useGravity = false;
+            rb.isKinematic = true;
+        }
+
         if (animator != null && animator.hasBoundPlayables) 
         {
             // Parametre kontrolü ekleyerek hatayı engelle

@@ -23,20 +23,20 @@ public class Arrow : MonoBehaviour
         if (trail == null) return;
 
         // Daha ince ve zarif rüzgar/hava efekti
-        trail.startWidth = 0.08f;  // Önceki 0.05'ten biraz daha belirgin ama hala ince
+        trail.startWidth = 0.05f;  // Önceki 0.05'ten biraz daha belirgin ama hala ince
         trail.endWidth = 0.01f;
-        trail.time = 0.25f;        // İz süresi
+        trail.time = 0.08f;        // İz süresi
         trail.minVertexDistance = 0.1f;
         
         // Açık gri, saydam rüzgar rengi
         Gradient gradient = new Gradient();
         gradient.SetKeys(
             new GradientColorKey[] { 
-                new GradientColorKey(new Color(0.9f, 0.9f, 0.95f), 0.0f), 
+                new GradientColorKey(new Color(0.95f, 0.95f, 0.95f), 0.0f), 
                 new GradientColorKey(new Color(0.7f, 0.7f, 0.8f), 1.0f) 
             },
             new GradientAlphaKey[] { 
-                new GradientAlphaKey(0.3f, 0.0f), // %30 saydamlık
+                new GradientAlphaKey(0.1f, 0.0f), // %30 saydamlık
                 new GradientAlphaKey(0.0f, 1.0f)  // Sona doğru tamamen kaybol
             }
         );

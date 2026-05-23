@@ -43,6 +43,12 @@
             <ui:Label text="ARCANE FOCUS" enable-rich-text="true" class="card-label" style="font-size: 16px;"/>
             <ui:Label name="Cost_Mage" text="150G" class="card-cost" style="font-size: 16px;"/>
         </ui:VisualElement>
+        <ui:VisualElement name="Upgrade_Rebuild" class="upgrade-card" style="width: 160px;">
+            <ui:Label text="4" class="upgrade-hotkey"/>
+            <ui:VisualElement name="Icon_Rebuild" class="upgrade-frame"/>
+            <ui:Label text="REBUILD TOWER" class="card-label" style="font-size: 16px;"/>
+            <ui:Label name="Cost_Rebuild" text="300G" class="card-cost" style="font-size: 16px;"/>
+        </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="SkillContainer" class="skill-dock">
         <ui:VisualElement name="Skill_Arrow" class="skill-orb">

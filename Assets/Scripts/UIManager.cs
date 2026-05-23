@@ -11,6 +11,10 @@ public class UIManager : MonoBehaviour
     private Label healthText;
     private Label playerHealthText;
     private Label gestureText;
+    private Label costWall;
+    private Label costArcher;
+    private Label costMage;
+    private Label costRebuild;
     private VisualElement gesturePanel;
     private VisualElement webcamContainer;
     private Image webcamPreview;
@@ -43,6 +47,10 @@ public class UIManager : MonoBehaviour
         healthText = root.Q<Label>("HealthText");
         playerHealthText = root.Q<Label>("PlayerHealthText");
         gestureText = root.Q<Label>("GestureText");
+        costWall = root.Q<Label>("Cost_Wall");
+        costArcher = root.Q<Label>("Cost_Archer");
+        costMage = root.Q<Label>("Cost_Mage");
+        costRebuild = root.Q<Label>("Cost_Rebuild");
         gesturePanel = root.Q<VisualElement>("GesturePanel");
         webcamContainer = root.Q<VisualElement>("WebcamContainer");
         webcamPreview = webcamContainer?.Q<Image>("WebcamPreview");
@@ -58,6 +66,12 @@ public class UIManager : MonoBehaviour
         root.Q<Button>("BtnQuit")?.RegisterCallback<ClickEvent>(ev => Application.Quit());
         root.Q<Button>("BtnRestart")?.RegisterCallback<ClickEvent>(ev => GameManager.Instance.RestartGame());
         root.Q<Button>("BtnMenu")?.RegisterCallback<ClickEvent>(ev => Application.Quit()); // Or load a scene
+
+        // Upgrade Hooks
+        root.Q<VisualElement>("Upgrade_Wall")?.RegisterCallback<ClickEvent>(ev => UpgradeManager.Instance.UpgradeWall());
+        root.Q<VisualElement>("Upgrade_Archer")?.RegisterCallback<ClickEvent>(ev => UpgradeManager.Instance.UpgradeTower());
+        root.Q<VisualElement>("Upgrade_Mage")?.RegisterCallback<ClickEvent>(ev => UpgradeManager.Instance.UpgradeMage());
+        root.Q<VisualElement>("Upgrade_Rebuild")?.RegisterCallback<ClickEvent>(ev => UpgradeManager.Instance.BuyRebuildTower());
 
         if (gesturePanel != null) gesturePanel.style.opacity = 0f;
         
@@ -198,6 +212,14 @@ public class UIManager : MonoBehaviour
             if (goldText != null) goldText.text = GameManager.Instance.Gold.ToString();
             if (healthText != null) healthText.text = GameManager.Instance.GateHealth.ToString();
             if (playerHealthText != null) playerHealthText.text = GameManager.Instance.PlayerHealth.ToString();
+        }
+
+        if (UpgradeManager.Instance != null)
+        {
+            if (costWall != null) costWall.text = UpgradeManager.Instance.wallUpgradeCost + "G";
+            if (costArcher != null) costArcher.text = UpgradeManager.Instance.towerUpgradeCost + "G";
+            if (costMage != null) costMage.text = UpgradeManager.Instance.mageUpgradeCost + "G";
+            if (costRebuild != null) costRebuild.text = UpgradeManager.Instance.rebuildTowerCost + "G";
         }
 
         // Gesture panelinin yavaşça kaybolması (Fade out)

@@ -53,10 +53,16 @@ class GestureTracker:
                 model_path)
             print("Download complete.")
 
-    def fingers_up(self, landmarks):
+    def fingers_up(self, landmarks, handedness="Right"):
         fingers = []
-        if landmarks[4].x < landmarks[3].x: fingers.append(1)
-        else: fingers.append(0)
+        # Thumb: check based on handedness (MediaPipe handedness is inverted for some reason in some versions)
+        # Usually: Left hand thumb up if tip.x > joint.x, Right hand if tip.x < joint.x
+        if handedness == "Left":
+            if landmarks[4].x > landmarks[3].x: fingers.append(1)
+            else: fingers.append(0)
+        else:
+            if landmarks[4].x < landmarks[3].x: fingers.append(1)
+            else: fingers.append(0)
             
         tip_ids = [8, 12, 16, 20]
         pip_ids = [6, 10, 14, 18]
@@ -73,11 +79,18 @@ class GestureTracker:
         self.results = self.landmarker.detect_for_video(mp_image, relative_timestamp)
         
         if self.results.hand_landmarks:
-            for hand_landmarks in self.results.hand_landmarks:
+            for i, hand_landmarks in enumerate(self.results.hand_landmarks):
+                # Draw landmarks
                 for landmark in hand_landmarks:
                     x = int(landmark.x * img.shape[1])
                     y = int(landmark.y * img.shape[0])
                     cv2.circle(img, (x, y), 5, (255, 0, 255), cv2.FILLED)
+                
+                # Display handedness and finger count for debugging
+                if hasattr(self.results, "handedness") and len(self.results.handedness) > i:
+                    label = self.results.handedness[i][0].category_name
+                    cv2.putText(img, f"{label}", (int(hand_landmarks[0].x * img.shape[1]), int(hand_landmarks[0].y * img.shape[0])), 
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
         return img
 
     def detect_gestures(self):
@@ -91,8 +104,10 @@ class GestureTracker:
         if len(self.results.hand_landmarks) == 2:
             h1 = self.results.hand_landmarks[0]
             h2 = self.results.hand_landmarks[1]
-            fingers1 = self.fingers_up(h1)
-            fingers2 = self.fingers_up(h2)
+            h1_label = self.results.handedness[0][0].category_name
+            h2_label = self.results.handedness[1][0].category_name
+            fingers1 = self.fingers_up(h1, h1_label)
+            fingers2 = self.fingers_up(h2, h2_label)
             wrist_dist = ((h1[0].x - h2[0].x)**2 + (h1[0].y - h2[0].y)**2)**0.5
             
             if wrist_dist < 0.15: raw_gesture = "Fireball"
@@ -106,16 +121,20 @@ class GestureTracker:
 
         elif len(self.results.hand_landmarks) == 1:
             h1 = self.results.hand_landmarks[0]
-            fingers = self.fingers_up(h1)
+            h1_label = self.results.handedness[0][0].category_name
+            fingers = self.fingers_up(h1, h1_label)
             is_upright = (h1[0].y - h1[9].y) > 0.1 
             if is_upright:
                 if fingers[1] == 1 and fingers[2] == 0 and fingers[3] == 0 and fingers[4] == 1: raw_gesture = "Spiderman"
                 else:
-                    num_fingers = sum(fingers[1:])
+                    num_fingers = sum(fingers[1:]) # Index to Pinky
                     if num_fingers == 0: raw_gesture = "Fist"
-                    elif num_fingers == 4 and sum(fingers) >= 4: raw_gesture = "Open_Hand"
-                    elif fingers[1] == 1 and sum(fingers[2:]) == 0: raw_gesture = "Index_Up"
-                    elif sum(fingers) == 5: raw_gesture = "Palm"
+                    elif num_fingers == 1: raw_gesture = "Index_Up"
+                    elif num_fingers == 2: raw_gesture = "Upgrade_2"
+                    elif num_fingers == 3: raw_gesture = "Upgrade_3"
+                    elif num_fingers == 4:
+                        if fingers[0] == 1: raw_gesture = "Palm" # Thumb is also up
+                        else: raw_gesture = "Upgrade_4" # Only 4 fingers up
 
         if raw_gesture != self.current_raw_gesture:
             self.current_raw_gesture = raw_gesture
@@ -124,6 +143,14 @@ class GestureTracker:
         held_time = current_time_ms - self.raw_gesture_start_time
         gesture_detected = None
         
+        if held_time > 1200:
+            if self.current_raw_gesture in ["Upgrade_2", "Upgrade_3", "Upgrade_4"]:
+                gesture_detected = self.current_raw_gesture
+                self.current_raw_gesture = None
+            elif self.current_raw_gesture == "Index_Up":
+                gesture_detected = "Upgrade_1"
+                self.current_raw_gesture = None
+
         if self.current_raw_gesture == "Palm" and held_time > 800:
             gesture_detected = "Palm"
             self.current_raw_gesture = None 
@@ -140,11 +167,11 @@ class GestureTracker:
         if self.current_raw_gesture == "Fist" and held_time > 500:
             if self.prev_arrow_state == 0: gesture_detected = "Hold_Fire"
             self.prev_arrow_state = 1
-        elif self.current_raw_gesture == "Open_Hand" and self.prev_arrow_state == 1:
+        elif self.current_raw_gesture in ["Upgrade_4", "Palm"] and self.prev_arrow_state == 1:
             gesture_detected = "Arrow_Volley"
             self.prev_arrow_state = 0
             
-        if self.current_raw_gesture == "Index_Up" and held_time > 300:
+        if self.current_raw_gesture == "Index_Up" and 300 < held_time < 1200:
             self.prev_lightning_state = 1
             self.lightning_y_start = self.results.hand_landmarks[0][8].y
         elif self.prev_lightning_state == 1:

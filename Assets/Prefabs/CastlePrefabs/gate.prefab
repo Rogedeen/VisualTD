@@ -93,6 +93,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 73a3155dd4fa7d041ba0c5fcdd4e0900, type: 3}
       insertIndex: -1
       addedObject: {fileID: -3632615722580603597}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 73a3155dd4fa7d041ba0c5fcdd4e0900, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5531585942510874475}
   m_SourcePrefab: {fileID: 100100000, guid: 73a3155dd4fa7d041ba0c5fcdd4e0900, type: 3}
 --- !u!1 &152908001762630522 stripped
 GameObject:
@@ -132,6 +135,10 @@ MonoBehaviour:
   dustParticlePrefab: {fileID: 0}
   healthBar: {fileID: 0}
   damageFlash: {fileID: 0}
+  healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  damagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  archerPrefab: {fileID: 0}
+  archerSpawnPoint: {fileID: 0}
   OnStructureDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -151,3 +158,24 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 0
   m_Center: {x: 0, y: 0.455, z: 0}
   m_TimeToStationary: 0.5
+--- !u!65 &5531585942510874475
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 152908001762630522}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.15159997, y: 0.91033846, z: 0.66215086}
+  m_Center: {x: 0, y: 0.45516923, z: 0}

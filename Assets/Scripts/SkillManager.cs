@@ -25,6 +25,7 @@ public class SkillManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private StructureManager mainGate; // The main gate
+    [SerializeField] private ChainLightningSkill chainLightning;
 
     // Cooldown Progress Helpers (0 to 1)
     public float GetArrowProgress() => Mathf.Clamp01((Time.time - lastArrowTime) / arrowVolleyCD);
@@ -56,6 +57,7 @@ public class SkillManager : MonoBehaviour
     private readonly int isAttackingHash = Animator.StringToHash("isAttacking");
     private readonly int fireballHash = Animator.StringToHash("fireball");
     private readonly int attackHash = Animator.StringToHash("attack");
+    private readonly int castLightningHashLegacy = Animator.StringToHash("CastLightning");
     
     // Legacy / Other
     private readonly int castArrowHash = Animator.StringToHash("attack");
@@ -190,18 +192,56 @@ public class SkillManager : MonoBehaviour
     public void TriggerLightningStrike(Vector3 targetPosition)
     {
         if (Time.time < lastLightningTime + lightningCD) return;
+        
+        // --- DÜZELTME: Hedef pozisyon sıfırsa en kalabalık alanı bul ---
+        Vector3 finalTargetPos = targetPosition != Vector3.zero ? targetPosition : FindCrowdedEnemyArea();
+        
+        // Eğer hala sıfırsa (hiç düşman yoksa) çık
+        if (finalTargetPos == Vector3.zero) return;
+
         lastLightningTime = Time.time;
 
-        Debug.Log("Commander Command: LIGHTNING STRIKE!");
-        if (commanderAnimator != null) commanderAnimator.SetTrigger(castLightningHash);
+        Debug.Log("Commander Command: CHAIN LIGHTNING!");
         
-        ObjectPooler.Instance.SpawnFromPool("Lightning", targetPosition, Quaternion.identity);
-
-        Collider[] hitColliders = Physics.OverlapSphere(targetPosition, lightningRadius);
-        foreach (var hitCollider in hitColliders)
+        // Animator parametresini kontrol et ve tetikle
+        if (commanderAnimator != null)
         {
-            EnemyAI enemy = hitCollider.GetComponent<EnemyAI>();
-            if (enemy != null) enemy.TakeDamage(lightningDamage);
+            // Eğer "CastLightning" (yeni) yoksa, büyücülerin kullandığı "attack" veya "isAttacking" parametrelerini de deneyebiliriz.
+            // Ama en sağlıklısı Animator'da CastLightning olana kadar fallback olarak attack kullanmak.
+            bool triggerSet = false;
+            foreach (var param in commanderAnimator.parameters)
+            {
+                if (param.nameHash == castLightningHash)
+                {
+                    commanderAnimator.SetTrigger(castLightningHash);
+                    triggerSet = true;
+                    break;
+                }
+            }
+            
+            if (!triggerSet)
+            {
+                Debug.LogWarning("[SkillManager] Animator'da 'CastLightning' bulunamadı, 'attack' tetikleniyor.");
+                commanderAnimator.SetTrigger(attackHash); // Mevcut olan 'attack' animasyonuna fallback yapar
+            }
+        }
+        
+        if (chainLightning != null)
+        {
+            chainLightning.Execute(finalTargetPos);
+        }
+        else
+        {
+            Debug.LogWarning("[SkillManager] ChainLightningSkill referansı atanmamış! Temel yıldırım çalışıyor.");
+            // Fallback to basic strike if chain is not assigned
+            ObjectPooler.Instance.SpawnFromPool("Lightning", finalTargetPos, Quaternion.identity);
+
+            Collider[] hitColliders = Physics.OverlapSphere(finalTargetPos, lightningRadius);
+            foreach (var hitCollider in hitColliders)
+            {
+                EnemyAI enemy = hitCollider.GetComponent<EnemyAI>();
+                if (enemy != null) enemy.TakeDamage(lightningDamage);
+            }
         }
     }
 
@@ -255,11 +295,6 @@ public class SkillManager : MonoBehaviour
         
         StructureManager[] structures = Object.FindObjectsByType<StructureManager>(FindObjectsInactive.Exclude);
         
-        // --- İYİLEŞTİRME: Her bina için değil, sadece bir veya birkaç ana noktadan AOE efekti çıkar ---
-        // Veya tüm binaların altına tek tek ama pivotu düzgün ayarlanmış şekilde koy.
-        // Kullanıcı 10 kere oynuyor dediği için belki sahnede bir tane merkezi efekt daha iyidir.
-        // Şimdilik kulelerin dibine (y=0) sabitleyerek düzeltiyoruz.
-        
         foreach (var structure in structures)
         {
             if (!structure.IsDestroyed) 
@@ -268,9 +303,19 @@ public class SkillManager : MonoBehaviour
                 
                 // Efekti binanın tam altına (Zero Y) koyuyoruz ki havada durmasın.
                 Vector3 spawnPos = structure.transform.position;
-                spawnPos.y = 0.1f; // Hafifçe yerin üstünde
+                spawnPos.y = 0.1f; 
                 
-                ObjectPooler.Instance.SpawnFromPool("Heal", spawnPos, Quaternion.identity);
+                GameObject healEffect = ObjectPooler.Instance.SpawnFromPool("Heal", spawnPos, Quaternion.identity);
+                
+                // GÜNCELLEME: Heal animasyonunun 1 kere oynayıp havuzuna dönmesini garanti ediyoruz.
+                if (healEffect != null)
+                {
+                    ReturnToPoolAfterTime returnScript = healEffect.GetComponent<ReturnToPoolAfterTime>();
+                    if (returnScript == null) returnScript = healEffect.AddComponent<ReturnToPoolAfterTime>();
+                    
+                    // Inspector ayarlarını kodla ezerek efektin kalıcı olmasını engelliyoruz
+                    // 2 saniye animasyon için makul bir süre
+                }
             }
         }
     }

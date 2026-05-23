@@ -9964,8 +9964,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4032eaa3273b7bf48b4e697eadbe595c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReturnToPoolAfterTime
-  delay: 5
+  delay: 4
   poolTag: Heal
+  disableAfterTime: 0
 --- !u!1 &2476770704603565246
 GameObject:
   m_ObjectHideFlags: 0

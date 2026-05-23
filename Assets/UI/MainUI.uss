@@ -223,6 +223,9 @@
 #Icon_Mage {
     background-image: url("project://database/Assets/UI/Icons/MageUpgradeIcon.png");
 }
+#Icon_Rebuild {
+    background-image: url("project://database/Assets/UI/Icons/HealIcon.png");
+}
 
 .skill-ready {
     border-color: var(--color-gold-bright);

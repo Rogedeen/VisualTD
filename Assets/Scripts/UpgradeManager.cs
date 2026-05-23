@@ -8,6 +8,7 @@ public class UpgradeManager : MonoBehaviour
     public int wallUpgradeCost = 50;
     public int towerUpgradeCost = 100;
     public int mageUpgradeCost = 150;
+    public int rebuildTowerCost = 300;
 
     [Header("Upgrade Levels")]
     public int wallLevel = 1;
@@ -67,6 +68,38 @@ public class UpgradeManager : MonoBehaviour
             SkillManager.Instance.UpgradeMageAbilities(0.9f); // %10 daha hızlı dolum
 
             mageUpgradeCost = Mathf.RoundToInt(mageUpgradeCost * 1.5f);
+        }
+    }
+
+    public void BuyRebuildTower()
+    {
+        // Önce yıkılmış bir kule var mı kontrol et
+        StructureManager[] allStructures = Object.FindObjectsByType<StructureManager>(FindObjectsInactive.Include);
+        StructureManager destroyedTower = null;
+
+        foreach (var s in allStructures)
+        {
+            if (s.type == StructureType.Tower && s.IsDestroyed)
+            {
+                destroyedTower = s;
+                break;
+            }
+        }
+
+        if (destroyedTower == null)
+        {
+            Debug.Log("Rebuild failed: No destroyed towers found!");
+            return;
+        }
+
+        if (GameManager.Instance.SpendGold(rebuildTowerCost))
+        {
+            Debug.Log("Tower Rebuilt!");
+            destroyedTower.Rebuild();
+        }
+        else
+        {
+            Debug.Log($"Not enough gold to rebuild tower! Required: {rebuildTowerCost}");
         }
     }
 }

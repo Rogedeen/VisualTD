@@ -4,11 +4,20 @@ public class ReturnToPoolAfterTime : MonoBehaviour
 {
     [SerializeField] private float delay = 2f;
     [SerializeField] private string poolTag;
+    [SerializeField] private bool disableAfterTime = false;
 
     private void OnEnable()
     {
         CancelInvoke();
-        Invoke(nameof(Return), delay);
+        if (disableAfterTime)
+            Invoke(nameof(SimpleDisable), delay);
+        else
+            Invoke(nameof(Return), delay);
+    }
+
+    private void SimpleDisable()
+    {
+        gameObject.SetActive(false);
     }
 
     private void Return()
