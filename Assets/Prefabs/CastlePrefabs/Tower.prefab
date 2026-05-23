@@ -68,9 +68,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureManager
   type: 2
-  maxHealth: 20
+  maxHealth: 500
   currentHealth: 0
-  dustParticlePrefab: {fileID: 0}
+  dustParticlePrefab: {fileID: 5244177765414710820, guid: 96e2edfe4216d2a49a18972ab228e96b, type: 3}
   healthBar: {fileID: 0}
   damageFlash: {fileID: 6492541451938233704}
   healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}

@@ -120,7 +120,7 @@ MonoBehaviour:
   type: 1
   maxHealth: 1000
   currentHealth: 0
-  dustParticlePrefab: {fileID: 0}
+  dustParticlePrefab: {fileID: 5244177765414710820, guid: 96e2edfe4216d2a49a18972ab228e96b, type: 3}
   healthBar: {fileID: 0}
   damageFlash: {fileID: 81314086571362919}
   healthyFlashColor: {r: 0, g: 1, b: 0, a: 1}
