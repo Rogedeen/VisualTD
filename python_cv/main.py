@@ -43,6 +43,7 @@ class GestureTracker:
         self.results = None
         self.current_raw_gesture = None
         self.raw_gesture_start_time = 0
+        self.wiggle_history = []
 
     def download_model(self):
         model_path = "hand_landmarker.task"
@@ -130,42 +131,67 @@ class GestureTracker:
             h2_label = self.results.handedness[1][0].category_name
             fingers1 = self.fingers_up(h1, h1_label)
             fingers2 = self.fingers_up(h2, h2_label)
-            wrist_dist = ((h1[0].x - h2[0].x)**2 + (h1[0].y - h2[0].y)**2)**0.5
             
-            if wrist_dist < 0.15: raw_gesture = "Fireball"
-            elif sum(fingers1) >= 4 and sum(fingers2) >= 4:
-                h1_horiz = abs(h1[0].y - h1[9].y) < 0.15
-                h2_horiz = abs(h2[0].y - h2[9].y) < 0.15
-                h1_vert = (h1[0].y - h1[9].y) > 0.1
-                h2_vert = (h2[0].y - h2[9].y) > 0.1
-                if (h1_horiz and h2_vert) or (h2_horiz and h1_vert): raw_gesture = "Palm"
-                else: raw_gesture = "Fortify_Wall"
-
+            # 1. Pray (Pause)
+            wrist_dist = ((h1[0].x - h2[0].x)**2 + (h1[0].y - h2[0].y)**2)**0.5
+            tip_dist = ((h1[12].x - h2[12].x)**2 + (h1[12].y - h2[12].y)**2)**0.5
+            if wrist_dist < 0.18 and tip_dist < 0.18:
+                h1_upright = h1[12].y < h1[0].y - 0.1
+                h2_upright = h2[12].y < h2[0].y - 0.1
+                if h1_upright and h2_upright:
+                    raw_gesture = "pause"
+            
+            # 2. Fireball
+            if raw_gesture is None and wrist_dist < 0.15:
+                raw_gesture = "fireball"
+                
+            # 3. Fortify (Wall) vs Wiggle (Lightning)
+            if raw_gesture is None and sum(fingers1) >= 4 and sum(fingers2) >= 4:
+                # Track finger wiggling
+                dist_h1 = sum(((h1[i].x - h1[0].x)**2 + (h1[i].y - h1[0].y)**2 + (h1[i].z - h1[0].z)**2)**0.5 for i in [8, 12, 16, 20])
+                dist_h2 = sum(((h2[i].x - h2[0].x)**2 + (h2[i].y - h2[0].y)**2 + (h2[i].z - h2[0].z)**2)**0.5 for i in [8, 12, 16, 20])
+                scale1 = ((h1[0].x - h1[9].x)**2 + (h1[0].y - h1[9].y)**2 + (h1[0].z - h1[9].z)**2)**0.5
+                scale2 = ((h2[0].x - h2[9].x)**2 + (h2[0].y - h2[9].y)**2 + (h2[0].z - h2[9].z)**2)**0.5
+                
+                if scale1 > 0 and scale2 > 0:
+                    total_dist_norm = (dist_h1 / scale1) + (dist_h2 / scale2)
+                    self.wiggle_history.append(total_dist_norm)
+                    if len(self.wiggle_history) > 10:
+                        self.wiggle_history.pop(0)
+                
+                if len(self.wiggle_history) >= 5:
+                    wiggle_val = sum(abs(self.wiggle_history[i] - self.wiggle_history[i-1]) for i in range(1, len(self.wiggle_history)))
+                    if wiggle_val > 0.12:
+                        raw_gesture = "lightning"
+                
+                if raw_gesture is None:
+                    h1_vert = (h1[0].y - h1[9].y) > 0.1
+                    h2_vert = (h2[0].y - h2[9].y) > 0.1
+                    if h1_vert and h2_vert:
+                        raw_gesture = "fortify"
         elif len(self.results.hand_landmarks) == 1:
+            self.wiggle_history.clear()
             h1 = self.results.hand_landmarks[0]
             h1_label = self.results.handedness[0][0].category_name
             fingers = self.fingers_up(h1, h1_label)
             is_upright = (h1[0].y - h1[9].y) > 0.1 
             if is_upright:
-                if fingers[1] == 1 and fingers[2] == 0 and fingers[3] == 0 and fingers[4] == 1: 
-                    raw_gesture = "Spiderman"
+                # Sadece 4 ana parmağı (İşaret, Orta, Yüzük, Serçe) sayıyoruz
+                num_fingers = sum(fingers[1:])
+                if num_fingers == 0: 
+                    raw_gesture = "Fist"
                 else:
-                    # Yükseltme komutlarında (1, 2, 3, 4) baş parmağı ihmal ediyoruz.
-                    # Sadece 4 ana parmağın (İşaret, Orta, Yüzük, Serçe) açık durumunu sayıyoruz.
-                    num_fingers = sum(fingers[1:])
-                    if num_fingers == 0: 
-                        raw_gesture = "Fist"
-                    elif num_fingers == 1: 
-                        raw_gesture = "Upgrade_1"
-                    elif num_fingers == 2: 
-                        raw_gesture = "Upgrade_2"
-                    elif num_fingers == 3: 
-                        raw_gesture = "Upgrade_3"
-                    elif num_fingers == 4: 
-                        if fingers[0] == 1: 
-                            raw_gesture = "Palm" if self.are_fingers_stuck_together(h1) else "Spread_Open"
-                        else: 
-                            raw_gesture = "Upgrade_4"
+                    if self.prev_arrow_state == 1:
+                        raw_gesture = "Spread_Open"
+                    else:
+                        if num_fingers == 1: 
+                            raw_gesture = "upgrade 1"
+                        elif num_fingers == 2: 
+                            raw_gesture = "upgrade 2"
+                        elif num_fingers == 3: 
+                            raw_gesture = "upgrade 3"
+                        elif num_fingers == 4: 
+                            raw_gesture = "upgrade 4"
 
         if raw_gesture != self.current_raw_gesture:
             self.current_raw_gesture = raw_gesture
@@ -174,58 +200,30 @@ class GestureTracker:
         held_time = current_time_ms - self.raw_gesture_start_time
         gesture_detected = None
         
-        if self.current_raw_gesture in ["Upgrade_1", "Upgrade_2", "Upgrade_3", "Upgrade_4"] and held_time > 1200:
+        if self.current_raw_gesture in ["upgrade 1", "upgrade 2", "upgrade 3", "upgrade 4"] and held_time > 1200:
             gesture_detected = self.current_raw_gesture
             self.current_raw_gesture = None
 
-        if self.current_raw_gesture == "Palm" and held_time > 800:
-            gesture_detected = "Palm"
+        if self.current_raw_gesture == "pause" and held_time > 800:
+            gesture_detected = "pause"
             self.current_raw_gesture = None 
-        elif self.current_raw_gesture == "Fireball" and held_time > 800:
-            gesture_detected = "Fireball_Cast"
+        elif self.current_raw_gesture == "fireball" and held_time > 800:
+            gesture_detected = "fireball"
             self.current_raw_gesture = None
-        elif self.current_raw_gesture == "Fortify_Wall" and held_time > 800:
-            gesture_detected = "Fortify_Wall"
+        elif self.current_raw_gesture == "fortify" and held_time > 800:
+            gesture_detected = "fortify"
             self.current_raw_gesture = None
-        elif self.current_raw_gesture == "Spiderman" and held_time > 800:
-            gesture_detected = "Spiderman_Cast"
+        elif self.current_raw_gesture == "lightning" and held_time > 800:
+            gesture_detected = "lightning"
             self.current_raw_gesture = None
 
         if self.current_raw_gesture == "Fist" and held_time > 500:
-            if self.prev_arrow_state == 0: gesture_detected = "Hold_Fire"
+            if self.prev_arrow_state == 0: gesture_detected = "hold fire"
             self.prev_arrow_state = 1
-        elif self.current_raw_gesture in ["Spread_Open", "Upgrade_4", "Palm"] and self.prev_arrow_state == 1:
-            gesture_detected = "Arrow_Volley"
+        elif self.prev_arrow_state == 1 and self.current_raw_gesture not in ["Fist", None]:
+            gesture_detected = "arrow volley"
             self.prev_arrow_state = 0
             self.current_raw_gesture = None
-        # --- LIGHTNING STRIKE HAREKET ALGILAMA (Swipe Down) ---
-        if self.results and self.results.hand_landmarks and len(self.results.hand_landmarks) == 1:
-            h1 = self.results.hand_landmarks[0]
-            index_tip_y = h1[8].y
-            
-            # Upgrade_1 (işaret parmağı havada) 250ms'den uzun sürerse hareketi kur
-            if self.current_raw_gesture == "Upgrade_1" and held_time > 250:
-                if self.prev_lightning_state == 0:
-                    self.prev_lightning_state = 1
-                    self.lightning_y_start = index_tip_y
-                    self.lightning_arm_time = current_time_ms
-                else:
-                    # Parmak havada daha da yukarı kalkarsa en tepe noktayı (en küçük Y) referans al
-                    if index_tip_y < self.lightning_y_start:
-                        self.lightning_y_start = index_tip_y
-            
-            # Kurulmuşsa, 600ms içinde parmağın hızlıca aşağı inip inmediğini kontrol et
-            if self.prev_lightning_state == 1:
-                if current_time_ms - self.lightning_arm_time < 600:
-                    displacement = index_tip_y - self.lightning_y_start
-                    if displacement > 0.18: # 0.18'lik aşağı yönlü kayma yeterlidir
-                        gesture_detected = "Lightning_Strike"
-                        self.prev_lightning_state = 0
-                        self.current_raw_gesture = None
-                else:
-                    self.prev_lightning_state = 0 # Zaman aşımı, devreden çıkar
-        else:
-            self.prev_lightning_state = 0 # El kaybolursa devreden çıkar
         return gesture_detected
 
 def main():

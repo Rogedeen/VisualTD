@@ -22,7 +22,8 @@ public class GestureParser : MonoBehaviour
         {
             // OYUN DURAKLATILDIYSA (ve gelen hareket PAUSE değilse) hareketleri işleme!
             bool isPaused = Time.timeScale == 0f;
-            if (isPaused && data.gesture != "Palm") continue;
+            string gName = data.gesture.ToLower().Replace("_", " ").Trim();
+            if (isPaused && gName != "pause" && gName != "palm") continue;
 
             ParseGesture(data.gesture);
         }
@@ -37,43 +38,54 @@ public class GestureParser : MonoBehaviour
             UIManager.Instance.UpdateGestureText(gestureName);
         }
 
-        switch (gestureName)
+        switch (gestureName.ToLower().Replace("_", " ").Trim())
         {
-            case "Hold_Fire":
+            case "hold fire":
+            case "hold_fire":
                 if (SkillManager.Instance != null) SkillManager.Instance.HoldArchers(true);
                 break;
-            case "Arrow_Volley":
+            case "arrow volley":
+            case "arrow_volley":
                 if (SkillManager.Instance != null) SkillManager.Instance.HoldArchers(false); 
                 if (SkillManager.Instance != null) SkillManager.Instance.TriggerArrowVolley();
                 break;
-            case "Lightning_Strike":
+            case "lightning":
+            case "lightning strike":
+            case "lightning_strike":
+            case "spiderman cast":
+            case "spiderman_cast":
                 if (SkillManager.Instance != null) SkillManager.Instance.SetFortifyState(false);
                 if (SkillManager.Instance != null) SkillManager.Instance.TriggerLightningStrike(Vector3.zero);
                 break;
-            case "Fortify_Wall":
+            case "fortify":
+            case "fortify wall":
+            case "fortify_wall":
                 if (SkillManager.Instance != null) SkillManager.Instance.SetFortifyState(true);
                 break;
-            case "Spiderman_Cast":
-                if (SkillManager.Instance != null) SkillManager.Instance.SetFortifyState(false);
-                if (SkillManager.Instance != null) SkillManager.Instance.TriggerLightningStrike(Vector3.zero);
-                break;
-            case "Fireball_Cast":
+            case "fireball":
+            case "fireball cast":
+            case "fireball_cast":
                 if (SkillManager.Instance != null) SkillManager.Instance.SetFortifyState(false);
                 if (SkillManager.Instance != null) SkillManager.Instance.TriggerFireball(Vector3.zero);
                 break;
-            case "Palm": // "Time_Out" yerine daha doğal "Palm" hareketi
+            case "pause":
+            case "palm":
                 if (GameManager.Instance != null) GameManager.Instance.TogglePause();
                 break;
-            case "Upgrade_1":
+            case "upgrade 1":
+            case "upgrade_1":
                 if (GameManager.Instance != null) GameManager.Instance.PurchaseUpgrade(1);
                 break;
-            case "Upgrade_2":
+            case "upgrade 2":
+            case "upgrade_2":
                 if (GameManager.Instance != null) GameManager.Instance.PurchaseUpgrade(2);
                 break;
-            case "Upgrade_3":
+            case "upgrade 3":
+            case "upgrade_3":
                 if (GameManager.Instance != null) GameManager.Instance.PurchaseUpgrade(3);
                 break;
-            case "Upgrade_4":
+            case "upgrade 4":
+            case "upgrade_4":
                 if (GameManager.Instance != null) GameManager.Instance.PurchaseUpgrade(4);
                 break;
             default:
