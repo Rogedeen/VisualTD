@@ -142,24 +142,39 @@ class GestureTracker:
             else:
                 # Check if both hands are open (at least 4 fingers up on both hands)
                 if sum(fingers1) >= 4 and sum(fingers2) >= 4:
-                    # Both hands open. Track average Y of landmark 9 (middle finger knuckle)
-                    y_avg = (h1[9].y + h2[9].y) / 2.0
-                    self.swipe_history.append((current_time_ms, y_avg))
+                    # Both hands open. Track positions of landmark 9 (middle knuckle)
+                    self.swipe_history.append((current_time_ms, h1[9].x, h1[9].y, h2[9].x, h2[9].y))
                     
                     # Clean up old history (>400ms)
                     self.swipe_history = [item for item in self.swipe_history if current_time_ms - item[0] < 400]
                     
-                    # Calculate displacement over last 400ms
                     if len(self.swipe_history) >= 3:
-                        oldest_time, oldest_y = self.swipe_history[0]
-                        # MediaPipe Y: 0.0 is top, 1.0 is bottom. Downward swipe means y increases.
-                        displacement = y_avg - oldest_y
-                        if displacement > 0.15:
+                        # Calculate total frame-to-frame movement of both hands
+                        total_movement = 0.0
+                        for i in range(1, len(self.swipe_history)):
+                            _, x1_p, y1_p, x2_p, y2_p = self.swipe_history[i-1]
+                            _, x1_c, y1_c, x2_c, y2_c = self.swipe_history[i]
+                            dist1 = ((x1_c - x1_p)**2 + (y1_c - y1_p)**2)**0.5
+                            dist2 = ((x2_c - x2_p)**2 + (y2_c - y2_p)**2)**0.5
+                            total_movement += (dist1 + dist2)
+                            
+                        # Calculate net Y displacement (average Y of both hands)
+                        _, oldest_x1, oldest_y1, _, oldest_y2 = self.swipe_history[0]
+                        y_avg_oldest = (oldest_y1 + oldest_y2) / 2.0
+                        y_avg_current = (h1[9].y + h2[9].y) / 2.0
+                        displacement_y = y_avg_current - y_avg_oldest
+                        
+                        # Lightning triggers if they shake (high total movement) or swipe down (displacement_y > 0.10)
+                        if total_movement > 0.15 or displacement_y > 0.10:
                             raw_gesture = "lightning"
                             self.swipe_history.clear()
-                            
-                    if raw_gesture is None:
-                        raw_gesture = "fortify"
+                        # Fortify triggers only if hands are extremely stationary (low movement)
+                        elif total_movement < 0.07:
+                            raw_gesture = "fortify"
+                        else:
+                            raw_gesture = None
+                    else:
+                        raw_gesture = None
                 else:
                     self.swipe_history.clear()
         elif len(self.results.hand_landmarks) == 1:
