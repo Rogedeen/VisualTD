@@ -11,6 +11,7 @@ public class Arrow : MonoBehaviour
     public Vector3 targetPos;
     public float progress;
     public TrailRenderer trail;
+    private float initialDistance;
 
     private void Awake()
     {
@@ -62,6 +63,7 @@ public class Arrow : MonoBehaviour
         {
             targetPos = target.position;
         }
+        initialDistance = Mathf.Max(Vector3.Distance(startPos, targetPos), 0.01f);
     }
 
     private void Update()
@@ -73,7 +75,7 @@ public class Arrow : MonoBehaviour
         }
 
         // Kavisli hareket hesaplama (Parabol)
-        progress += Time.deltaTime * speed / Vector3.Distance(startPos, targetPos);
+        progress += Time.deltaTime * speed / initialDistance;
         
         // Lerp ile x ve z ekseninde düz git
         Vector3 currentPos = Vector3.Lerp(startPos, targetPos, progress);

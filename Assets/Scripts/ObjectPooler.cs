@@ -41,11 +41,22 @@ public class ObjectPooler : MonoBehaviour
     {
         if (!poolDictionary.ContainsKey(tag)) return null;
 
-        // Havuzda eleman kalmadıysa güvenlik önlemi
+        // Havuzda eleman kalmadıysa güvenlik önlemi: dinamik genişletme
         if (poolDictionary[tag].Count == 0)
         {
-            Debug.LogWarning($"Havuzda yeterli {tag} kalmadi! Pool Size degerini artirin.");
-            return null;
+            Pool pool = pools.Find(p => p.tag == tag);
+            if (pool != null && pool.prefab != null)
+            {
+                GameObject obj = Instantiate(pool.prefab);
+                obj.SetActive(false);
+                obj.transform.SetParent(this.transform);
+                poolDictionary[tag].Enqueue(obj);
+            }
+            else
+            {
+                Debug.LogWarning($"Havuzda yeterli {tag} kalmadi ve prefab bulunamadi!");
+                return null;
+            }
         }
 
         GameObject objectToSpawn = poolDictionary[tag].Dequeue();

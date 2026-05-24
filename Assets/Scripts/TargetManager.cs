@@ -7,6 +7,7 @@ public class TargetManager : MonoBehaviour
 
     private List<StructureManager> towers = new List<StructureManager>();
     private StructureManager mainGate;
+    private List<StructureManager> allStructures = new List<StructureManager>();
 
     private void Awake()
     {
@@ -19,9 +20,12 @@ public class TargetManager : MonoBehaviour
     public void RefreshAllLinks()
     {
         towers.Clear();
+        allStructures.Clear();
+        mainGate = null;
         StructureManager[] all = Object.FindObjectsByType<StructureManager>(FindObjectsInactive.Exclude);
         foreach (var s in all)
         {
+            allStructures.Add(s);
             if (s.type == StructureType.Tower) towers.Add(s);
             else if (s.type == StructureType.Gate) mainGate = s;
         }
@@ -73,7 +77,6 @@ public class TargetManager : MonoBehaviour
         float minInfDist = Mathf.Infinity;
 
         // Tüm yapıları (Kapı + Duvar + Kule) tara, en yakınına git
-        StructureManager[] allStructures = Object.FindObjectsByType<StructureManager>(FindObjectsInactive.Exclude);
         foreach (var s in allStructures)
         {
             if (s == null || s.IsDestroyed || !s.gameObject.activeInHierarchy) continue;
@@ -95,6 +98,34 @@ public class TargetManager : MonoBehaviour
         return EnemyGoal.Instance?.transform;
     }
 
-    public void RegisterStructure(StructureManager structure) { RefreshAllLinks(); }
-    public void UnregisterStructure(StructureManager structure) { RefreshAllLinks(); }
+    public void RegisterStructure(StructureManager structure)
+    {
+        if (structure == null) return;
+        if (!allStructures.Contains(structure))
+        {
+            allStructures.Add(structure);
+            if (structure.type == StructureType.Tower)
+            {
+                if (!towers.Contains(structure)) towers.Add(structure);
+            }
+            else if (structure.type == StructureType.Gate)
+            {
+                mainGate = structure;
+            }
+        }
+    }
+
+    public void UnregisterStructure(StructureManager structure)
+    {
+        if (structure == null) return;
+        allStructures.Remove(structure);
+        if (structure.type == StructureType.Tower)
+        {
+            towers.Remove(structure);
+        }
+        else if (structure.type == StructureType.Gate)
+        {
+            if (mainGate == structure) mainGate = null;
+        }
+    }
 }

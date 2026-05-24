@@ -27,8 +27,8 @@ public class EnemyGoal : MonoBehaviour
                 GameManager.Instance.TakePlayerDamage(1);
             }
             
-            // Düşmanı anında sahneden kaldırıyoruz (Object Pool için SetActive(false) yeterlidir)
-            enemy.gameObject.SetActive(false);
+            // Düşmanı anında sahneden kaldırıyoruz
+            ObjectPooler.Instance.ReturnToPool(enemy.PoolTag, enemy.gameObject);
         }
     }
 }

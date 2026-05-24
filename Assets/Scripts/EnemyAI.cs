@@ -8,6 +8,8 @@ public class EnemyAI : MonoBehaviour
 {
     [SerializeField] private EnemyData enemyData;
     private string currentPoolTag = "Enemy";
+
+    public string PoolTag => currentPoolTag;
     
     // Stats will be loaded from EnemyData
     private float maxHealth;
