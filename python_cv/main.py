@@ -44,6 +44,7 @@ class GestureTracker:
         self.current_raw_gesture = None
         self.raw_gesture_start_time = 0
         self.wiggle_history = []
+        self.swipe_history = []
 
     def download_model(self):
         model_path = "hand_landmarker.task"
@@ -119,6 +120,7 @@ class GestureTracker:
     def detect_gestures(self):
         if not self.results or not self.results.hand_landmarks:
             self.current_raw_gesture = None
+            self.swipe_history.clear()
             return None
             
         current_time_ms = int(time.time() * 1000)
@@ -132,59 +134,52 @@ class GestureTracker:
             fingers1 = self.fingers_up(h1, h1_label)
             fingers2 = self.fingers_up(h2, h2_label)
             
-            # 1. Pray (Pause)
+            # Fireball (two hands close to each other, like a sphere)
             wrist_dist = ((h1[0].x - h2[0].x)**2 + (h1[0].y - h2[0].y)**2)**0.5
-            tip_dist = ((h1[12].x - h2[12].x)**2 + (h1[12].y - h2[12].y)**2)**0.5
-            if wrist_dist < 0.18 and tip_dist < 0.18:
-                h1_upright = h1[12].y < h1[0].y - 0.1
-                h2_upright = h2[12].y < h2[0].y - 0.1
-                if h1_upright and h2_upright:
-                    raw_gesture = "pause"
-            
-            # 2. Fireball
-            if raw_gesture is None and wrist_dist < 0.15:
+            if wrist_dist < 0.15:
                 raw_gesture = "fireball"
-                
-            # 3. Fortify (Wall) vs Wiggle (Lightning)
-            if raw_gesture is None and sum(fingers1) >= 4 and sum(fingers2) >= 4:
-                # Track finger wiggling
-                dist_h1 = sum(((h1[i].x - h1[0].x)**2 + (h1[i].y - h1[0].y)**2 + (h1[i].z - h1[0].z)**2)**0.5 for i in [8, 12, 16, 20])
-                dist_h2 = sum(((h2[i].x - h2[0].x)**2 + (h2[i].y - h2[0].y)**2 + (h2[i].z - h2[0].z)**2)**0.5 for i in [8, 12, 16, 20])
-                scale1 = ((h1[0].x - h1[9].x)**2 + (h1[0].y - h1[9].y)**2 + (h1[0].z - h1[9].z)**2)**0.5
-                scale2 = ((h2[0].x - h2[9].x)**2 + (h2[0].y - h2[9].y)**2 + (h2[0].z - h2[9].z)**2)**0.5
-                
-                if scale1 > 0 and scale2 > 0:
-                    total_dist_norm = (dist_h1 / scale1) + (dist_h2 / scale2)
-                    self.wiggle_history.append(total_dist_norm)
-                    if len(self.wiggle_history) > 10:
-                        self.wiggle_history.pop(0)
-                
-                if len(self.wiggle_history) >= 5:
-                    wiggle_val = sum(abs(self.wiggle_history[i] - self.wiggle_history[i-1]) for i in range(1, len(self.wiggle_history)))
-                    if wiggle_val > 0.12:
-                        raw_gesture = "lightning"
-                
-                if raw_gesture is None:
-                    h1_vert = (h1[0].y - h1[9].y) > 0.1
-                    h2_vert = (h2[0].y - h2[9].y) > 0.1
-                    if h1_vert and h2_vert:
+                self.swipe_history.clear()
+            else:
+                # Check if both hands are open (at least 4 fingers up on both hands)
+                if sum(fingers1) >= 4 and sum(fingers2) >= 4:
+                    # Both hands open. Track average Y of landmark 9 (middle finger knuckle)
+                    y_avg = (h1[9].y + h2[9].y) / 2.0
+                    self.swipe_history.append((current_time_ms, y_avg))
+                    
+                    # Clean up old history (>400ms)
+                    self.swipe_history = [item for item in self.swipe_history if current_time_ms - item[0] < 400]
+                    
+                    # Calculate displacement over last 400ms
+                    if len(self.swipe_history) >= 3:
+                        oldest_time, oldest_y = self.swipe_history[0]
+                        # MediaPipe Y: 0.0 is top, 1.0 is bottom. Downward swipe means y increases.
+                        displacement = y_avg - oldest_y
+                        if displacement > 0.15:
+                            raw_gesture = "lightning"
+                            self.swipe_history.clear()
+                            
+                    if raw_gesture is None:
                         raw_gesture = "fortify"
+                else:
+                    self.swipe_history.clear()
         elif len(self.results.hand_landmarks) == 1:
-            self.wiggle_history.clear()
+            self.swipe_history.clear()
             h1 = self.results.hand_landmarks[0]
             h1_label = self.results.handedness[0][0].category_name
             fingers = self.fingers_up(h1, h1_label)
             is_upright = (h1[0].y - h1[9].y) > 0.1 
             if is_upright:
-                # Sadece 4 ana parmağı (İşaret, Orta, Yüzük, Serçe) sayıyoruz
                 num_fingers = sum(fingers[1:])
-                if num_fingers == 0: 
-                    raw_gesture = "Fist"
+                # Like (thumbs up) gesture: thumb is up, other 4 fingers are down
+                if fingers[0] == 1 and num_fingers == 0:
+                    raw_gesture = "pause"
                 else:
                     if self.prev_arrow_state == 1:
                         raw_gesture = "Spread_Open"
                     else:
-                        if num_fingers == 1: 
+                        if num_fingers == 0:
+                            raw_gesture = "Fist"
+                        elif num_fingers == 1: 
                             raw_gesture = "upgrade 1"
                         elif num_fingers == 2: 
                             raw_gesture = "upgrade 2"
@@ -204,7 +199,7 @@ class GestureTracker:
             gesture_detected = self.current_raw_gesture
             self.current_raw_gesture = None
 
-        if self.current_raw_gesture == "pause" and held_time > 800:
+        if self.current_raw_gesture == "pause" and held_time > 600:
             gesture_detected = "pause"
             self.current_raw_gesture = None 
         elif self.current_raw_gesture == "fireball" and held_time > 800:
@@ -213,7 +208,8 @@ class GestureTracker:
         elif self.current_raw_gesture == "fortify" and held_time > 800:
             gesture_detected = "fortify"
             self.current_raw_gesture = None
-        elif self.current_raw_gesture == "lightning" and held_time > 800:
+        elif self.current_raw_gesture == "lightning":
+            # Lightning (swipe down) triggers immediately upon detection
             gesture_detected = "lightning"
             self.current_raw_gesture = None
 
